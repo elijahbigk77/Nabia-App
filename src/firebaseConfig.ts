@@ -25,9 +25,8 @@ export async function loginUser(username: string, password: string) {
         return userCredential.user;
     } catch (error) {
         if (error instanceof Error) {
-            throw new Error(error.message);
-        } else {
-            throw new Error('Login Failed');
+            toast(error.message)
+            return false
         }
     }
 }

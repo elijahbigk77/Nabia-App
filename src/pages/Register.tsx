@@ -25,6 +25,9 @@ const Register: React.FC = () => {
         return toast('Password is required')
       }
       const user = await registerUser(Username, Password);
+      if(user){
+        toast('You have registered Succesfully')
+      }
     }
 
   return (

@@ -18,7 +18,7 @@ const Login: React.FC = () => {
                 console.log('Login Successful', user);
             }
         } catch (error) {
-            toast('Login Failed');
+            toast('Error logging in with your credentials');
             console.error('Login Failed', error);
         }
     }
