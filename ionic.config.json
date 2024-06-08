@@ -1,0 +1,7 @@
+{
+  "name": "NabiaApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
