@@ -8,6 +8,7 @@
 .welcome-text{
     text-align: center;
     margin-top: 50%;
+    margin-bottom: 50%;
 }
 
 .login-button{
@@ -15,6 +16,7 @@
     left: 50%;
     top: 70%;
     transform: translate(-50%, -50%);
+    width: 40%;
 }
 
 .register-button{
@@ -22,6 +24,7 @@
     left: 50%;
     top: 75%;
     transform: translate(-50%, -50%);
+    width: 40%;
 }
 
 

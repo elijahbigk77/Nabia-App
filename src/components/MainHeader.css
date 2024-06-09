@@ -1,6 +1,8 @@
 .title {
-  color: white;
+  color: #dea000;
   text-align: center;
-  font-family:'NoteWorthy';
+  font-family:'Title';
   font-size:32px;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
 }

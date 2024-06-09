@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonInput, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage } from '@ionic/react';
 import MainHeader from '../components/MainHeader';
 import './Home.css';
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { toast } from '../toast';
 import { registerUser } from '../firebaseConfig';
 import MainFooter from '../components/MainFooter';
+import './Register.css'
 
 const Register: React.FC = () => {
     const [Username, setUsename] = useState('')
@@ -33,17 +34,35 @@ const Register: React.FC = () => {
 
   return (
     <IonPage>
+
       <MainHeader />
       <IonContent fullscreen className='ion-padding'color='background'>
-        <IonInput placeholder='Username' onIonChange={(e: any) => setUsename(e.target.value)}/>
-        <IonInput type='password' placeholder='Password'onIonChange={(e: any) => setPassword(e.target.value)}/>
-        <IonInput type='password' placeholder='Confirm Password'onIonChange={(e: any) => setConfirmPassword(e.target.value)}/>
-        <IonButton onClick={register}>Create An Account</IonButton>
-        <p> 
+
+        <IonItem className='username-field' color='background'>
+          <IonLabel style={{fontSize: '25px', color: 'black'}} position="stacked"> Email: </IonLabel>
+          <IonInput className='username-input' placeholder=' Username' onIonChange={(e: any) => setUsename(e.target.value)}/>
+        </IonItem>
+
+        <IonItem className='password-field' color='background'>
+          <IonLabel style={{fontSize: '25px', color: 'black'}} position="stacked"> Password: </IonLabel>
+          <IonInput className='password-input' type='password' placeholder=' Password'onIonChange={(e: any) => setPassword(e.target.value)}/>
+        </IonItem>
+
+        <IonItem className='confirm-password-field' color='background'>
+          <IonLabel style={{fontSize: '25px', color: 'black'}} position="stacked"> Conform Password: </IonLabel>
+          <IonInput className='confirm-password-input' type='password' placeholder=' Confirm Password'onIonChange={(e: any) => setConfirmPassword(e.target.value)}/>
+        </IonItem>
+
+        
+        <IonButton className='create-account-button' color='light' onClick={register}>Create An Account</IonButton>
+        
+        <p className='login-text'> 
             Already have an account? <Link to='/login'>Login</Link>
         </p>
+
       </IonContent>
       <MainFooter />
+      
     </IonPage>
   );
 };

@@ -7,6 +7,11 @@ http://ionicframework.com/docs/theming/ */
     src: url("../assets/fonts/Noteworthy.ttf");
 }
 
+@font-face {
+  font-family: "Title";
+  src: url("../assets/fonts/postnobillscolombo-extrabold.ttf");
+}
+
 :root {
     --ion-color-background: #DEA000;
     --ion-color-background-rgb: 222, 160, 0;

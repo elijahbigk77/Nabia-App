@@ -1,0 +1,53 @@
+.login-button{
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+}
+
+.register-text{
+    position: absolute;
+    left: 50%;
+    top: 73%;
+    transform: translate(-50%, -50%);
+}
+
+.username-field{
+    background: transparent;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+}
+
+.username-input{
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.username-label{
+    font-size: 14px ;
+}
+
+.password-field{
+    background: transparent;
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+}
+
+.password-input{
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin-top: 10px;
+
+}
+
+.password-label{
+    font-size: 14px ;
+}
