@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUser } from '../firebaseConfig';
 import { toast } from '../toast';
+import MainFooter from '../components/MainFooter';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -41,6 +42,7 @@ const Login: React.FC = () => {
                     First time user? <Link to='/register'>Register</Link>
                 </p>
             </IonContent>
+            <MainFooter />
         </IonPage>
     );
 };

@@ -5,4 +5,23 @@
     font-size:32px;
 }
 
+.welcome-text{
+    text-align: center;
+    margin-top: 50%;
+}
+
+.login-button{
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+}
+
+.register-button{
+    position: absolute;
+    left: 50%;
+    top: 75%;
+    transform: translate(-50%, -50%);
+}
+
 
