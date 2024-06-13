@@ -1,9 +1,9 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.nabia.com',
   appName: 'NabiaApp',
-  webDir: 'dist'
+  webDir: 'build'
 };
 
 export default config;

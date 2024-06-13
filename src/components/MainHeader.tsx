@@ -8,7 +8,7 @@ const MainHeader: React.FC<ContainerProps> = () => {
     <IonHeader>
       <IonItem color='background'>
       <IonButtons slot="start">
-        <IonBackButton></IonBackButton>
+      <IonBackButton></IonBackButton>
       </IonButtons>
       <IonToolbar className='top-bar' color='background'>
         <IonTitle className='title'>Nabia App</IonTitle>

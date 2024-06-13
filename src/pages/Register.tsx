@@ -40,7 +40,7 @@ const Register: React.FC = () => {
 
         <IonItem className='username-field' color='background'>
           <IonLabel style={{fontSize: '25px', color: 'black'}} position="stacked"> Email: </IonLabel>
-          <IonInput className='username-input' placeholder=' Username' onIonChange={(e: any) => setUsename(e.target.value)}/>
+          <IonInput className='username-input' placeholder=' Email' onIonChange={(e: any) => setUsename(e.target.value)}/>
         </IonItem>
 
         <IonItem className='password-field' color='background'>

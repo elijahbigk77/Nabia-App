@@ -34,6 +34,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Dashboard from './pages/Dashboard';
 
 setupIonicReact();
 
@@ -52,6 +53,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/register">
           <Register />
+        </Route>
+        <Route exact path="/dashboard">
+          <Dashboard />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
