@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { toast } from './toast';
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDtBx6-QJY7n8YwO62mQLqd9oNj0IFOym0",
@@ -15,8 +16,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+export function getCurrentUser() {
+    return auth.currentUser
+}
+
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
+
+const db = getFirestore(app);
 
 export async function loginUser(username: string, password: string) {
     const email = convertToEmail(username);
@@ -53,3 +60,5 @@ function convertToEmail(username: string): string {
     }
     return username;
 }
+
+export {db, auth};
