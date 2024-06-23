@@ -1,6 +1,6 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { toast } from './toast';
 
 const firebaseConfig = {
@@ -80,6 +80,7 @@ function convertToEmail(username: string): string {
 
 // Schema for member data
 export interface MemberData {
+    id: string;
     name: string;
     birthdate: string;
     residentialAddress: string;
@@ -112,10 +113,22 @@ export async function addMember(memberData: MemberData): Promise<boolean> {
 export async function getAllMembers(): Promise<MemberData[]> {
     try {
         const querySnapshot = await getDocs(collection(db, 'members'));
-        const members: MemberData[] = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data() as MemberData
-        }));
+        const members: MemberData[] = querySnapshot.docs.map(doc => {
+            const data = doc.data() as MemberData;
+            return {
+                id: doc.id,
+                name: data.name,
+                birthdate: data.birthdate,
+                residentialAddress: data.residentialAddress,
+                schoolAddress: data.schoolAddress,
+                parentGuardianName: data.parentGuardianName,
+                parentGuardianRelationship: data.parentGuardianRelationship,
+                parentGuardianContact: data.parentGuardianContact,
+                teacherName: data.teacherName,
+                teacherContact: data.teacherContact,
+                teacherClass: data.teacherClass,
+            };
+        });
         return members;
     } catch (error) {
         console.error('Error fetching members: ', error);
@@ -123,5 +136,39 @@ export async function getAllMembers(): Promise<MemberData[]> {
         return [];
     }
 }
+
+// Function to update an existing member in Firestore
+export const updateMember = async (memberId: string, updatedMemberData: Partial<MemberData>): Promise<boolean> => {
+    try {
+      const memberRef = doc(db, 'members', memberId);
+      await updateDoc(memberRef, updatedMemberData);
+      return true;
+    } catch (error) {
+      console.error('Error updating member: ', error);
+      if (error instanceof FirebaseError && error.code === 'permission-denied') {
+        toast('You do not have permission to update members. Please contact support.');
+      } else {
+        toast('Failed to update member');
+      }
+      return false;
+    }
+  };
+  
+  // Function to delete a member from Firestore
+  export const deleteMember = async (memberId: string): Promise<boolean> => {
+    try {
+      const memberRef = doc(db, 'members', memberId);
+      await deleteDoc(memberRef);
+      return true;
+    } catch (error) {
+      console.error('Error deleting member: ', error);
+      if (error instanceof FirebaseError && error.code === 'permission-denied') {
+        toast('You do not have permission to delete members. Please contact support.');
+      } else {
+        toast('Failed to delete member');
+      }
+      return false;
+    }
+  };
 
 export { db, auth, app };
