@@ -42,7 +42,7 @@ const Login: React.FC = () => {
                     <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Password: </IonLabel>
                     <IonInput className='password-input' type='password' placeholder=' Password' onIonChange={(e: any) => setPassword(e.target.value)} />
                 </IonItem>
-                <IonButton className='login-button' color='light' onClick={login}>Login</IonButton>
+                <IonButton className='login-button' color='dark' onClick={login}>Login</IonButton>
                 <p className='register-text'>
                     First time user? <Link to='/register'>Create New Account</Link>
                 </p>
