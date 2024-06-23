@@ -1,8 +1,10 @@
 import React from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/react';
+import { IonPage, IonIcon, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonText } from '@ionic/react';
 import { useLocation, useHistory } from 'react-router-dom';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
+import './Dashboard.css';
+import { personAddOutline, warning } from 'ionicons/icons';
 
 interface LocationState {
   username: string;
@@ -24,8 +26,15 @@ const Dashboard: React.FC = () => {
     <IonPage>
       <MainHeader />
       <IonContent fullscreen className='ion-padding' color='background'>
-        <p className='welcome-text'>Hello {username}, Welcome to the Nabia App</p>
-        <IonButton onClick={navigateToAddMember}>Add Member</IonButton>
+
+      <p>
+      <IonText className='welcome-text'> Hello {username}, Welcome to the Nabia App </IonText>
+        <IonButton onClick={navigateToAddMember}>
+            <IonIcon slot="start" icon={personAddOutline} />
+            Add Member
+        </IonButton>
+      </p>
+      
       </IonContent>
       <MainFooter />
     </IonPage>
