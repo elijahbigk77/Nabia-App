@@ -38,6 +38,7 @@ const AddMember: React.FC = () => {
       teacherName,
       teacherContact,
       teacherClass,
+      id: ''
     };
 
     // Add member to Firestore

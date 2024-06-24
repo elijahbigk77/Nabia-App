@@ -21,6 +21,7 @@ import { pencilOutline, trashOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { MemberData, getAllMembers, deleteMember, updateMember } from '../firebaseConfig';
+import './MemberList.css';
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<MemberData[]>([]);
@@ -117,8 +118,9 @@ const MemberList: React.FC = () => {
         </IonList>
 
         {/* Modal to display member details */}
-        <IonModal isOpen={showModal} onDidDismiss={closeModal}>
-          <IonCard>
+        <IonModal isOpen={showModal} onDidDismiss={closeModal} className='full-screen-modal'>
+        <MainHeader />
+          <IonCard className='profile-card'>
             <IonCardHeader>
               <IonCardTitle>{editMode ? 'Edit Member' : selectedMember?.name}</IonCardTitle>
             </IonCardHeader>
@@ -224,19 +226,18 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
                   </IonLabel>
-                  <IonButtons slot="end">
-                    <IonButton color="dark" onClick={() => setEditMode(true)}>
-                      <IonIcon icon={pencilOutline} />
-                    </IonButton>
-                    <IonButton color="dark" onClick={() => setShowDeleteAlert(true)}>
-                      <IonIcon icon={trashOutline} />
-                    </IonButton>
-                  </IonButtons>
                 </>
               )}
               <IonButton onClick={closeModal}>Close</IonButton>
+              <IonButton color="dark" onClick={() => setEditMode(true)}>
+                <IonIcon icon={pencilOutline} />
+              </IonButton>
+              <IonButton color="dark" onClick={() => setShowDeleteAlert(true)}>
+                <IonIcon icon={trashOutline} />
+              </IonButton>
             </IonCardContent>
           </IonCard>
+          <MainFooter />
         </IonModal>
 
         {/* Alert for delete confirmation */}
