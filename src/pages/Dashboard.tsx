@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
   }
 
   const navigateToTribeList = () => {
-    history.push('/tribe-list')
+    history.push('/tribe-list');
   }
 
   return (
@@ -42,13 +42,13 @@ const Dashboard: React.FC = () => {
               <IonIcon slot="start" icon={personAddOutline} />
               Add Member
             </IonButton>
-            <IonButton  onClick={navigateToMemberList}>
+            <IonButton onClick={navigateToMemberList}>
               <IonIcon slot="start" icon={personAddOutline} />
               Member List
             </IonButton>
-            <IonButton  onClick={navigateToTribeList}>
+            <IonButton onClick={navigateToTribeList}>
               <IonIcon slot="start" icon={personAddOutline} />
-              Create/View Tribe
+              View Tribes
             </IonButton>
           </div>
         </div>

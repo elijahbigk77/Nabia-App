@@ -262,7 +262,6 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher: ${selectedMember?.teacherName}`}</p>
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
-                    {/* Display Tribe Name */}
                     <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
                   </IonLabel>
                   <IonButton onClick={closeModal}>Close</IonButton>

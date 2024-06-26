@@ -1,7 +1,9 @@
 import React from 'react';
 import { IonPage, IonContent, IonList, IonItem, IonLabel } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { Tribe, tribes } from '../firebaseConfig'; // Adjust the path as per your project structure
+import { Tribe, tribes } from '../firebaseConfig';
+import MainHeader from '../components/MainHeader';
+import MainFooter from '../components/MainFooter';
 
 const TribeList: React.FC = () => {
     const history = useHistory();
@@ -12,7 +14,8 @@ const TribeList: React.FC = () => {
 
     return (
         <IonPage>
-            <IonContent className="ion-padding">
+            <MainHeader />
+            <IonContent className="ion-padding" color="background">
                 <IonList>
                     {tribes.map((tribe: Tribe) => (
                         <IonItem key={tribe.id} onClick={() => handleTribeClick(tribe.id)}>
@@ -21,6 +24,7 @@ const TribeList: React.FC = () => {
                     ))}
                 </IonList>
             </IonContent>
+            <MainFooter />
         </IonPage>
     );
 };
