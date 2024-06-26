@@ -5,7 +5,7 @@ import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { addMember, MemberData } from '../firebaseConfig';
 import { toast } from '../toast';
-import { tribes, Tribe } from './TribeList';
+import { tribes, Tribe } from '../firebaseConfig';
 
 const AddMember: React.FC = () => {
   const [name, setName] = useState('');

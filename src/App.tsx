@@ -7,7 +7,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AddMember from './pages/AddMember';
 import MemberList from './pages/MemberList';
-import {Tribe,tribes} from './pages/TribeList'
+import TribeList from './pages/TribeList';
+import TribeMemberList from './pages/TribeMemberList';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -54,6 +55,12 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/member-list">
           <MemberList />
+        </Route>
+        <Route exact path="/tribe-list">
+          <TribeList />
+        </Route>
+        <Route exact path="/tribe-member-list/:tribeId">
+          <TribeMemberList />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

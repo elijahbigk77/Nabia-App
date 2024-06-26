@@ -173,4 +173,64 @@ export const updateMember = async (memberId: string, updatedMemberData: Partial<
     }
   };
 
+
+
+// Function to fetch members by tribeId from Firestore
+export async function getMembersByTribeId(tribeId: string): Promise<MemberData[]> {
+    try {
+        const querySnapshot = await getDocs(collection(db, 'members'));
+        const members: MemberData[] = querySnapshot.docs
+            .filter(doc => {
+                const data = doc.data() as MemberData;
+                return data.tribeId === tribeId;
+            })
+            .map(doc => {
+                const data = doc.data() as MemberData;
+                return {
+                    id: doc.id,
+                    name: data.name,
+                    birthdate: data.birthdate,
+                    residentialAddress: data.residentialAddress,
+                    schoolAddress: data.schoolAddress,
+                    parentGuardianName: data.parentGuardianName,
+                    parentGuardianRelationship: data.parentGuardianRelationship,
+                    parentGuardianContact: data.parentGuardianContact,
+                    teacherName: data.teacherName,
+                    teacherContact: data.teacherContact,
+                    teacherClass: data.teacherClass,
+                    tribeId: data.tribeId
+                };
+            });
+
+        return members;
+    } catch (error) {
+        console.error('Error fetching members by tribeId: ', error);
+        toast('Failed to fetch members');
+        return [];
+    }
+}
+
+
+export interface Tribe {
+    id: string;
+    name: string;
+  }
+
+
+export const tribes: Tribe[] = [
+    { id: "1", name: "Asher" },
+    { id: "2", name: "Dan" },
+    { id: "3", name: "Judah" },
+    { id: "4", name: "Reuben" },
+    { id: "5", name: "Joseph" },
+    { id: "6", name: "Naphtali" },
+    { id: "7", name: "Issachar" },
+    { id: "8", name: "Simeon" },
+    { id: "9", name: "Benjamin" },
+    { id: "10", name: "Gad" },
+    { id: "11", name: "Zebulun" },
+    { id: "12", name: "Levi" }
+  ];
+
+
 export { db, auth, app };

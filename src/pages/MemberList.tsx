@@ -24,7 +24,7 @@ import MainFooter from '../components/MainFooter';
 import { MemberData, getAllMembers, deleteMember, updateMember } from '../firebaseConfig';
 import './MemberList.css';
 import { toast } from '../toast';
-import { tribes, Tribe } from './TribeList';
+import { tribes, Tribe } from '../firebaseConfig';
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<MemberData[]>([]);

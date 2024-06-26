@@ -1,24 +1,28 @@
+import React from 'react';
+import { IonPage, IonContent, IonList, IonItem, IonLabel } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
+import { Tribe, tribes } from '../firebaseConfig'; // Adjust the path as per your project structure
 
-export interface Tribe {
-    id: string;
-    name: string;
-  }
+const TribeList: React.FC = () => {
+    const history = useHistory();
 
+    const handleTribeClick = (tribeId: string) => {
+        history.push(`/tribe-member-list/${tribeId}`); // Navigate to TribeMemberList with tribeId
+    };
 
-export const tribes: Tribe[] = [
-    { id: "1", name: "Asher" },
-    { id: "2", name: "Dan" },
-    { id: "3", name: "Judah" },
-    { id: "4", name: "Reuben" },
-    { id: "5", name: "Joseph" },
-    { id: "6", name: "Naphtali" },
-    { id: "7", name: "Issachar" },
-    { id: "8", name: "Simeon" },
-    { id: "9", name: "Benjamin" },
-    { id: "10", name: "Gad" },
-    { id: "11", name: "Zebulun" },
-    { id: "12", name: "Levi" }
-  ];
+    return (
+        <IonPage>
+            <IonContent className="ion-padding">
+                <IonList>
+                    {tribes.map((tribe: Tribe) => (
+                        <IonItem key={tribe.id} onClick={() => handleTribeClick(tribe.id)}>
+                            <IonLabel>{tribe.name}</IonLabel>
+                        </IonItem>
+                    ))}
+                </IonList>
+            </IonContent>
+        </IonPage>
+    );
+};
 
-
-  
+export default TribeList;
