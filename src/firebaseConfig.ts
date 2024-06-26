@@ -91,6 +91,7 @@ export interface MemberData {
     teacherName: string;
     teacherContact: string;
     teacherClass: string;
+    tribeId:string;
 }
 
 // Function to add a new member to Firestore
@@ -127,6 +128,7 @@ export async function getAllMembers(): Promise<MemberData[]> {
                 teacherName: data.teacherName,
                 teacherContact: data.teacherContact,
                 teacherClass: data.teacherClass,
+                tribeId: data.tribeId
             };
         });
         return members;

@@ -14,13 +14,17 @@ import {
   IonAlert,
   IonInput,
   IonItem,
-  IonDatetime
+  IonDatetime,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/react';
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { MemberData, getAllMembers, deleteMember, updateMember } from '../firebaseConfig';
 import './MemberList.css';
+import { toast } from '../toast';
+import { tribes, Tribe } from './TribeList';
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<MemberData[]>([]);
@@ -39,7 +43,8 @@ const MemberList: React.FC = () => {
     parentGuardianContact: '',
     teacherName: '',
     teacherContact: '',
-    teacherClass: ''
+    teacherClass: '',
+    tribeId: ''
   });
 
   useEffect(() => {
@@ -84,13 +89,9 @@ const MemberList: React.FC = () => {
   const handleEditMember = async () => {
     // Validate required fields
     if (
-      !editMemberData.name ||
-      !editMemberData.birthdate ||
-      !editMemberData.parentGuardianName ||
-      !editMemberData.parentGuardianRelationship ||
-      !editMemberData.parentGuardianContact
+      !editMemberData.name
     ) {
-      alert("Please fill in all required fields.");
+      toast("Please fill in all required fields.");
       return;
     }
 
@@ -220,6 +221,21 @@ const MemberList: React.FC = () => {
                   onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherClass: e.target.value })}
                 />
               </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Tribe</IonLabel>
+                <IonSelect
+                  value={editMemberData.tribeId}
+                  onIonChange={(e: any) =>
+                    setEditMemberData({ ...editMemberData, tribeId: e.target.value })
+                  }
+                >
+                  {tribes.map((tribe: Tribe) => (
+                    <IonSelectOption key={tribe.id} value={tribe.id}>
+                      {tribe.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
               <IonButton expand="block" onClick={handleEditMember}>
                 Save Changes
               </IonButton>
@@ -246,6 +262,8 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher: ${selectedMember?.teacherName}`}</p>
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
+                    {/* Display Tribe Name */}
+                    <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
                   </IonLabel>
                   <IonButton onClick={closeModal}>Close</IonButton>
                   <IonButton color="dark" onClick={() => setEditMode(true)}>

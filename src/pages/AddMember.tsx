@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
+import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonButton, IonSelect, IonSelectOption } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { addMember, MemberData } from '../firebaseConfig';
 import { toast } from '../toast';
+import { tribes, Tribe } from './TribeList';
 
 const AddMember: React.FC = () => {
   const [name, setName] = useState('');
@@ -17,12 +18,13 @@ const AddMember: React.FC = () => {
   const [teacherName, setTeacherName] = useState('');
   const [teacherContact, setTeacherContact] = useState('');
   const [teacherClass, setTeacherClass] = useState('');
+  const [tribeId, setTribeId] = useState(''); // State for tribe selection
   const history = useHistory();
 
   const handleAddMember = async () => {
-    // Validate required fields
-    if (!name) {
-      toast('Please fill in all required fields');
+    // Validate required fields including tribe selection
+    if (!name || !tribeId) {
+      toast('Please fill in all required fields and select a tribe');
       return;
     }
 
@@ -38,6 +40,7 @@ const AddMember: React.FC = () => {
       teacherName,
       teacherContact,
       teacherClass,
+      tribeId, // Assign selected tribeId
       id: ''
     };
 
@@ -93,6 +96,16 @@ const AddMember: React.FC = () => {
         <IonItem>
           <IonLabel position="floating">Teacher Class</IonLabel>
           <IonInput value={teacherClass} onIonChange={(e) => setTeacherClass(e.detail.value!)} />
+        </IonItem>
+        <IonItem>
+          <IonLabel>Tribe</IonLabel>
+          <IonSelect value={tribeId} placeholder="Select Tribe" onIonChange={(e) => setTribeId(e.detail.value)}>
+            {tribes.map((tribe: Tribe) => (
+              <IonSelectOption key={tribe.id} value={tribe.id}>
+                {tribe.name}
+              </IonSelectOption>
+            ))}
+          </IonSelect>
         </IonItem>
         <IonButton expand="full" onClick={handleAddMember}>Add Member</IonButton>
       </IonContent>

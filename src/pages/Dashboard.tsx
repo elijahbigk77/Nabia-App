@@ -25,6 +25,10 @@ const Dashboard: React.FC = () => {
     history.push('/member-list')
   }
 
+  const navigateToTribeList = () => {
+    history.push('/tribe-list')
+  }
+
   return (
     <IonPage>
       <MainHeader />
@@ -41,6 +45,10 @@ const Dashboard: React.FC = () => {
             <IonButton  onClick={navigateToMemberList}>
               <IonIcon slot="start" icon={personAddOutline} />
               Member List
+            </IonButton>
+            <IonButton  onClick={navigateToTribeList}>
+              <IonIcon slot="start" icon={personAddOutline} />
+              Create/View Tribe
             </IonButton>
           </div>
         </div>

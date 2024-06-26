@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AddMember from './pages/AddMember';
 import MemberList from './pages/MemberList';
+import {Tribe,tribes} from './pages/TribeList'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
