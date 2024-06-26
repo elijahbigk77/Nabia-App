@@ -21,7 +21,7 @@ const AddMember: React.FC = () => {
 
   const handleAddMember = async () => {
     // Validate required fields
-    if (!name || !parentGuardianName) {
+    if (!name) {
       toast('Please fill in all required fields');
       return;
     }

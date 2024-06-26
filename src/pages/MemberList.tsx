@@ -11,7 +11,6 @@ import {
   IonButton,
   IonLabel,
   IonIcon,
-  IonButtons,
   IonAlert,
   IonInput,
   IonItem,
@@ -49,13 +48,21 @@ const MemberList: React.FC = () => {
 
   const fetchMembers = async () => {
     const fetchedMembers = await getAllMembers();
-    setMembers(fetchedMembers);
+    const validMembers = fetchedMembers.filter(member => member.name && member.name.trim() !== '');
+    const invalidMembers = fetchedMembers.filter(member => !member.name || member.name.trim() === '');
+
+    // Delete invalid members from Firestore
+    for (const member of invalidMembers) {
+      await deleteMember(member.id);
+    }
+
+    setMembers(validMembers);
   };
 
   const openModal = (member: MemberData) => {
     setSelectedMember(member);
-    setEditMode(false); 
-    setEditMemberData(member); 
+    setEditMode(false);
+    setEditMemberData(member);
     setShowModal(true);
   };
 
@@ -75,6 +82,18 @@ const MemberList: React.FC = () => {
   };
 
   const handleEditMember = async () => {
+    // Validate required fields
+    if (
+      !editMemberData.name ||
+      !editMemberData.birthdate ||
+      !editMemberData.parentGuardianName ||
+      !editMemberData.parentGuardianRelationship ||
+      !editMemberData.parentGuardianContact
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
     if (editMemberData.id) {
       const memberId = editMemberData.id;
       const updated = await updateMember(memberId, editMemberData);
@@ -119,101 +138,103 @@ const MemberList: React.FC = () => {
 
         {/* Modal to display member details */}
         <IonModal isOpen={showModal} onDidDismiss={closeModal} className='full-screen-modal'>
-        <MainHeader />
-          <IonCard className='profile-card'>
-            <IonCardHeader>
-              <IonCardTitle>{editMode ? 'Edit Member' : selectedMember?.name}</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              {editMode ? (
-                <>
-                  <IonItem>
-                    <IonLabel position="stacked">Name</IonLabel>
-                    <IonInput
-                      value={editMemberData.name}
-                      onIonInput={(e: any) => setEditMemberData({ ...editMemberData, name: e.target.value })}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Birthdate</IonLabel>
-                    <IonDatetime
-                      
-                      value={editMemberData.birthdate}
-                      onIonChange={(e: any) => setEditMemberData({ ...editMemberData, birthdate: e.detail.value! })}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Residential Address</IonLabel>
-                    <IonInput
-                      value={editMemberData.residentialAddress}
-                      onIonInput={(e: any) =>
-                        setEditMemberData({ ...editMemberData, residentialAddress: e.target.value })
-                      }
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">School Address</IonLabel>
-                    <IonInput
-                      value={editMemberData.schoolAddress}
-                      onIonInput={(e: any) => setEditMemberData({ ...editMemberData, schoolAddress: e.target.value })}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Parent/Guardian Name</IonLabel>
-                    <IonInput
-                      value={editMemberData.parentGuardianName}
-                      onIonInput={(e: any) =>
-                        setEditMemberData({ ...editMemberData, parentGuardianName: e.target.value })
-                      }
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Parent/Guardian Relationship</IonLabel>
-                    <IonInput
-                      value={editMemberData.parentGuardianRelationship}
-                      onIonInput={(e: any) =>
-                        setEditMemberData({ ...editMemberData, parentGuardianRelationship: e.target.value })
-                      }
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Parent/Guardian Contact</IonLabel>
-                    <IonInput
-                      value={editMemberData.parentGuardianContact}
-                      onIonInput={(e: any) =>
-                        setEditMemberData({ ...editMemberData, parentGuardianContact: e.target.value })
-                      }
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Teacher Name</IonLabel>
-                    <IonInput
-                      value={editMemberData.teacherName}
-                      onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherName: e.target.value })}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Teacher Contact</IonLabel>
-                    <IonInput
-                      value={editMemberData.teacherContact}
-                      onIonInput={(e: any) =>
-                        setEditMemberData({ ...editMemberData, teacherContact: e.target.value })
-                      }
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Teacher Class</IonLabel>
-                    <IonInput
-                      value={editMemberData.teacherClass}
-                      onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherClass: e.target.value })}
-                    />
-                  </IonItem>
-                  <IonButton expand="block" onClick={handleEditMember}>
-                    Save Changes
-                  </IonButton>
-                </>
-              ) : (
-                <>
+          {editMode ? (
+            <IonContent fullscreen>
+              <MainHeader />
+              <IonItem>
+                <IonLabel position="stacked">Name</IonLabel>
+                <IonInput
+                  value={editMemberData.name}
+                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, name: e.target.value })}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Birthdate</IonLabel>
+                <IonDatetime
+                  value={editMemberData.birthdate}
+                  onIonChange={(e: any) => setEditMemberData({ ...editMemberData, birthdate: e.detail.value! })}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Residential Address</IonLabel>
+                <IonInput
+                  value={editMemberData.residentialAddress}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({ ...editMemberData, residentialAddress: e.target.value })
+                  }
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">School Address</IonLabel>
+                <IonInput
+                  value={editMemberData.schoolAddress}
+                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, schoolAddress: e.target.value })}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Parent/Guardian Name</IonLabel>
+                <IonInput
+                  value={editMemberData.parentGuardianName}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({ ...editMemberData, parentGuardianName: e.target.value })
+                  }
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Parent/Guardian Relationship</IonLabel>
+                <IonInput
+                  value={editMemberData.parentGuardianRelationship}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({ ...editMemberData, parentGuardianRelationship: e.target.value })
+                  }
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Parent/Guardian Contact</IonLabel>
+                <IonInput
+                  value={editMemberData.parentGuardianContact}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({ ...editMemberData, parentGuardianContact: e.target.value })}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Teacher Name</IonLabel>
+                <IonInput
+                  value={editMemberData.teacherName}
+                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherName: e.target.value })}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Teacher Contact</IonLabel>
+                <IonInput
+                  value={editMemberData.teacherContact}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({ ...editMemberData, teacherContact: e.target.value })
+                  }
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Teacher Class</IonLabel>
+                <IonInput
+                  value={editMemberData.teacherClass}
+                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherClass: e.target.value })}
+                />
+              </IonItem>
+              <IonButton expand="block" onClick={handleEditMember}>
+                Save Changes
+              </IonButton>
+              <IonButton expand="block" color="medium" onClick={closeModal}>
+                Cancel
+              </IonButton>
+            </IonContent>
+          ) : (
+            <IonContent className='profile-modal'>
+              <MainHeader />
+              <IonCard className='profile-card'>
+                <IonCardHeader>
+                  <IonCardTitle>{selectedMember?.name}</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent className='member-info'>
                   <IonLabel>
                     <p>{`Birthdate: ${selectedMember?.birthdate}`}</p>
                     <p>{`Age: ${calculateAge(selectedMember?.birthdate || '')}`}</p>
@@ -226,17 +247,17 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
                   </IonLabel>
-                </>
-              )}
-              <IonButton onClick={closeModal}>Close</IonButton>
-              <IonButton color="dark" onClick={() => setEditMode(true)}>
-                <IonIcon icon={pencilOutline} />
-              </IonButton>
-              <IonButton color="dark" onClick={() => setShowDeleteAlert(true)}>
-                <IonIcon icon={trashOutline} />
-              </IonButton>
-            </IonCardContent>
-          </IonCard>
+                  <IonButton onClick={closeModal}>Close</IonButton>
+                  <IonButton color="dark" onClick={() => setEditMode(true)}>
+                    <IonIcon icon={pencilOutline} />
+                  </IonButton>
+                  <IonButton color="dark" onClick={() => setShowDeleteAlert(true)}>
+                    <IonIcon icon={trashOutline} />
+                  </IonButton>
+                </IonCardContent>
+              </IonCard>
+            </IonContent>
+          )}
           <MainFooter />
         </IonModal>
 

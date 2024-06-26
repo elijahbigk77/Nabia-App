@@ -28,4 +28,8 @@
     align-items: center; 
     text-align: center; 
   }
+
+  .name-edit {
+    background-color: #DEA000;
+  }
   
