@@ -9,6 +9,7 @@ import AddMember from './pages/AddMember';
 import MemberList from './pages/MemberList';
 import TribeList from './pages/TribeList';
 import TribeMemberList from './pages/TribeMemberList';
+import ClubPage from './pages/ClubPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -61,6 +62,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/tribe-member-list/:tribeId">
           <TribeMemberList />
+        </Route>
+        <Route exact path="/club-page">
+          <ClubPage />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

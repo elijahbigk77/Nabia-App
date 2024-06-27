@@ -21,10 +21,10 @@ import {
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import { MemberData, getAllMembers, deleteMember, updateMember } from '../firebaseConfig';
+import { MemberData, getAllMembers, deleteMember, updateMember, getTribes } from '../firebaseConfig';
 import './MemberList.css';
 import { toast } from '../toast';
-import { tribes, Tribe } from '../firebaseConfig';
+import { tribes, Tribe, ClubData, getAllClubs } from '../firebaseConfig';
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<MemberData[]>([]);
@@ -44,11 +44,17 @@ const MemberList: React.FC = () => {
     teacherName: '',
     teacherContact: '',
     teacherClass: '',
-    tribeId: ''
+    tribeId: '',
+    clubId: ''
   });
+  const [tribesList, setTribesList] = useState<Tribe[]>([]);
+
+  const [clubs, setClubs] = useState<ClubData[]>([]);
 
   useEffect(() => {
     fetchMembers();
+    fetchTribes();
+    fetchClubs();
   }, []);
 
   const fetchMembers = async () => {
@@ -62,6 +68,16 @@ const MemberList: React.FC = () => {
     }
 
     setMembers(validMembers);
+  };
+
+  const fetchTribes = async () => {
+    const fetchedTribes = await getTribes();
+    setTribesList(fetchedTribes);
+  };
+
+  const fetchClubs = async () => {
+    const fetchedClubs = await getAllClubs();
+    setClubs(fetchedClubs);
   };
 
   const openModal = (member: MemberData) => {
@@ -88,20 +104,16 @@ const MemberList: React.FC = () => {
 
   const handleEditMember = async () => {
     // Validate required fields
-    if (
-      !editMemberData.name
-    ) {
-      toast("Please fill in all required fields.");
+    if (!editMemberData.name) {
+      toast('Please fill in all required fields.');
       return;
     }
 
-    if (editMemberData.id) {
-      const memberId = editMemberData.id;
-      const updated = await updateMember(memberId, editMemberData);
-      if (updated) {
-        fetchMembers(); // Refresh member list after update
-        closeModal();
-      }
+    const memberId = editMemberData.id;
+    const updated = await updateMember(memberId, editMemberData);
+    if (updated) {
+      fetchMembers(); // Refresh member list after update
+      closeModal();
     }
   };
 
@@ -138,7 +150,7 @@ const MemberList: React.FC = () => {
         </IonList>
 
         {/* Modal to display member details */}
-        <IonModal isOpen={showModal} onDidDismiss={closeModal} className='full-screen-modal'>
+        <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal">
           {editMode ? (
             <IonContent fullscreen>
               <MainHeader />
@@ -195,7 +207,8 @@ const MemberList: React.FC = () => {
                 <IonInput
                   value={editMemberData.parentGuardianContact}
                   onIonInput={(e: any) =>
-                    setEditMemberData({ ...editMemberData, parentGuardianContact: e.target.value })}
+                    setEditMemberData({ ...editMemberData, parentGuardianContact: e.target.value })
+                  }
                 />
               </IonItem>
               <IonItem>
@@ -236,6 +249,21 @@ const MemberList: React.FC = () => {
                   ))}
                 </IonSelect>
               </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Club</IonLabel>
+                <IonSelect
+                  value={editMemberData.clubId}
+                  onIonChange={(e: any) =>
+                    setEditMemberData({ ...editMemberData, clubId: e.target.value })
+                  }
+                >
+                  {clubs.map((club: ClubData) => (
+                    <IonSelectOption key={club.id} value={club.id}>
+                      {club.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
               <IonButton expand="block" onClick={handleEditMember}>
                 Save Changes
               </IonButton>
@@ -244,13 +272,13 @@ const MemberList: React.FC = () => {
               </IonButton>
             </IonContent>
           ) : (
-            <IonContent className='profile-modal'>
+            <IonContent className="profile-modal">
               <MainHeader />
-              <IonCard className='profile-card'>
+              <IonCard className="profile-card">
                 <IonCardHeader>
                   <IonCardTitle>{selectedMember?.name}</IonCardTitle>
                 </IonCardHeader>
-                <IonCardContent className='member-info'>
+                <IonCardContent className="member-info">
                   <IonLabel>
                     <p>{`Birthdate: ${selectedMember?.birthdate}`}</p>
                     <p>{`Age: ${calculateAge(selectedMember?.birthdate || '')}`}</p>
@@ -263,6 +291,7 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
                     <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
+                    <p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p>
                   </IonLabel>
                   <IonButton onClick={closeModal}>Close</IonButton>
                   <IonButton color="dark" onClick={() => setEditMode(true)}>

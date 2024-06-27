@@ -27,7 +27,8 @@ const TribeMemberList: React.FC = () => {
         teacherName: '',
         teacherContact: '',
         teacherClass: '',
-        tribeId: ''
+        tribeId: '',
+        clubId: ''
     });
 
     useEffect(() => {

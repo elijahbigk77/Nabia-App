@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonButton, IonSelect, IonSelectOption } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import { addMember, MemberData } from '../firebaseConfig';
+import { addMember, MemberData, ClubData, getAllClubs, Tribe, tribes } from '../firebaseConfig'; // Update imports
 import { toast } from '../toast';
-import { tribes, Tribe } from '../firebaseConfig';
 
 const AddMember: React.FC = () => {
   const [name, setName] = useState('');
@@ -18,13 +17,24 @@ const AddMember: React.FC = () => {
   const [teacherName, setTeacherName] = useState('');
   const [teacherContact, setTeacherContact] = useState('');
   const [teacherClass, setTeacherClass] = useState('');
-  const [tribeId, setTribeId] = useState(''); // State for tribe selection
+  const [clubId, setClubId] = useState(''); // State for club selection
+  const [clubs, setClubs] = useState<ClubData[]>([]); // State to store clubs
+  const [tribeId, setTribeId] = useState<string>('');
   const history = useHistory();
 
+  useEffect(() => {
+    fetchClubs(); // Fetch clubs when component mounts
+  }, []);
+
+  const fetchClubs = async () => {
+    const fetchedClubs = await getAllClubs();
+    setClubs(fetchedClubs);
+  };
+
   const handleAddMember = async () => {
-    // Validate required fields including tribe selection
-    if (!name || !tribeId) {
-      toast('Please fill in all required fields and select a tribe');
+    // Validate required fields including club selection
+    if (!name || !clubId) {
+      toast('Please fill in all required fields and select a club');
       return;
     }
 
@@ -40,14 +50,15 @@ const AddMember: React.FC = () => {
       teacherName,
       teacherContact,
       teacherClass,
-      tribeId, // Assign selected tribeId
-      id: ''
+      tribeId: '',
+      clubId,
+      id: '' 
     };
 
     // Add member to Firestore
     const added = await addMember(newMemberData);
     if (added) {
-      history.push('/member-list');
+      history.push(`/club-members/${clubId}`); // Navigate to club-specific member list
     } else {
       alert('Failed to add member');
     }
@@ -96,6 +107,16 @@ const AddMember: React.FC = () => {
         <IonItem>
           <IonLabel position="floating">Teacher Class</IonLabel>
           <IonInput value={teacherClass} onIonChange={(e) => setTeacherClass(e.detail.value!)} />
+        </IonItem>
+        <IonItem>
+          <IonLabel>Club</IonLabel>
+          <IonSelect value={clubId} placeholder="Select Club" onIonChange={(e) => setClubId(e.detail.value)}>
+            {clubs.map((club: ClubData) => (
+              <IonSelectOption key={club.id} value={club.id}>
+                {club.name}
+              </IonSelectOption>
+            ))}
+          </IonSelect>
         </IonItem>
         <IonItem>
           <IonLabel>Tribe</IonLabel>

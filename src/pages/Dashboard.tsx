@@ -11,9 +11,7 @@ interface LocationState {
 }
 
 const Dashboard: React.FC = () => {
-  const location = useLocation<{
-    username: string; state: LocationState 
-}>();
+  const location = useLocation<{ username: string; state: LocationState }>();
   const history = useHistory();
   const username = location.state?.username || 'Guest';
 
@@ -22,12 +20,16 @@ const Dashboard: React.FC = () => {
   };
 
   const navigateToMemberList = () => {
-    history.push('/member-list')
-  }
+    history.push('/member-list');
+  };
 
   const navigateToTribeList = () => {
     history.push('/tribe-list');
-  }
+  };
+
+  const navigateToClubPage = () => {
+    history.push('/club-page');
+  };
 
   return (
     <IonPage>
@@ -49,6 +51,10 @@ const Dashboard: React.FC = () => {
             <IonButton onClick={navigateToTribeList}>
               <IonIcon slot="start" icon={personAddOutline} />
               View Tribes
+            </IonButton>
+            <IonButton onClick={navigateToClubPage}>
+              <IonIcon slot="start" icon={personAddOutline} />
+              Create/View Club
             </IonButton>
           </div>
         </div>
