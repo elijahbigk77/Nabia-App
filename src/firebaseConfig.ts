@@ -322,8 +322,6 @@ export interface Tribe {
     name: string;
 }
 
-
-
 export const tribes: Tribe[] = [
     { id: "1", name: "Asher" },
     { id: "2", name: "Dan" },
@@ -338,5 +336,15 @@ export const tribes: Tribe[] = [
     { id: "11", name: "Zebulun" },
     { id: "12", name: "Levi" }
 ];
+
+
+export const signOut = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+  
 
 export { db, auth, app };
