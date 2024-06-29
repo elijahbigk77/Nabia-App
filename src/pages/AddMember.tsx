@@ -58,16 +58,16 @@ const AddMember: React.FC = () => {
     // Add member to Firestore
     const added = await addMember(newMemberData);
     if (added) {
-      history.push(`/club-members/${clubId}`); // Navigate to club-specific member list
+      history.push(`/member-list`); // Navigate to club-specific member list
     } else {
       alert('Failed to add member');
     }
   };
 
   return (
-    <IonPage>
+    <IonPage className='item-background-color'>
       <MainHeader />
-      <IonContent className="ion-padding">
+      <IonContent >
         <IonItem>
           <IonLabel position="floating">Name</IonLabel>
           <IonInput value={name} onIonChange={(e) => setName(e.detail.value!)} />

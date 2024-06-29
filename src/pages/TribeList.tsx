@@ -15,10 +15,10 @@ const TribeList: React.FC = () => {
     return (
         <IonPage>
             <MainHeader />
-            <IonContent className="ion-padding" color="background">
+            <IonContent className="ion-padding item-background-color" color="background">
                 <IonList>
                     {tribes.map((tribe: Tribe) => (
-                        <IonItem key={tribe.id} onClick={() => handleTribeClick(tribe.id)}>
+                        <IonItem key={tribe.id} onClick={() => handleTribeClick(tribe.id)} className='item-background-color'>
                             <IonLabel>{tribe.name}</IonLabel>
                         </IonItem>
                     ))}

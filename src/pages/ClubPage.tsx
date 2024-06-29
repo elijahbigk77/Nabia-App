@@ -1,3 +1,4 @@
+// ClubList.tsx
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
@@ -22,6 +23,8 @@ import { addOutline, createOutline, trashOutline, closeOutline } from 'ionicons/
 import { addClub, getAllClubs, ClubData, updateClub, deleteClub } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
+import ClubPage from './ClubPage'; // Import ClubPage component
+import { useHistory } from 'react-router-dom';
 
 const ClubList: React.FC = () => {
   const [clubs, setClubs] = useState<ClubData[]>([]);
@@ -36,6 +39,7 @@ const ClubList: React.FC = () => {
   const [deleteClubId, setDeleteClubId] = useState<string | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     fetchClubs();
@@ -96,13 +100,18 @@ const ClubList: React.FC = () => {
     setShowDeleteAlert(true);
   };
 
+  const navigateToClubPage = (clubId: string) => {
+    // Navigate to ClubPage component passing the clubId as props
+    history.push('/club-page');
+  };
+
   return (
     <IonPage>
       <MainHeader />
       <IonContent className="ion-padding" color="background">
         <IonList>
           {clubs.map((club, index) => (
-            <IonCard key={index}>
+            <IonCard key={index} onClick={() => navigateToClubPage(club.id || '')}>
               <IonCardHeader>
                 <IonCardTitle>{club.name}</IonCardTitle>
               </IonCardHeader>

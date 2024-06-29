@@ -16,7 +16,7 @@ import {
   IonItem,
   IonDatetime,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
 } from '@ionic/react';
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
@@ -132,7 +132,7 @@ const MemberList: React.FC = () => {
   return (
     <IonPage>
       <MainHeader />
-      <IonContent className="ion-padding" color="background">
+      <IonContent className="ion-padding item-background-color" color="background">
         <IonList>
           {members.map((member, index) => (
             <IonCard key={index} onClick={() => openModal(member)}>
@@ -150,7 +150,7 @@ const MemberList: React.FC = () => {
         </IonList>
 
         {/* Modal to display member details */}
-        <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal">
+        <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal item-background-color">
           {editMode ? (
             <IonContent fullscreen>
               <MainHeader />
@@ -161,9 +161,9 @@ const MemberList: React.FC = () => {
                   onIonInput={(e: any) => setEditMemberData({ ...editMemberData, name: e.target.value })}
                 />
               </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Birthdate</IonLabel>
-                <IonDatetime
+              <IonItem className='item-background-color'>
+                <p><IonLabel position="stacked">Birthdate</IonLabel></p>
+                <IonDatetime color='success'
                   value={editMemberData.birthdate}
                   onIonChange={(e: any) => setEditMemberData({ ...editMemberData, birthdate: e.detail.value! })}
                 />
@@ -272,8 +272,8 @@ const MemberList: React.FC = () => {
               </IonButton>
             </IonContent>
           ) : (
-            <IonContent className="profile-modal">
-              <MainHeader />
+            <IonContent className="profile-modal" color="background">
+              <MainHeader> </MainHeader>
               <IonCard className="profile-card">
                 <IonCardHeader>
                   <IonCardTitle>{selectedMember?.name}</IonCardTitle>
@@ -293,7 +293,7 @@ const MemberList: React.FC = () => {
                     <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
                     <p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p>
                   </IonLabel>
-                  <IonButton onClick={closeModal}>Close</IonButton>
+                  <IonButton onClick={closeModal} color='danger'>Close</IonButton>
                   <IonButton color="dark" onClick={() => setEditMode(true)}>
                     <IonIcon icon={pencilOutline} />
                   </IonButton>

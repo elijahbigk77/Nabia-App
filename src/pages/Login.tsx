@@ -17,7 +17,7 @@ const Login: React.FC = () => {
         try {
             const user = await loginUser(username, password);
             if (user) {
-                toast('Login Successful');
+                toast('Login Successful', 'success');
                 console.log('Login Successful', user);
                 history.push({
                     pathname: '/dashboard',
@@ -25,7 +25,7 @@ const Login: React.FC = () => {
                 });
             }
         } catch (error) {
-            toast('Error logging in with your credentials');
+            toast('Error logging in with your credentials', 'red'); // Pass 'danger' color
             console.error('Login Failed', error);
         }
     }
@@ -36,11 +36,11 @@ const Login: React.FC = () => {
             <IonContent fullscreen className='ion-padding' color='background'>
                 <IonItem className='username-field' color='background'>
                     <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Email: </IonLabel>
-                    <IonInput className='username-input' placeholder=' Email' onIonChange={(e: any) => setUsername(e.target.value)} />
+                    <IonInput className='ion-padding username-input' placeholder=' Email' onIonChange={(e: any) => setUsername(e.target.value)} />
                 </IonItem>
                 <IonItem className='password-field' color='background'>
                     <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Password: </IonLabel>
-                    <IonInput className='password-input' type='password' placeholder=' Password' onIonChange={(e: any) => setPassword(e.target.value)} />
+                    <IonInput className='ion-padding password-input' type='password' placeholder=' Password' onIonChange={(e: any) => setPassword(e.target.value)} />
                 </IonItem>
                 <IonButton className='login-button' color='dark' onClick={login}>Login</IonButton>
                 <p className='register-text'>
