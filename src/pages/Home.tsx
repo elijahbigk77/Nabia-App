@@ -2,11 +2,12 @@ import { IonButton, IonContent, IonHeader, IonItem, IonPage, IonTitle, IonToolba
 import './Home.css';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
+import Header from '../components/Header';
 
 const Home: React.FC = () => {
   return (
     <IonPage>
-      <MainHeader />
+      <Header />
       <IonContent fullscreen className='home-content'color='background' >
         <p className='welcome-text'><i> Welcome to the Nabia Fellows app</i></p>
         <IonButton className='login-button' color='light' routerLink='/Login'>Login</IonButton>

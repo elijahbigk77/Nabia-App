@@ -7,6 +7,7 @@ import { loginUser } from '../firebaseConfig';
 import { toast } from '../toast';
 import MainFooter from '../components/MainFooter';
 import './Login.css';
+import Header from '../components/Header';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -21,7 +22,7 @@ const Login: React.FC = () => {
                 console.log('Login Successful', user);
                 history.push({
                     pathname: '/dashboard',
-                    state: { username: user.email || 'Guest' }  // Ensure 'user.email' is correct or replace it with the correct property
+                    state: { username: user.email || 'Guest' } 
                 });
             }
         } catch (error) {
@@ -32,7 +33,7 @@ const Login: React.FC = () => {
 
     return (
         <IonPage>
-            <MainHeader />
+            <Header />
             <IonContent fullscreen className='ion-padding' color='background'>
                 <IonItem className='username-field' color='background'>
                     <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Email: </IonLabel>
