@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonPage, IonIcon, IonContent, IonButton, IonText } from '@ionic/react';
 import { useLocation, useHistory } from 'react-router-dom';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import './Dashboard.css';
 import { personAddOutline } from 'ionicons/icons';
+import { getCurrentUser, signOut } from '../firebaseConfig'; // Import getCurrentUser and signOut functions
 
 interface LocationState {
   username: string;
@@ -13,7 +14,14 @@ interface LocationState {
 const Dashboard: React.FC = () => {
   const location = useLocation<{ username: string; state: LocationState }>();
   const history = useHistory();
-  const username = location.state?.username || 'Guest';
+  const [displayName, setDisplayName] = useState<string>('Guest');
+
+  useEffect(() => {
+    const user = getCurrentUser(); // Get current authenticated user
+    if (user) {
+      setDisplayName(user.displayName || 'User'); // Set display name from user's profile
+    }
+  }, []);
 
   const navigateToAddMember = () => {
     history.push('/add-member');
@@ -31,13 +39,18 @@ const Dashboard: React.FC = () => {
     history.push('/club-page');
   };
 
+  const handleSignOut = async () => {
+    await signOut(); // Call signOut function from firebaseConfig
+    history.replace('/login'); // Redirect to login page after signing out
+  };
+
   return (
     <IonPage>
       <MainHeader />
       <IonContent fullscreen className="ion-padding" color="background">
         <div className="dashboard-container">
           <p className="welcome-text">
-            <IonText>Hello {username}, Welcome to the Nabia App</IonText>
+            <IonText>Hello {displayName}, Welcome to the Nabia App</IonText>
           </p>
           <div className="add-member">
             <IonButton className="add-member-button" onClick={navigateToAddMember}>
@@ -55,6 +68,9 @@ const Dashboard: React.FC = () => {
             <IonButton onClick={navigateToClubPage}>
               <IonIcon slot="start" icon={personAddOutline} />
               Create/View Club
+            </IonButton>
+            <IonButton onClick={handleSignOut}>
+              Sign Out
             </IonButton>
           </div>
         </div>

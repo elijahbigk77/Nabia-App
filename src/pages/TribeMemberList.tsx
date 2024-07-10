@@ -3,10 +3,11 @@ import { IonPage, IonContent, IonList, IonCard, IonCardHeader, IonCardTitle, Ion
 import { useParams } from 'react-router-dom';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import { MemberData, Tribe, getMembersByTribeId, tribes, updateMember, deleteMember } from '../firebaseConfig';
+import { MemberData, Tribe, getMembersByTribeId, tribes, updateMember,getAllClubs, deleteMember, ClubData, getTribes } from '../firebaseConfig';
 import './MemberList.css';
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import { toast } from '../toast';
+
 
 const TribeMemberList: React.FC = () => {
     const { tribeId } = useParams<{ tribeId: string }>();
@@ -31,14 +32,30 @@ const TribeMemberList: React.FC = () => {
         clubId: ''
     });
 
+    const [clubs, setClubs] = useState<ClubData[]>([]);
+    const [tribesList, setTribesList] = useState<Tribe[]>([]);
+
+
     useEffect(() => {
         fetchMembers();
+        fetchTribes();
+        fetchClubs();
     }, [tribeId]); // Fetch members when tribeId changes
 
     const fetchMembers = async () => {
         const fetchedMembers = await getMembersByTribeId(tribeId); // Fetch members by tribeId
         setMembers(fetchedMembers);
     };
+
+    const fetchTribes = async () => {
+        const fetchedTribes = await getTribes();
+        setTribesList(fetchedTribes);
+      };
+    
+      const fetchClubs = async () => {
+        const fetchedClubs = await getAllClubs();
+        setClubs(fetchedClubs);
+      };
 
     const openModal = (member: MemberData) => {
         setSelectedMember(member);
@@ -213,6 +230,21 @@ const TribeMemberList: React.FC = () => {
                                     ))}
                                 </IonSelect>
                             </IonItem>
+                            <IonItem>
+                <IonLabel position="stacked">Club</IonLabel>
+                <IonSelect
+                  value={editMemberData.clubId}
+                  onIonChange={(e: any) =>
+                    setEditMemberData({ ...editMemberData, clubId: e.target.value })
+                  }
+                >
+                  {clubs.map((club: ClubData) => (
+                    <IonSelectOption key={club.id} value={club.id}>
+                      {club.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
                             <IonButton expand="block" onClick={handleEditMember}>
                                 Save Changes
                             </IonButton>
@@ -240,6 +272,7 @@ const TribeMemberList: React.FC = () => {
                                         <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                                         <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
                                         <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
+                                        <p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p>
                                     </IonLabel>
                                     <IonButton onClick={closeModal}>Close</IonButton>
                                     <IonButton color="dark" onClick={() => setEditMode(true)}>

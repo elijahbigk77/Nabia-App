@@ -1,6 +1,5 @@
 import { IonButton, IonContent, IonHeader, IonItem, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
-import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import Header from '../components/Header';
 

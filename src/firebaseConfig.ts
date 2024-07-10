@@ -1,5 +1,5 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from 'firebase/firestore';
 import { toast } from './toast';
 
@@ -54,20 +54,25 @@ export async function loginUser(username: string, password: string) {
 }
 
 // Function to register user with email and password
-export async function registerUser(username: string, password: string) {
-    const email = convertToEmail(username);
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        return userCredential.user;
-    } catch (error) {
-        if (error instanceof Error) {
-            toast(error.message);
-        } else {
-            toast('Registration Failed');
-        }
-        return false;
-    }
+export async function registerUser(username: string, password: string, name: string) {
+  const email = convertToEmail(username);
+  try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      // Update user profile with name
+      await updateProfile(userCredential.user, { displayName: name });
+
+      return userCredential.user;
+  } catch (error) {
+      if (error instanceof Error) {
+          toast(error.message);
+      } else {
+          toast('Registration Failed');
+      }
+      return false;
+  }
 }
+
 
 // Function to convert username to valid email format
 function convertToEmail(username: string): string {
