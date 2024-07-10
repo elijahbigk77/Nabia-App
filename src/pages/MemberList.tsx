@@ -48,7 +48,6 @@ const MemberList: React.FC = () => {
     clubId: ''
   });
   const [tribesList, setTribesList] = useState<Tribe[]>([]);
-
   const [clubs, setClubs] = useState<ClubData[]>([]);
 
   useEffect(() => {
@@ -129,6 +128,23 @@ const MemberList: React.FC = () => {
     }
   };
 
+  const formatBirthdate = (birthdate: string): string => {
+    const date = new Date(birthdate);
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+
+    // Suffix for day (e.g., 1st, 2nd, 3rd, 4th)
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const suffix = suffixes[day % 10] || 'th';
+
+    // Array of month names
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = months[monthIndex];
+
+    return `${day}${suffix} ${month}, ${year}`;
+  };
+
   return (
     <IonPage>
       <MainHeader />
@@ -141,7 +157,7 @@ const MemberList: React.FC = () => {
               </IonCardHeader>
               <IonCardContent>
                 <IonLabel>
-                  <p>{`Birthdate: ${member.birthdate}`}</p>
+                  <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
                   <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
                 </IonLabel>
               </IonCardContent>
@@ -242,7 +258,7 @@ const MemberList: React.FC = () => {
                     setEditMemberData({ ...editMemberData, tribeId: e.target.value })
                   }
                 >
-                  {tribes.map((tribe: Tribe) => (
+                  {tribesList.map((tribe: Tribe) => (
                     <IonSelectOption key={tribe.id} value={tribe.id}>
                       {tribe.name}
                     </IonSelectOption>
@@ -280,7 +296,7 @@ const MemberList: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent className="member-info">
                   <IonLabel>
-                    <p>{`Birthdate: ${selectedMember?.birthdate}`}</p>
+                    <p>{`Birthdate: ${formatBirthdate(selectedMember?.birthdate || '')}`}</p>
                     <p>{`Age: ${calculateAge(selectedMember?.birthdate || '')}`}</p>
                     <p>{`Residential Address: ${selectedMember?.residentialAddress}`}</p>
                     <p>{`School Address: ${selectedMember?.schoolAddress}`}</p>
@@ -290,7 +306,7 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher: ${selectedMember?.teacherName}`}</p>
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
-                    <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
+                    <p>{`Tribe: ${tribesList.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
                     <p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p>
                   </IonLabel>
                   <IonButton onClick={closeModal} color='danger'>Close</IonButton>

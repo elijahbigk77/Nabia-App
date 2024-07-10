@@ -13,15 +13,18 @@ import {
   IonInput,
   IonSelect,
   IonSelectOption,
-  IonAlert
+  IonAlert,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle
 } from '@ionic/react';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { getMembersByClubId, MemberData, updateMember, deleteMember, Tribe, tribes, ClubData, getTribes, getAllClubs } from '../firebaseConfig';
 import { useParams } from 'react-router-dom';
 
-
-import { pencilOutline, trashOutline, closeOutline } from 'ionicons/icons';
+import { pencilOutline, trashOutline } from 'ionicons/icons';
 import { toast } from '../toast';
 
 interface RouteParams {
@@ -50,9 +53,9 @@ const ClubMemberList: React.FC = () => {
     clubId: ''
   });
 
-const { clubId } = useParams<RouteParams>();
-const [clubs, setClubs] = useState<ClubData[]>([]);
-const [tribesList, setTribesList] = useState<Tribe[]>([]);
+  const { clubId } = useParams<RouteParams>();
+  const [clubs, setClubs] = useState<ClubData[]>([]);
+  const [tribesList, setTribesList] = useState<Tribe[]>([]);
 
   useEffect(() => {
     fetchTribes();
@@ -65,7 +68,7 @@ const [tribesList, setTribesList] = useState<Tribe[]>([]);
     setMembers(fetchedMembers);
   };
 
-const fetchTribes = async () => {
+  const fetchTribes = async () => {
     const fetchedTribes = await getTribes();
     setTribesList(fetchedTribes);
   };
@@ -126,17 +129,44 @@ const fetchTribes = async () => {
     }
   };
 
+  const formatBirthdate = (birthdate: string): string => {
+    const date = new Date(birthdate);
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+
+    // Suffix for day (e.g., 1st, 2nd, 3rd, 4th)
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const suffix = suffixes[day % 10] || 'th';
+
+    // Array of month names
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = months[monthIndex];
+
+    return `${day}${suffix} ${month}, ${year}`;
+  };
+
+  // Find the selected club's name
+  const selectedClubName = clubs.find(club => club.id === clubId)?.name || '';
+
   return (
     <IonPage>
       <MainHeader />
       <IonContent fullscreen className="ion-padding" color="background">
+        <h2>Members of {selectedClubName}</h2>
         <IonList>
-          {members.map((member, index) => (
-            <IonItem key={index} button onClick={() => openModal(member)}>
-              <IonLabel>{member.name}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
+                    {members.map((member, index) => (
+                        <IonCard key={index} onClick={() => openModal(member)}>
+                            <IonCardHeader>
+                                <IonCardTitle>{member.name}</IonCardTitle>
+                            </IonCardHeader>
+                            <IonCardContent>
+                                <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
+                                <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
+                            </IonCardContent>
+                        </IonCard>
+                    ))}
+                </IonList>
 
         {/* Member Details Modal */}
         <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal">
@@ -223,21 +253,21 @@ const fetchTribes = async () => {
                 />
               </IonItem>
               <IonItem>
-                                <IonLabel position="stacked">Tribe</IonLabel>
-                                <IonSelect
-                                    value={editMemberData.tribeId}
-                                    onIonChange={(e: any) =>
-                                        setEditMemberData({ ...editMemberData, tribeId: e.target.value })
-                                    }
-                                >
-                                    {tribes.map((tribe: Tribe) => (
-                                        <IonSelectOption key={tribe.id} value={tribe.id}>
-                                            {tribe.name}
-                                        </IonSelectOption>
-                                    ))}
-                                </IonSelect>
-                            </IonItem>
-                            <IonItem>
+                <IonLabel position="stacked">Tribe</IonLabel>
+                <IonSelect
+                  value={editMemberData.tribeId}
+                  onIonChange={(e: any) =>
+                    setEditMemberData({ ...editMemberData, tribeId: e.target.value })
+                  }
+                >
+                  {tribesList.map((tribe: Tribe) => (
+                    <IonSelectOption key={tribe.id} value={tribe.id}>
+                      {tribe.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+              <IonItem>
                 <IonLabel position="stacked">Club</IonLabel>
                 <IonSelect
                   value={editMemberData.clubId}
@@ -266,7 +296,7 @@ const fetchTribes = async () => {
                 <p>{selectedMember?.name}</p>
               </IonItem>
               <IonItem>
-                <p>Birthdate: {selectedMember?.birthdate}</p>
+                <p>Birthdate: {formatBirthdate(selectedMember?.birthdate || '')}</p>
               </IonItem>
               <IonItem>
                 <p>Age: {calculateAge(selectedMember?.birthdate || '')}</p>
@@ -295,7 +325,7 @@ const fetchTribes = async () => {
               <IonItem>
                 <p>Teacher Class: {selectedMember?.teacherClass}</p>
               </IonItem>
-              <IonItem><p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p></IonItem>
+              <IonItem><p>{`Tribe: ${tribesList.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p></IonItem>
               <IonItem><p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p></IonItem>
               <IonButton onClick={closeModal}>Close</IonButton>
               <IonButton color="dark" onClick={() => setEditMode(true)}>

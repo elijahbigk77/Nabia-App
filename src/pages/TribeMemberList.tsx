@@ -3,11 +3,10 @@ import { IonPage, IonContent, IonList, IonCard, IonCardHeader, IonCardTitle, Ion
 import { useParams } from 'react-router-dom';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import { MemberData, Tribe, getMembersByTribeId, tribes, updateMember,getAllClubs, deleteMember, ClubData, getTribes } from '../firebaseConfig';
+import { MemberData, Tribe, getMembersByTribeId, tribes, updateMember, getAllClubs, deleteMember, ClubData, getTribes } from '../firebaseConfig';
 import './MemberList.css';
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import { toast } from '../toast';
-
 
 const TribeMemberList: React.FC = () => {
     const { tribeId } = useParams<{ tribeId: string }>();
@@ -35,7 +34,6 @@ const TribeMemberList: React.FC = () => {
     const [clubs, setClubs] = useState<ClubData[]>([]);
     const [tribesList, setTribesList] = useState<Tribe[]>([]);
 
-
     useEffect(() => {
         fetchMembers();
         fetchTribes();
@@ -50,12 +48,12 @@ const TribeMemberList: React.FC = () => {
     const fetchTribes = async () => {
         const fetchedTribes = await getTribes();
         setTribesList(fetchedTribes);
-      };
-    
-      const fetchClubs = async () => {
+    };
+
+    const fetchClubs = async () => {
         const fetchedClubs = await getAllClubs();
         setClubs(fetchedClubs);
-      };
+    };
 
     const openModal = (member: MemberData) => {
         setSelectedMember(member);
@@ -81,9 +79,7 @@ const TribeMemberList: React.FC = () => {
 
     const handleEditMember = async () => {
         // Validate required fields
-        if (
-            !editMemberData.name
-        ) {
+        if (!editMemberData.name) {
             toast("Please fill in all required fields.");
             return;
         }
@@ -113,6 +109,24 @@ const TribeMemberList: React.FC = () => {
     // Find the name of the selected tribe
     const selectedTribeName = tribes.find(tribe => tribe.id === tribeId)?.name;
 
+    const formatBirthdate = (birthdate: string): string => {
+        const date = new Date(birthdate);
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+    
+        // Suffix for day (e.g., 1st, 2nd, 3rd, 4th)
+        const suffixes = ['th', 'st', 'nd', 'rd'];
+        const suffix = suffixes[day % 10] || 'th';
+    
+        // Array of month names
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const month = months[monthIndex];
+    
+        return `${day}${suffix} ${month}, ${year}`;
+      };
+    
+
     return (
         <IonPage>
             <MainHeader />
@@ -125,7 +139,7 @@ const TribeMemberList: React.FC = () => {
                                 <IonCardTitle>{member.name}</IonCardTitle>
                             </IonCardHeader>
                             <IonCardContent>
-                                <p>{`Birthdate: ${member.birthdate}`}</p>
+                                <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
                                 <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
                             </IonCardContent>
                         </IonCard>
@@ -231,20 +245,20 @@ const TribeMemberList: React.FC = () => {
                                 </IonSelect>
                             </IonItem>
                             <IonItem>
-                <IonLabel position="stacked">Club</IonLabel>
-                <IonSelect
-                  value={editMemberData.clubId}
-                  onIonChange={(e: any) =>
-                    setEditMemberData({ ...editMemberData, clubId: e.target.value })
-                  }
-                >
-                  {clubs.map((club: ClubData) => (
-                    <IonSelectOption key={club.id} value={club.id}>
-                      {club.name}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+                                <IonLabel position="stacked">Club</IonLabel>
+                                <IonSelect
+                                    value={editMemberData.clubId}
+                                    onIonChange={(e: any) =>
+                                        setEditMemberData({ ...editMemberData, clubId: e.target.value })
+                                    }
+                                >
+                                    {clubs.map((club: ClubData) => (
+                                        <IonSelectOption key={club.id} value={club.id}>
+                                            {club.name}
+                                        </IonSelectOption>
+                                    ))}
+                                </IonSelect>
+                            </IonItem>
                             <IonButton expand="block" onClick={handleEditMember}>
                                 Save Changes
                             </IonButton>
@@ -261,7 +275,7 @@ const TribeMemberList: React.FC = () => {
                                 </IonCardHeader>
                                 <IonCardContent className='member-info'>
                                     <IonLabel>
-                                        <p>{`Birthdate: ${selectedMember?.birthdate}`}</p>
+                                        <p>{`Birthdate: ${formatBirthdate(selectedMember?.birthdate || '')}`}</p>
                                         <p>{`Age: ${calculateAge(selectedMember?.birthdate || '')}`}</p>
                                         <p>{`Residential Address: ${selectedMember?.residentialAddress}`}</p>
                                         <p>{`School Address: ${selectedMember?.schoolAddress}`}</p>
@@ -287,24 +301,24 @@ const TribeMemberList: React.FC = () => {
                     )}
                     <MainFooter />
                 </IonModal>
-        {/* Alert for delete confirmation */}
-        <IonAlert
-          isOpen={showDeleteAlert}
-          onDidDismiss={() => setShowDeleteAlert(false)}
-          header={'Confirm Delete'}
-          message={`Are you sure you want to delete ${selectedMember?.name}?`}
-          buttons={[
-            {
-              text: 'Cancel',
-              role: 'cancel',
-              cssClass: 'secondary'
-            },
-            {
-              text: 'Delete',
-              handler: handleDeleteMember
-            }
-          ]}
-        />
+                {/* Alert for delete confirmation */}
+                <IonAlert
+                    isOpen={showDeleteAlert}
+                    onDidDismiss={() => setShowDeleteAlert(false)}
+                    header={'Confirm Delete'}
+                    message={`Are you sure you want to delete ${selectedMember?.name}?`}
+                    buttons={[
+                        {
+                            text: 'Cancel',
+                            role: 'cancel',
+                            cssClass: 'secondary'
+                        },
+                        {
+                            text: 'Delete',
+                            handler: handleDeleteMember
+                        }
+                    ]}
+                />
             </IonContent>
             <MainFooter />
         </IonPage>

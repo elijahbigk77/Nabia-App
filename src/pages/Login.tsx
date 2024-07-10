@@ -39,8 +39,8 @@ const Login: React.FC = () => {
             <Header />
             <IonContent fullscreen className='ion-padding' color='background'>
                 <IonItem className='username-field' color='background'>
-                    <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Email: </IonLabel>
-                    <IonInput className='ion-padding username-input' placeholder=' Email' onIonChange={(e: any) => setUsername(e.target.value)} />
+                    <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Email / Username: </IonLabel>
+                    <IonInput className='ion-padding username-input' placeholder=' Email / Username' onIonChange={(e: any) => setUsername(e.target.value)} />
                 </IonItem>
                 <IonItem className='password-field' color='background'>
                     <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Password: </IonLabel>

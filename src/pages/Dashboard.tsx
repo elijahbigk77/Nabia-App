@@ -39,10 +39,6 @@ const Dashboard: React.FC = () => {
     history.push('/club-page');
   };
 
-  const handleSignOut = async () => {
-    await signOut(); // Call signOut function from firebaseConfig
-    
-  };
 
   return (
     <IonPage>
@@ -68,9 +64,6 @@ const Dashboard: React.FC = () => {
             <IonButton onClick={navigateToClubPage}>
               <IonIcon slot="start" icon={personAddOutline} />
               Create/View Club
-            </IonButton>
-            <IonButton onClick={handleSignOut}>
-              Sign Out
             </IonButton>
           </div>
         </div>
