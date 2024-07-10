@@ -26,8 +26,12 @@ const Register: React.FC = () => {
         try {
             const userRegistered = await registerUser(username, password, name); // Call registerUser with username, password, and name
             if (userRegistered) {
-                toast('You have registered successfully');
-                // Redirect to dashboard or login page
+                toast('You have registered successfully', 'success');
+                // Reset input fields after successful registration
+                setName('');
+                setUsername('');
+                setPassword('');
+                setConfirmPassword('');
             } else {
                 toast('Registration failed'); // Handle registration failure
             }

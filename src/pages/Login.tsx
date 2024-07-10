@@ -20,6 +20,9 @@ const Login: React.FC = () => {
             if (user) {
                 toast('Login Successful', 'success');
                 console.log('Login Successful', user);
+                // Reset input fields after successful registration
+                setUsername('');
+                setPassword('');
                 history.push({
                     pathname: '/dashboard',
                     state: { username: user.email || 'Guest' } 

@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
 
   const handleSignOut = async () => {
     await signOut(); // Call signOut function from firebaseConfig
-    history.replace('/login'); // Redirect to login page after signing out
+    
   };
 
   return (
