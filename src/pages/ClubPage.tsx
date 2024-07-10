@@ -1,4 +1,5 @@
-// ClubList.tsx
+// ClubPage.tsx
+
 import React, { useState, useEffect } from 'react';
 import {
   IonPage,
@@ -23,10 +24,10 @@ import { addOutline, createOutline, trashOutline, closeOutline } from 'ionicons/
 import { addClub, getAllClubs, ClubData, updateClub, deleteClub } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import ClubPage from './ClubPage'; // Import ClubPage component
+import { toast } from '../toast';
 import { useHistory } from 'react-router-dom';
 
-const ClubList: React.FC = () => {
+const ClubPage: React.FC = () => {
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -100,9 +101,9 @@ const ClubList: React.FC = () => {
     setShowDeleteAlert(true);
   };
 
-  const navigateToClubPage = (clubId: string) => {
-    // Navigate to ClubPage component passing the clubId as props
-    history.push('/club-page');
+  const navigateToClubMemberList = (clubId: string) => {
+    // Navigate to ClubMemberList page passing the clubId as a parameter
+    history.push(`/club-member-list/${clubId}`);
   };
 
   return (
@@ -111,12 +112,16 @@ const ClubList: React.FC = () => {
       <IonContent className="ion-padding" color="background">
         <IonList>
           {clubs.map((club, index) => (
-            <IonCard key={index} onClick={() => navigateToClubPage(club.id || '')}>
+            <IonCard key={index}>
               <IonCardHeader>
                 <IonCardTitle>{club.name}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
                 <p>{`Location: ${club.location}`}</p>
+                {/* Link to ClubMemberList */}
+                <IonButton size="small" fill="clear" onClick={() => navigateToClubMemberList(club.id || '')} className="view-members-link">
+                  View Members in {club.name} Club
+                </IonButton>
                 <IonButton size="small" onClick={() => openEditModal(club)}>
                   <IonIcon icon={createOutline} slot="icon-only" />
                 </IonButton>
@@ -210,4 +215,4 @@ const ClubList: React.FC = () => {
   );
 };
 
-export default ClubList;
+export default ClubPage;

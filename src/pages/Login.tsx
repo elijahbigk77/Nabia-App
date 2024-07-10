@@ -26,7 +26,7 @@ const Login: React.FC = () => {
                 });
             }
         } catch (error) {
-            toast('Error logging in with your credentials', 'red'); // Pass 'danger' color
+            toast('Error logging in with your credentials', 'red');
             console.error('Login Failed', error);
         }
     }

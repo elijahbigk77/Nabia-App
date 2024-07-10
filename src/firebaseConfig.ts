@@ -1,6 +1,6 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from 'firebase/firestore';
 import { toast } from './toast';
 
 const firebaseConfig = {
@@ -336,6 +336,39 @@ export const tribes: Tribe[] = [
     { id: "11", name: "Zebulun" },
     { id: "12", name: "Levi" }
 ];
+
+
+// Function to fetch members by clubId from Firestore
+export async function getMembersByClubId(clubId: string): Promise<MemberData[]> {
+    try {
+      const membersQuery = query(collection(db, 'members'), where('clubId', '==', clubId));
+      const querySnapshot = await getDocs(membersQuery);
+      const members: MemberData[] = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name,
+          birthdate: data.birthdate,
+          residentialAddress: data.residentialAddress,
+          schoolAddress: data.schoolAddress,
+          parentGuardianName: data.parentGuardianName,
+          parentGuardianRelationship: data.parentGuardianRelationship,
+          parentGuardianContact: data.parentGuardianContact,
+          teacherName: data.teacherName,
+          teacherContact: data.teacherContact,
+          teacherClass: data.teacherClass,
+          tribeId: data.tribeId,
+          clubId: data.clubId
+        };
+      });
+      return members;
+    } catch (error) {
+      console.error('Error fetching members by clubId: ', error);
+      toast('Failed to fetch members');
+      return [];
+    }
+  }
+  
 
 
 export const signOut = async () => {

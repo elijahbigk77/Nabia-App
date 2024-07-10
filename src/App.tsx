@@ -29,6 +29,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import ClubMemberList from './pages/ClubMemberList';
 
 setupIonicReact();
 
@@ -65,6 +66,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/club-page">
           <ClubPage />
+        </Route>
+        <Route exact path="/club-member-list/:clubId">
+          <ClubMemberList />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
