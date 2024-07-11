@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { IonPage, IonIcon, IonContent, IonButton, IonText } from '@ionic/react';
-import { useLocation, useHistory } from 'react-router-dom';
+import {
+  IonPage,
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonIcon,
+  IonText
+} from '@ionic/react';
+import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import './Dashboard.css';
-import { personAddOutline } from 'ionicons/icons';
 import { getCurrentUser, signOut } from '../firebaseConfig'; // Import getCurrentUser and signOut functions
-
-interface LocationState {
-  username: string;
-}
+import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const location = useLocation<{ username: string; state: LocationState }>();
-  const history = useHistory();
   const [displayName, setDisplayName] = useState<string>('Guest');
 
   useEffect(() => {
@@ -23,50 +28,61 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  const navigateToAddMember = () => {
-    history.push('/add-member');
-  };
-
-  const navigateToMemberList = () => {
-    history.push('/member-list');
-  };
-
-  const navigateToTribeList = () => {
-    history.push('/tribe-list');
-  };
-
-  const navigateToClubPage = () => {
-    history.push('/club-page');
-  };
-
-
   return (
     <IonPage>
       <MainHeader />
-      <IonContent fullscreen className="ion-padding" color="background">
-        <div className="dashboard-container">
-          <p className="welcome-text">
-            <IonText>Hello {displayName}, Welcome to the Nabia App</IonText>
-          </p>
-          <div className="add-member">
-            <IonButton className="add-member-button" onClick={navigateToAddMember}>
-              <IonIcon slot="start" icon={personAddOutline} />
-              Add Member
-            </IonButton>
-            <IonButton onClick={navigateToMemberList}>
-              <IonIcon slot="start" icon={personAddOutline} />
-              Member List
-            </IonButton>
-            <IonButton onClick={navigateToTribeList}>
-              <IonIcon slot="start" icon={personAddOutline} />
-              View Tribes
-            </IonButton>
-            <IonButton onClick={navigateToClubPage}>
-              <IonIcon slot="start" icon={personAddOutline} />
-              Create/View Club
-            </IonButton>
-          </div>
+      <IonContent fullscreen className="ion-padding custom-background" color='background'>
+        <div className="welcome-text">
+          <IonText>Hello {displayName}, Welcome to the Nabia App</IonText>
         </div>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-md="6" size-lg="4">
+              <IonCard button routerLink="/add-member" className="dashboard-card">
+                <IonCardHeader>
+                  <IonIcon icon={personAddOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title">Add Member</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  Add new members
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="12" size-md="6" size-lg="4">
+              <IonCard button routerLink="/member-list" className="dashboard-card">
+                <IonCardHeader>
+                  <IonIcon icon={peopleOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title">Member List</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  View and Manage all members
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="12" size-md="6" size-lg="4">
+              <IonCard button routerLink="/tribe-list" className="dashboard-card">
+                <IonCardHeader>
+                  <IonIcon icon={schoolOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title">View Tribes</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  View and Manage all tribes
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="12" size-md="6" size-lg="4">
+              <IonCard button routerLink="/club-page" className="dashboard-card">
+                <IonCardHeader>
+                  <IonIcon icon={addCircleOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title">Create/View Club</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  Manage and view all clubs
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
       <MainFooter />
     </IonPage>

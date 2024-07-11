@@ -11,6 +11,15 @@
     margin-bottom: 50%;
 }
 
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0px;
+}
+
 .login-button{
     position: absolute;
     left: 50%;
@@ -26,5 +35,16 @@
     transform: translate(-50%, -50%);
     width: 40%;
 }
+
+.ion-item-custom {
+    --inner-padding-start: 20px;
+    --inner-padding-end: 20px; 
+    --padding-start: 20px; 
+    --padding-end: 20px;
+    --padding-top: 20px; 
+    --border-width: 1px; 
+    --border-style: solid; 
+    --border-color: #000;
+  }
 
 

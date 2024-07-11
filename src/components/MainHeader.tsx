@@ -11,7 +11,7 @@ const MainHeader: React.FC<ContainerProps> = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    history.push('/login');
+    history.push('/home');
   };
 
   return (

@@ -327,7 +327,7 @@ const ClubMemberList: React.FC = () => {
               </IonItem>
               <IonItem><p>{`Tribe: ${tribesList.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p></IonItem>
               <IonItem><p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p></IonItem>
-              <IonButton onClick={closeModal}>Close</IonButton>
+              <IonButton onClick={closeModal} color='danger'>Close</IonButton>
               <IonButton color="dark" onClick={() => setEditMode(true)}>
                 <IonIcon icon={pencilOutline} />
               </IonButton>
