@@ -29,11 +29,12 @@ const ClubAttendanceList: React.FC = () => {
     <IonPage>
         <MainHeader />
       
-        <IonToolbar>
-          <IonTitle>Select a Club to Take Club Meeting Attendance</IonTitle>
-        </IonToolbar>
+        
+        
+        
       
       <IonContent>
+      <IonLabel ><p className='ion-padding'><i>Select a Club to Take Club Meeting Attendance</i></p></IonLabel>
         <IonList>
           {clubs.map(club => (
             <IonItem key={club.id} onClick={() => club.id && handleClubSelection(club.id)}>
