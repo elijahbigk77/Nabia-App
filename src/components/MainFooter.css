@@ -1,4 +1,26 @@
-.footer-title{
-    font-size: 12px;
-    text-align: end;
-}
+.footer-title {
+    text-align: center;
+    font-size: 1rem;
+    padding: 10px 0;
+  }
+  
+  ion-tab-bar {
+    background-color: #DEA000;
+    border-top: 1px solid #DEA000;
+    box-shadow: 20px 4px 8px rgba(0.2, 0.1, 0.5, 0.5);
+  }
+  
+  ion-tab-button {
+    --color-selected: #e0e7ef;
+    --color: #090909;
+    background-color: #DEA000;
+  }
+  
+  ion-tab-button ion-icon {
+    font-size: 1.5rem;
+  }
+  
+  ion-tab-button ion-label {
+    font-size: 0.75rem;
+  }
+  
