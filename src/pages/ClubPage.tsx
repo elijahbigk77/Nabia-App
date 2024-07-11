@@ -90,7 +90,7 @@ const ClubPage: React.FC = () => {
   };
 
   const openEditModal = (club: ClubData) => {
-    setEditClubId(club.id || null); // Use null coalescing operator to handle potential undefined
+    setEditClubId(club.id || null); 
     setEditClubName(club.name);
     setEditClubLocation(club.location);
     setShowEditModal(true);
@@ -185,7 +185,7 @@ const ClubPage: React.FC = () => {
           isOpen={showDeleteAlert}
           onDidDismiss={() => setShowDeleteAlert(false)}
           header="Delete Club"
-          message="Are you sure you want to delete this club?"
+          message="Are you sure you want to delete this club? All members in this club will be removed from the club."
           buttons={[
             {
               text: 'Cancel',

@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
       <MainHeader />
       <IonContent fullscreen className="ion-padding custom-background" color='background'>
         <div className="welcome-text">
-          <IonText>Hello {displayName}, Welcome to the Nabia App</IonText>
+          <IonText>Hello {displayName}, Welcome to your dashboard</IonText>
         </div>
         <IonGrid>
           <IonRow>
