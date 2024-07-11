@@ -11,7 +11,8 @@ import TribeList from './pages/TribeList';
 import TribeMemberList from './pages/TribeMemberList';
 import ClubPage from './pages/ClubPage';
 import ClubMemberList from './pages/ClubMemberList';
-import ClubMembersAttendance from './pages/ClubMembersAttendance'; // Import the new page
+import ClubAttendanceMemberList from './pages/ClubAttendanceMemberList';
+import ClubAttendanceList from './pages/ClubAttendanceList';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -31,7 +32,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import ClubAttendanceList from './pages/ClubAttendanceList';
+
 
 setupIonicReact();
 
@@ -72,11 +73,11 @@ const App: React.FC = () => (
         <Route exact path="/club-member-list/:clubId">
           <ClubMemberList />
         </Route>
-        <Route exact path="/club-members-attendance">
-          <ClubMembersAttendance />
-        </Route>
-        <Route exact path="/club-attendance-list/:clubId">
+        <Route exact path="/club-attendance-list">
           <ClubAttendanceList />
+        </Route>
+        <Route exact path="/club-attendance-member-list/:clubId">
+          <ClubAttendanceMemberList />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

@@ -28,7 +28,7 @@ const MainFooter: React.FC = () => {
             <IonIcon icon={addCircleOutline} />
             <IonLabel>Clubs</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="club-members-attendance" href="/club-members-attendance">
+          <IonTabButton tab="clubattendance-list" href="/club-attendance-list">
             <IonIcon icon={checkboxOutline} />
             <IonLabel>Attend</IonLabel>
           </IonTabButton>

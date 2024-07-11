@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
               </IonCard>
             </IonCol>
             <IonCol size="12" size-md="6" size-lg="4">
-              <IonCard button routerLink="/club-members-attendance" className="dashboard-card">
+              <IonCard button routerLink="/club-attendance-list" className="dashboard-card">
                 <IonCardHeader>
                   <IonIcon icon={checkboxOutline} className="dashboard-icon" />
                   <IonCardTitle className="dashboard-title"> Club Attendance</IonCardTitle>
