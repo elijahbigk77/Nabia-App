@@ -21,19 +21,23 @@ import { toast } from '../toast';
 import './AddMember.css';
 
 const AddMember: React.FC = () => {
-  const [name, setName] = useState('');
-  const [birthdate, setBirthdate] = useState('');
-  const [residentialAddress, setResidentialAddress] = useState('');
-  const [schoolAddress, setSchoolAddress] = useState('');
-  const [parentGuardianName, setParentGuardianName] = useState('');
-  const [parentGuardianRelationship, setParentGuardianRelationship] = useState('');
-  const [parentGuardianContact, setParentGuardianContact] = useState('');
-  const [teacherName, setTeacherName] = useState('');
-  const [teacherContact, setTeacherContact] = useState('');
-  const [teacherClass, setTeacherClass] = useState('');
-  const [clubId, setClubId] = useState(''); 
-  const [clubs, setClubs] = useState<ClubData[]>([]); 
-  const [tribeId, setTribeId] = useState<string>('');
+  const initialFormState = {
+    name: '',
+    birthdate: '',
+    residentialAddress: '',
+    schoolAddress: '',
+    parentGuardianName: '',
+    parentGuardianRelationship: '',
+    parentGuardianContact: '',
+    teacherName: '',
+    teacherContact: '',
+    teacherClass: '',
+    clubId: '',
+    tribeId: ''
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
+  const [clubs, setClubs] = useState<ClubData[]>([]);
   const history = useHistory();
 
   useEffect(() => {
@@ -45,38 +49,38 @@ const AddMember: React.FC = () => {
     setClubs(fetchedClubs);
   };
 
+  const handleInputChange = (field: string, value: any) => {
+    setFormData({
+      ...formData,
+      [field]: value
+    });
+  };
+
   const handleAddMember = async () => {
+    const { name, clubId } = formData;
     if (!name || !clubId) {
       toast('Please fill in all required fields and select a club');
       return;
     }
 
     const newMemberData: MemberData = {
-      name,
-      birthdate,
-      residentialAddress,
-      schoolAddress,
-      parentGuardianName,
-      parentGuardianRelationship,
-      parentGuardianContact,
-      teacherName,
-      teacherContact,
-      teacherClass,
-      tribeId: '',
-      clubId,
+      ...formData,
+      tribeId: formData.tribeId || '', // Ensure tribeId is not undefined
       id: ''
     };
 
-  const added = await addMember(newMemberData);
-  if (added) {
-    history.push({
-      pathname: '/member-list',
-      state: { refresh: true } // Pass refresh flag
-    });
-  } else {
-    alert('Failed to add member');
-  }
-};
+    const added = await addMember(newMemberData);
+    if (added) {
+      toast('Member added successfully!');
+      setFormData(initialFormState); // Clear the form
+      history.push({
+        pathname: '/member-list',
+        state: { refresh: true } // Pass refresh flag
+      });
+    } else {
+      alert('Failed to add member');
+    }
+  };
 
   return (
     <IonPage>
@@ -94,47 +98,47 @@ const AddMember: React.FC = () => {
             <IonCol size="12">
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Name</IonLabel>
-                <IonInput value={name} onIonChange={(e) => setName(e.detail.value!)} />
+                <IonInput value={formData.name} onIonChange={(e) => handleInputChange('name', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Birthdate</IonLabel>
-                <IonInput type="date" value={birthdate} onIonChange={(e) => setBirthdate(e.detail.value!)} />
+                <IonInput type="date" value={formData.birthdate} onIonChange={(e) => handleInputChange('birthdate', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Residential Address</IonLabel>
-                <IonInput value={residentialAddress} onIonChange={(e) => setResidentialAddress(e.detail.value!)} />
+                <IonInput value={formData.residentialAddress} onIonChange={(e) => handleInputChange('residentialAddress', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">School Address</IonLabel>
-                <IonInput value={schoolAddress} onIonChange={(e) => setSchoolAddress(e.detail.value!)} />
+                <IonInput value={formData.schoolAddress} onIonChange={(e) => handleInputChange('schoolAddress', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Parent/Guardian Name</IonLabel>
-                <IonInput value={parentGuardianName} onIonChange={(e) => setParentGuardianName(e.detail.value!)} />
+                <IonInput value={formData.parentGuardianName} onIonChange={(e) => handleInputChange('parentGuardianName', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Relationship of Parent/Guardian</IonLabel>
-                <IonInput value={parentGuardianRelationship} onIonChange={(e) => setParentGuardianRelationship(e.detail.value!)} />
+                <IonInput value={formData.parentGuardianRelationship} onIonChange={(e) => handleInputChange('parentGuardianRelationship', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Contact of Parent/Guardian</IonLabel>
-                <IonInput value={parentGuardianContact} onIonChange={(e) => setParentGuardianContact(e.detail.value!)} />
+                <IonInput value={formData.parentGuardianContact} onIonChange={(e) => handleInputChange('parentGuardianContact', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Teacher Name</IonLabel>
-                <IonInput value={teacherName} onIonChange={(e) => setTeacherName(e.detail.value!)} />
+                <IonInput value={formData.teacherName} onIonChange={(e) => handleInputChange('teacherName', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Teacher Contact</IonLabel>
-                <IonInput value={teacherContact} onIonChange={(e) => setTeacherContact(e.detail.value!)} />
+                <IonInput value={formData.teacherContact} onIonChange={(e) => handleInputChange('teacherContact', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel position="floating">Teacher Class</IonLabel>
-                <IonInput value={teacherClass} onIonChange={(e) => setTeacherClass(e.detail.value!)} />
+                <IonInput value={formData.teacherClass} onIonChange={(e) => handleInputChange('teacherClass', e.detail.value!)} />
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel>Club</IonLabel>
-                <IonSelect value={clubId} placeholder="Select Club" onIonChange={(e) => setClubId(e.detail.value)}>
+                <IonSelect value={formData.clubId} placeholder="Select Club" onIonChange={(e) => handleInputChange('clubId', e.detail.value)}>
                   {clubs.map((club: ClubData) => (
                     <IonSelectOption key={club.id} value={club.id}>
                       {club.name}
@@ -144,7 +148,7 @@ const AddMember: React.FC = () => {
               </IonItem>
               <IonItem className='ion-item-custom'>
                 <IonLabel>Tribe</IonLabel>
-                <IonSelect value={tribeId} placeholder="Select Tribe" onIonChange={(e) => setTribeId(e.detail.value)}>
+                <IonSelect value={formData.tribeId} placeholder="Select Tribe" onIonChange={(e) => handleInputChange('tribeId', e.detail.value)}>
                   {tribes.map((tribe: Tribe) => (
                     <IonSelectOption key={tribe.id} value={tribe.id}>
                       {tribe.name}
