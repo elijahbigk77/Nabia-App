@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonText
 } from '@ionic/react';
-import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline } from 'ionicons/icons';
+import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline, checkboxOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { getCurrentUser, signOut } from '../firebaseConfig'; // Import getCurrentUser and signOut functions
@@ -78,6 +78,17 @@ const Dashboard: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   View and Manage all clubs
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="12" size-md="6" size-lg="4">
+              <IonCard button routerLink="/club-members-attendance" className="dashboard-card">
+                <IonCardHeader>
+                  <IonIcon icon={checkboxOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title"> Club Attendance</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                View and Manage Members' Club Attendance
                 </IonCardContent>
               </IonCard>
             </IonCol>

@@ -373,16 +373,30 @@ export async function getMembersByClubId(clubId: string): Promise<MemberData[]> 
       return [];
     }
   }
+
+// Function to mark attendance for a member on a specific date
+export async function markAttendance(memberId: string, date: string, attended: boolean): Promise<boolean> {
+  try {
+    const memberRef = doc(db, 'members', memberId);
+    // Update the member document to set attendance for the specified date
+    await updateDoc(memberRef, { [`attendance.${date}`]: attended });
+    return true;
+  } catch (error) {
+    console.error('Error marking attendance: ', error);
+    return false;
+  }
+}
   
 
 
 export const signOut = async () => {
     try {
       await auth.signOut();
+      // Clear any persisted user data
+      localStorage.removeItem('firebase:authUser'); // Clear Firebase auth user from local storage if using persistence
     } catch (error) {
       console.error("Error signing out:", error);
     }
   };
-  
 
 export { db, auth, app };
