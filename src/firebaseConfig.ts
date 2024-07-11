@@ -1,6 +1,6 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, getDoc } from 'firebase/firestore';
 import { toast } from './toast';
 
 const firebaseConfig = {
@@ -98,6 +98,8 @@ export interface MemberData {
     teacherClass: string;
     tribeId: string;
     clubId: string; 
+    attended?: boolean;
+    attendance?: { [date: string]: boolean };
 }
 
 // Function to add a new member to Firestore
@@ -300,6 +302,27 @@ export interface ClubData {
       return [];
     }
   }
+
+  // Function to fetch club by ID from Firestore
+export async function getClubById(clubId: string): Promise<ClubData | undefined> {
+  try {
+      const clubDoc = await getDoc(doc(db, 'clubs', clubId));
+      if (clubDoc.exists()) {
+          const clubData = clubDoc.data() as ClubData;
+          return {
+              id: clubDoc.id,
+              name: clubData.name,
+              location: clubData.location
+          };
+      } else {
+          console.error(`Club with ID ${clubId} not found`);
+          return undefined;
+      }
+  } catch (error) {
+      console.error(`Error fetching club with ID ${clubId}: `, error);
+      return undefined;
+  }
+}
   
 // Function to fetch tribes from Firestore
 export async function getTribes(): Promise<Tribe[]> {
@@ -386,6 +409,45 @@ export async function markAttendance(memberId: string, date: string, attended: b
     return false;
   }
 }
+
+// Function to delete all dummy accounts from Firestore
+export async function deleteDummyAccounts() {
+  try {
+      const querySnapshot = await getDocs(collection(db, 'members'));
+
+      // Array to store promises for deletion
+      const deletePromises: Promise<void>[] = [];
+
+      // Iterate over each document in the collection
+      querySnapshot.forEach(doc => {
+          const data = doc.data();
+          // Check if it's a dummy account (example criteria: no name)
+          if (!data.name) {
+              // Add delete operation to array of promises
+              deletePromises.push(deleteDoc(doc.ref));
+              console.log(`Deleted dummy account with id ${doc.id}`);
+          }
+      });
+
+      // Wait for all delete operations to complete
+      await Promise.all(deletePromises);
+
+      console.log("All dummy accounts deleted successfully");
+  } catch (error) {
+      console.error('Error deleting dummy accounts: ', error);
+      toast('Failed to delete dummy accounts');
+  }
+}
+
+// Call the function to delete dummy accounts
+deleteDummyAccounts()
+  .then(() => {
+      console.log("Dummy accounts cleanup complete");
+      // Perform any additional actions after cleanup if needed
+  })
+  .catch(error => {
+      console.error("Error cleaning up dummy accounts: ", error);
+  });
   
 
 
