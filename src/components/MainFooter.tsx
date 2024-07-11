@@ -28,7 +28,6 @@ const MainFooter: React.FC = () => {
             <IonIcon icon={addCircleOutline} />
             <IonLabel>Create/View Club</IonLabel>
           </IonTabButton>
-          
         </IonTabBar>
       </IonFooter>
     </>
