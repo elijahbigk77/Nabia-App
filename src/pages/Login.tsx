@@ -8,6 +8,7 @@ import { toast } from '../toast';
 import MainFooter from '../components/MainFooter';
 import './Login.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -51,7 +52,7 @@ const Login: React.FC = () => {
                     First time user? <Link to='/register'>Create New Account</Link>
                 </p>
             </IonContent>
-            <MainFooter />
+            <Footer />
         </IonPage>
     );
 };

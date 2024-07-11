@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCheckbox, IonFab, IonFabButton, IonIcon, IonButton } from '@ionic/react';
-import { refreshOutline, saveOutline, createOutline } from 'ionicons/icons';
+import { refreshOutline } from 'ionicons/icons';
 import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 import { MemberData, markAttendance, getMembersByClubId, getClubById } from '../firebaseConfig';
@@ -49,24 +49,20 @@ const ClubAttendanceMemberList: React.FC = () => {
       return member;
     });
     setMembers(updatedMembers);
-  };
 
-  const handleSaveAttendance = () => {
-    // Save attendance in Firebase for each member
+    // Save attendance in Firebase immediately
     const currentDate = format(new Date(), 'yyyy-MM-dd');
-    members.forEach(member => {
-      markAttendance(member.id, currentDate, member.attended || false) // Ensure attended is boolean
-        .then(success => {
-          if (success) {
-            console.log(`Attendance marked for member ${member.id}`);
-          } else {
-            console.error(`Failed to mark attendance for member ${member.id}`);
-          }
-        })
-        .catch(error => {
-          console.error('Error marking attendance:', error);
-        });
-    });
+    markAttendance(memberId, currentDate, attended)
+      .then(success => {
+        if (success) {
+          console.log(`Attendance marked for member ${memberId}`);
+        } else {
+          console.error(`Failed to mark attendance for member ${memberId}`);
+        }
+      })
+      .catch(error => {
+        console.error('Error marking attendance:', error);
+      });
   };
 
   return (
@@ -78,13 +74,21 @@ const ClubAttendanceMemberList: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-      <IonLabel><p className='ion-padding'><h6><i>select a checkbox to mark a member present and uncheck to mark them absent</i></h6></p></IonLabel>
+        <IonLabel>
+          <p className='ion-padding'>
+            <h6><i>Select a checkbox to mark a member present and uncheck to mark them absent</i></h6>
+          </p>
+        </IonLabel>
         <IonList>
           {members.map(member => (
             <IonItem key={member.id}>
               <IonLabel>{member.name}</IonLabel>
               <IonLabel slot="end">{member.attended ? 'Present' : 'Absent'}</IonLabel>
-              <IonCheckbox slot="end" checked={member.attended || false} onIonChange={e => handleAttendanceChange(member.id, e.detail.checked)} />
+              <IonCheckbox 
+                slot="end" 
+                checked={member.attended || false} 
+                onIonChange={e => handleAttendanceChange(member.id, e.detail.checked)} 
+              />
             </IonItem>
           ))}
         </IonList>
@@ -93,7 +97,7 @@ const ClubAttendanceMemberList: React.FC = () => {
             <IonIcon icon={refreshOutline} />
           </IonFabButton>
         </IonFab>
-        <IonButton expand="full" onClick={handleSaveAttendance} routerLink="/club-attendance-list">Save Attendance</IonButton>
+        <IonButton expand="full" routerLink="/club-attendance-list">Save Attendance</IonButton>
         <IonFab vertical="bottom" horizontal="start" slot="fixed" color='black'>
           <strong><i><IonLabel color='dark'>Date: {attendanceDate}</IonLabel></i></strong>
         </IonFab>

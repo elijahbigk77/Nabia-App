@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonHeader, IonItem, IonPage, IonText, IonTitle, 
 import './Home.css';
 import MainFooter from '../components/MainFooter';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Home: React.FC = () => {
   return (
@@ -16,7 +17,7 @@ const Home: React.FC = () => {
           <IonButton className='register-button' color='dark' routerLink='/register'>Create New Account</IonButton>
         </div>
       </IonContent>
-      <MainFooter />
+      <Footer />
     </IonPage>
   );
 };

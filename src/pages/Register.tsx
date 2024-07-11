@@ -6,6 +6,8 @@ import { registerUser } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import './Register.css'
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const Register: React.FC = () => {
     const [name, setName] = useState('');
@@ -44,7 +46,7 @@ const Register: React.FC = () => {
 
     return (
         <IonPage>
-            <MainHeader />
+            <Header />
             <IonContent fullscreen className='ion-padding' color='background'>
 
                 <IonItem className='name-field' color='background'>
@@ -74,7 +76,7 @@ const Register: React.FC = () => {
                 </p>
 
             </IonContent>
-            <MainFooter />
+            <Footer />
         </IonPage>
     );
 };
