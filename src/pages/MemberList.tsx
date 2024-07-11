@@ -25,6 +25,7 @@ import { MemberData, getAllMembers, deleteMember, updateMember, getTribes } from
 import './MemberList.css';
 import { toast } from '../toast';
 import { tribes, Tribe, ClubData, getAllClubs } from '../firebaseConfig';
+import SearchBar from '../components/SearchBar'; // Import the SearchBar component
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<MemberData[]>([]);
@@ -49,6 +50,7 @@ const MemberList: React.FC = () => {
   });
   const [tribesList, setTribesList] = useState<Tribe[]>([]);
   const [clubs, setClubs] = useState<ClubData[]>([]);
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     fetchMembers();
@@ -145,12 +147,17 @@ const MemberList: React.FC = () => {
     return `${day}${suffix} ${month}, ${year}`;
   };
 
+  const filteredMembers = members.filter(member =>
+    member.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <IonPage>
       <MainHeader />
       <IonContent className="ion-padding item-background-color" color="background">
+        <SearchBar searchText={searchText} setSearchText={setSearchText} placeholder="Search members by name" />
         <IonList>
-          {members.map((member, index) => (
+          {filteredMembers.map((member, index) => (
             <IonCard key={index} onClick={() => openModal(member)}>
               <IonCardHeader>
                 <IonCardTitle>{member.name}</IonCardTitle>
@@ -165,8 +172,8 @@ const MemberList: React.FC = () => {
           ))}
         </IonList>
 
-        {/* Modal to display member details */}
-        <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal item-background-color">
+                {/* Modal to display member details */}
+                <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal item-background-color">
           {editMode ? (
             <IonContent fullscreen>
               <MainHeader />
@@ -318,23 +325,22 @@ const MemberList: React.FC = () => {
           )}
           <MainFooter />
         </IonModal>
-
-        {/* Alert for delete confirmation */}
+        
+        {/* Alert to confirm delete action */}
         <IonAlert
           isOpen={showDeleteAlert}
           onDidDismiss={() => setShowDeleteAlert(false)}
-          header={'Confirm Delete'}
-          message={`Are you sure you want to delete ${selectedMember?.name}?`}
+          header="Confirm Delete"
+          message="Are you sure you want to delete this member?"
           buttons={[
             {
               text: 'Cancel',
               role: 'cancel',
-              cssClass: 'secondary'
             },
             {
               text: 'Delete',
-              handler: handleDeleteMember
-            }
+              handler: handleDeleteMember,
+            },
           ]}
         />
       </IonContent>
