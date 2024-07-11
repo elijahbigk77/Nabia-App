@@ -8,14 +8,14 @@ import MainHeader from '../components/Header';
 import MainFooter from '../components/MainFooter';
 
 const ClubAttendanceMemberList: React.FC = () => {
-  const { clubId } = useParams<{ clubId: string }>(); // Fetch clubId from route params
+  const { clubId } = useParams<{ clubId: string }>(); 
   const [members, setMembers] = useState<MemberData[]>([]);
   const [attendanceDate, setAttendanceDate] = useState<string>('');
-  const [clubName, setClubName] = useState<string>(''); // State to hold club name
+  const [clubName, setClubName] = useState<string>(''); 
 
   useEffect(() => {
-    fetchClubMembers(clubId); // Fetch members when clubId changes
-    fetchClubName(clubId); // Fetch club name when clubId changes
+    fetchClubMembers(clubId); 
+    fetchClubName(clubId); 
     setCurrentDate();
   }, [clubId]);
 

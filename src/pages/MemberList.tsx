@@ -255,20 +255,20 @@ const MemberList: React.FC = () => {
                 />
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Tribe</IonLabel>
-                <IonSelect
-                  value={editMemberData.tribeId || ''}
-                  onIonChange={(e: any) =>
-                    setEditMemberData({ ...editMemberData, tribeId: e.target.value })
-                  }
-                >
-                  {tribesList.map((tribe: Tribe) => (
-                    <IonSelectOption key={tribe.id} value={tribe.id}>
-                      {tribe.name}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+                                <IonLabel position="stacked">Tribe</IonLabel>
+                                <IonSelect
+                                    value={editMemberData.tribeId}
+                                    onIonChange={(e: any) =>
+                                        setEditMemberData({ ...editMemberData, tribeId: e.target.value })
+                                    }
+                                >
+                                    {tribes.map((tribe: Tribe) => (
+                                        <IonSelectOption key={tribe.id} value={tribe.id}>
+                                            {tribe.name}
+                                        </IonSelectOption>
+                                    ))}
+                                </IonSelect>
+                            </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Club</IonLabel>
                 <IonSelect
@@ -310,7 +310,7 @@ const MemberList: React.FC = () => {
                     <p>{`Teacher: ${selectedMember?.teacherName || ''}`}</p>
                     <p>{`Teacher Contact: ${selectedMember?.teacherContact || ''}`}</p>
                     <p>{`Teacher Class: ${selectedMember?.teacherClass || ''}`}</p>
-                    <p>{`Tribe: ${tribesList.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name || ''}`}</p>
+                    <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
                     <p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name || ''}`}</p>
                   </IonLabel>
                   <IonButton onClick={closeModal} color='danger'>

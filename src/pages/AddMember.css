@@ -24,3 +24,28 @@ h2 {
   margin-bottom: 20px;
   color: #333;
 }
+
+/* AddMember.css */
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group ion-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ion-color-dark);
+}
+
+.form-group ion-input,
+.form-group ion-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--ion-color-medium);
+  border-radius: 5px;
+}
+
+.add-member-btn {
+  margin-top: 20px;
+}
+

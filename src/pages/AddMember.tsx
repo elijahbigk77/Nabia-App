@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   IonPage,
   IonContent,
-  IonItem,
   IonLabel,
   IonInput,
   IonButton,
@@ -96,47 +95,47 @@ const AddMember: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol size="12">
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Name</IonLabel>
+              <div className="form-group">
+                <IonLabel>Name</IonLabel>
                 <IonInput value={formData.name} onIonChange={(e) => handleInputChange('name', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Birthdate</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Birthdate</IonLabel>
                 <IonInput type="date" value={formData.birthdate} onIonChange={(e) => handleInputChange('birthdate', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Residential Address</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Residential Address</IonLabel>
                 <IonInput value={formData.residentialAddress} onIonChange={(e) => handleInputChange('residentialAddress', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">School Address</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>School Address</IonLabel>
                 <IonInput value={formData.schoolAddress} onIonChange={(e) => handleInputChange('schoolAddress', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Parent/Guardian Name</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Parent/Guardian Name</IonLabel>
                 <IonInput value={formData.parentGuardianName} onIonChange={(e) => handleInputChange('parentGuardianName', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Relationship of Parent/Guardian</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Relationship of Parent/Guardian</IonLabel>
                 <IonInput value={formData.parentGuardianRelationship} onIonChange={(e) => handleInputChange('parentGuardianRelationship', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Contact of Parent/Guardian</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Contact of Parent/Guardian</IonLabel>
                 <IonInput value={formData.parentGuardianContact} onIonChange={(e) => handleInputChange('parentGuardianContact', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Teacher Name</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Teacher Name</IonLabel>
                 <IonInput value={formData.teacherName} onIonChange={(e) => handleInputChange('teacherName', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Teacher Contact</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Teacher Contact</IonLabel>
                 <IonInput value={formData.teacherContact} onIonChange={(e) => handleInputChange('teacherContact', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
-                <IonLabel position="floating">Teacher Class</IonLabel>
+              </div>
+              <div className="form-group">
+                <IonLabel>Teacher Class</IonLabel>
                 <IonInput value={formData.teacherClass} onIonChange={(e) => handleInputChange('teacherClass', e.detail.value!)} />
-              </IonItem>
-              <IonItem className='ion-item-custom'>
+              </div>
+              <div className="form-group">
                 <IonLabel>Club</IonLabel>
                 <IonSelect value={formData.clubId} placeholder="Select Club" onIonChange={(e) => handleInputChange('clubId', e.detail.value)}>
                   {clubs.map((club: ClubData) => (
@@ -145,8 +144,8 @@ const AddMember: React.FC = () => {
                     </IonSelectOption>
                   ))}
                 </IonSelect>
-              </IonItem>
-              <IonItem className='ion-item-custom'>
+              </div>
+              <div className="form-group">
                 <IonLabel>Tribe</IonLabel>
                 <IonSelect value={formData.tribeId} placeholder="Select Tribe" onIonChange={(e) => handleInputChange('tribeId', e.detail.value)}>
                   {tribes.map((tribe: Tribe) => (
@@ -155,7 +154,7 @@ const AddMember: React.FC = () => {
                     </IonSelectOption>
                   ))}
                 </IonSelect>
-              </IonItem>
+              </div>
               <IonButton className='add-member-btn' expand="full" color='primary' onClick={handleAddMember}>
                 Add Member
               </IonButton>
