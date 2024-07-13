@@ -92,6 +92,17 @@ const Dashboard: React.FC = () => {
                 </IonCardContent>
               </IonCard>
             </IonCol>
+            <IonCol size="12" size-md="6" size-lg="4">
+              <IonCard button routerLink="/attendance-record" className="dashboard-card">
+                <IonCardHeader>
+                  <IonIcon icon={checkboxOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title"> Club Attendance Record</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                View Club Members' Attendance Records
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
           </IonRow>
         </IonGrid>
       </IonContent>

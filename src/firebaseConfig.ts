@@ -228,7 +228,7 @@ export async function getMembersByTribeId(tribeId: string): Promise<MemberData[]
 
 // Schema for club data
 export interface ClubData {
-    id?: string; // Optional because Firestore will generate it
+    id?: string; 
     name: string;
     location: string; // Added location field
   }
@@ -407,6 +407,27 @@ export async function markAttendance(memberId: string, date: string, attended: b
   } catch (error) {
     console.error('Error marking attendance: ', error);
     return false;
+  }
+}
+
+// Function to get attendance records for a specific date
+export async function getAttendanceByDate(clubId: string, date: string): Promise<MemberData[]> {
+  try {
+      const membersQuery = query(collection(db, 'members'), where('clubId', '==', clubId));
+      const querySnapshot = await getDocs(membersQuery);
+      const members: MemberData[] = querySnapshot.docs.map(doc => {
+          const data = doc.data() as MemberData;
+          return {
+              ...data,
+              id: doc.id,
+              attended: data.attendance && data.attendance[date] === true
+          };
+      });
+      return members;
+  } catch (error) {
+      console.error('Error fetching attendance records: ', error);
+      toast('Failed to fetch attendance records');
+      return [];
   }
 }
 

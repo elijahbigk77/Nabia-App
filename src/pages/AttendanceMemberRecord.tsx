@@ -1,78 +1,65 @@
-// AttendanceMemberRecord.tsx
-
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle } from '@ionic/react';
-import { useParams } from 'react-router-dom';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel } from '@ionic/react';
 import { format } from 'date-fns';
-import { MemberData, getMembersByClubId, getClubById } from '../firebaseConfig';
-import MainHeader from '../components/MainHeader';
+import { useParams } from 'react-router-dom';
+import { MemberData, getAttendanceByDate, getClubById } from '../firebaseConfig';
+import MainHeader from '../components/Header';
 import MainFooter from '../components/MainFooter';
 
 const AttendanceMemberRecord: React.FC = () => {
-  const { clubId } = useParams<{ clubId: string }>(); 
-  const [members, setMembers] = useState<MemberData[]>([]);
-  const [attendanceDate, setAttendanceDate] = useState<string>('');
-  const [clubName, setClubName] = useState<string>(''); 
-  const [showPresent, setShowPresent] = useState(true); // Toggle to show present or absent members
+    const { clubId } = useParams<{ clubId: string }>();
+    const [members, setMembers] = useState<MemberData[]>([]);
+    const [attendanceDate, setAttendanceDate] = useState<string>('');
+    const [clubName, setClubName] = useState<string>('');
 
-  useEffect(() => {
-    fetchClubMembers(clubId); 
-    fetchClubName(clubId); 
-    setCurrentDate();
-  }, [clubId]);
+    useEffect(() => {
+        fetchAttendanceRecords(clubId);
+        fetchClubName(clubId);
+        setCurrentDate();
+    }, [clubId]);
 
-  const fetchClubMembers = async (clubId: string) => {
-    const membersData = await getMembersByClubId(clubId);
-    const currentDate = format(new Date(), 'yyyy-MM-dd');
-    const membersWithAttendance = membersData.map(member => ({
-      ...member,
-      attended: member.attendance && member.attendance[currentDate] === true,
-    }));
-    setMembers(membersWithAttendance);
-  };
+    const fetchAttendanceRecords = async (clubId: string) => {
+        const currentDate = format(new Date(), 'yyyy-MM-dd');
+        const attendanceRecords = await getAttendanceByDate(clubId, currentDate);
+        setMembers(attendanceRecords);
+    };
 
-  const fetchClubName = async (clubId: string) => {
-    const club = await getClubById(clubId);
-    setClubName(club?.name || ''); 
-  };
+    const fetchClubName = async (clubId: string) => {
+        const club = await getClubById(clubId);
+        setClubName(club?.name || '');
+    };
 
-  const setCurrentDate = () => {
-    const currentDate = format(new Date(), 'EEEE, do MMMM, yyyy');
-    setAttendanceDate(currentDate);
-  };
+    const setCurrentDate = () => {
+        const currentDate = format(new Date(), 'EEEE, do MMMM, yyyy');
+        setAttendanceDate(currentDate);
+    };
 
-  const filteredMembers = members.filter(member => 
-    showPresent ? member.attendance && member.attendance[attendanceDate] : !member.attendance || !member.attendance[attendanceDate]
-  );
-
-  return (
-    <IonPage>
-      <MainHeader />
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{`List of Members ${showPresent ? 'Present' : 'Absent'} at ${clubName} on ${attendanceDate}`}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonItem>
-          <IonLabel>{showPresent ? 'Show Absent Members' : 'Show Present Members'}</IonLabel>
-          <IonToggle 
-            checked={showPresent} 
-            onIonChange={e => setShowPresent(e.detail.checked)} 
-            slot="end" 
-          />
-        </IonItem>
-        <IonList>
-          {filteredMembers.map(member => (
-            <IonItem key={member.id}>
-              <IonLabel>{member.name}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
-      </IonContent>
-      <MainFooter />
-    </IonPage>
-  );
+    return (
+        <IonPage>
+            <MainHeader />
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Attendance Records for {clubName} Club</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent>
+                <IonLabel>
+                    <p className='ion-padding'>
+                        <h6><i>Attendance for {attendanceDate}</i></h6>
+                    </p>
+                </IonLabel>
+                <IonList>
+                    {members.map(member => (
+                        <IonItem key={member.id}>
+                            <IonLabel>{member.name}</IonLabel>
+                            <IonLabel slot="end">{member.attended ? 'Present' : 'Absent'}</IonLabel>
+                        </IonItem>
+                    ))}
+                </IonList>
+            </IonContent>
+            <MainFooter />
+        </IonPage>
+    );
 };
 
 export default AttendanceMemberRecord;
