@@ -32,6 +32,8 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import AttendanceRecord from './pages/AttendanceRecord';
+import AttendanceMemberRecord from './pages/AttendanceMemberRecord';
 
 
 setupIonicReact();
@@ -78,6 +80,12 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/club-attendance-member-list/:clubId">
           <ClubAttendanceMemberList />
+        </Route>
+        <Route exact path="/attendance-record">
+          <AttendanceRecord />
+        </Route>
+        <Route exact path="/attendance-member-record/:clubId">
+          <AttendanceMemberRecord />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
