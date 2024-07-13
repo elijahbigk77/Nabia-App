@@ -1,25 +1,25 @@
+// ClubAttendanceMemberList.tsx
+
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCheckbox, IonFab, IonFabButton, IonIcon, IonButton } from '@ionic/react';
 import { refreshOutline } from 'ionicons/icons';
-import { format, isSameDay } from 'date-fns';
-import { useParams, useHistory } from 'react-router-dom';
-import { MemberData, markAttendance, getMembersByClubId, getClubById, getAttendanceByDate } from '../firebaseConfig';
+import { format } from 'date-fns';
+import { useParams } from 'react-router-dom';
+import { MemberData, markAttendance, getMembersByClubId, getClubById } from '../firebaseConfig';
 import MainHeader from '../components/Header';
 import MainFooter from '../components/MainFooter';
+import AttendanceTakenModal from '../components/AttendanceTakenModal'; // Import the modal component
 import { toast } from '../toast';
 
 const ClubAttendanceMemberList: React.FC = () => {
     const { clubId } = useParams<{ clubId: string }>();
     const [members, setMembers] = useState<MemberData[]>([]);
-    const [attendanceDate, setAttendanceDate] = useState<Date>(new Date());
     const [clubName, setClubName] = useState<string>('');
-    const [attendanceTakenToday, setAttendanceTakenToday] = useState<boolean>(false);
-    const history = useHistory();
+    const [showAttendanceTakenModal, setShowAttendanceTakenModal] = useState<boolean>(false); // State to control modal visibility
 
     useEffect(() => {
         fetchClubMembers(clubId);
         fetchClubName(clubId);
-        checkAttendanceForToday(clubId);
     }, [clubId]);
 
     const fetchClubMembers = async (clubId: string) => {
@@ -37,12 +37,6 @@ const ClubAttendanceMemberList: React.FC = () => {
         setClubName(club?.name || '');
     };
 
-    const checkAttendanceForToday = async (clubId: string) => {
-        const currentDate = new Date();
-        const attendanceExists = await getAttendanceByDate(clubId, currentDate.toISOString().substr(0, 10));
-        setAttendanceTakenToday(attendanceExists.length > 0);
-    };
-
     const handleAttendanceChange = (memberId: string, attended: boolean) => {
         const updatedMembers = members.map(member => {
             if (member.id === memberId) {
@@ -56,11 +50,7 @@ const ClubAttendanceMemberList: React.FC = () => {
     const saveAttendance = async () => {
         const currentDate = new Date();
         const currentDateStr = currentDate.toISOString().substr(0, 10);
-
-        if (attendanceTakenToday) {
-            toast(`Attendance has already been taken for ${clubName} club. Please wait until tomorrow to take attendance for another day.`);
-            return;
-        }
+        
 
         try {
             const promises = members.map(member => {
@@ -69,17 +59,11 @@ const ClubAttendanceMemberList: React.FC = () => {
             });
             await Promise.all(promises);
             toast(`Attendance marked for ${clubName}`);
-            setAttendanceTakenToday(true);
+            //fetchClubMembers(clubId); // Refresh member list after marking attendance
         } catch (error) {
             console.error('Error marking attendance:', error);
             toast('Failed to mark attendance. Please try again.');
         }
-    };
-
-    const resetPage = () => {
-        setAttendanceDate(new Date());
-        setAttendanceTakenToday(false);
-        fetchClubMembers(clubId);
     };
 
     return (
@@ -110,16 +94,23 @@ const ClubAttendanceMemberList: React.FC = () => {
                     ))}
                 </IonList>
                 <IonFab vertical="bottom" horizontal="end" slot="fixed">
-                    <IonFabButton onClick={resetPage}>
+                    <IonFabButton onClick={() => fetchClubMembers(clubId)}>
                         <IonIcon icon={refreshOutline} />
                     </IonFabButton>
                 </IonFab>
-                <IonButton expand="full" onClick={saveAttendance}>Save Attendance</IonButton>
+                <IonButton expand="full" onClick={saveAttendance} routerLink='/club-attendance-list'>Save Attendance</IonButton>
                 <IonFab vertical="bottom" horizontal="start" slot="fixed" color='black'>
-                    <strong><i><IonLabel color='dark'>Date: {format(attendanceDate, 'EEEE, do MMMM, yyyy')}</IonLabel></i></strong>
+                    <strong><i><IonLabel color='dark'>Date: {format(new Date(), 'EEEE, do MMMM, yyyy')}</IonLabel></i></strong>
                 </IonFab>
             </IonContent>
             <MainFooter />
+
+            {/* Modal to display when attendance is already taken */}
+            <AttendanceTakenModal
+                isOpen={showAttendanceTakenModal}
+                clubName={clubName}
+                onClose={() => setShowAttendanceTakenModal(false)}
+            />
         </IonPage>
     );
 };
