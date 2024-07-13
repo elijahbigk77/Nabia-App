@@ -25,7 +25,7 @@ const MainHeader: React.FC<ContainerProps> = () => {
         <IonHeader>
             <IonItem color='background'>
                 <IonButtons slot="start">
-                    <IonBackButton defaultHref="/home" />
+                    <IonBackButton />
                 </IonButtons>
                 <IonToolbar className='top-bar' color='background'>
                     <IonTitle className='title'>Nabia Fellows App</IonTitle>

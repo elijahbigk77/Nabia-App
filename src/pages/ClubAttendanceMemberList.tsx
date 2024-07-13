@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCheckbox, IonFab, IonFabButton, IonIcon, IonButton } from '@ionic/react';
 import { refreshOutline } from 'ionicons/icons';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { useParams, useHistory } from 'react-router-dom';
-import { MemberData, markAttendance, getMembersByClubId, getClubById } from '../firebaseConfig';
+import { MemberData, markAttendance, getMembersByClubId, getClubById, getAttendanceByDate } from '../firebaseConfig';
 import MainHeader from '../components/Header';
 import MainFooter from '../components/MainFooter';
 import { toast } from '../toast';
@@ -11,22 +11,23 @@ import { toast } from '../toast';
 const ClubAttendanceMemberList: React.FC = () => {
     const { clubId } = useParams<{ clubId: string }>();
     const [members, setMembers] = useState<MemberData[]>([]);
-    const [attendanceDate, setAttendanceDate] = useState<string>('');
+    const [attendanceDate, setAttendanceDate] = useState<Date>(new Date());
     const [clubName, setClubName] = useState<string>('');
+    const [attendanceTakenToday, setAttendanceTakenToday] = useState<boolean>(false);
     const history = useHistory();
 
     useEffect(() => {
         fetchClubMembers(clubId);
         fetchClubName(clubId);
-        setCurrentDate();
+        checkAttendanceForToday(clubId);
     }, [clubId]);
 
     const fetchClubMembers = async (clubId: string) => {
         const membersData = await getMembersByClubId(clubId);
-        const currentDate = format(new Date(), 'yyyy-MM-dd');
+        const currentDate = new Date();
         const membersWithAttendance = membersData.map(member => ({
             ...member,
-            attended: member.attendance && member.attendance[currentDate] === true,
+            attended: member.attendance && member.attendance[currentDate.toISOString().substr(0, 10)] === true,
         }));
         setMembers(membersWithAttendance);
     };
@@ -36,9 +37,10 @@ const ClubAttendanceMemberList: React.FC = () => {
         setClubName(club?.name || '');
     };
 
-    const setCurrentDate = () => {
-        const currentDate = format(new Date(), 'EEEE, do MMMM, yyyy');
-        setAttendanceDate(currentDate);
+    const checkAttendanceForToday = async (clubId: string) => {
+        const currentDate = new Date();
+        const attendanceExists = await getAttendanceByDate(clubId, currentDate.toISOString().substr(0, 10));
+        setAttendanceTakenToday(attendanceExists.length > 0);
     };
 
     const handleAttendanceChange = (memberId: string, attended: boolean) => {
@@ -51,23 +53,33 @@ const ClubAttendanceMemberList: React.FC = () => {
         setMembers(updatedMembers);
     };
 
-    const saveAttendance = () => {
-        const currentDate = format(new Date(), 'yyyy-MM-dd');
-        members.forEach(member => {
-            const attended = member.attended || false;  // Ensure attended is a boolean
-            markAttendance(member.id, currentDate, attended)
-                .then(success => {
-                    if (success) {
-                        toast(`Attendance marked for ${clubName}`);
-                    } else {
-                        console.error(`Failed to mark attendance for member ${member.id}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error marking attendance:', error);
-                });
-        });
-        history.push(`/club-attendance-list/`);
+    const saveAttendance = async () => {
+        const currentDate = new Date();
+        const currentDateStr = currentDate.toISOString().substr(0, 10);
+
+        if (attendanceTakenToday) {
+            toast(`Attendance has already been taken for ${clubName} club. Please wait until tomorrow to take attendance for another day.`);
+            return;
+        }
+
+        try {
+            const promises = members.map(member => {
+                const attended = member.attended || false;  // Ensure attended is a boolean
+                return markAttendance(member.id, currentDateStr, attended);
+            });
+            await Promise.all(promises);
+            toast(`Attendance marked for ${clubName}`);
+            setAttendanceTakenToday(true);
+        } catch (error) {
+            console.error('Error marking attendance:', error);
+            toast('Failed to mark attendance. Please try again.');
+        }
+    };
+
+    const resetPage = () => {
+        setAttendanceDate(new Date());
+        setAttendanceTakenToday(false);
+        fetchClubMembers(clubId);
     };
 
     return (
@@ -98,13 +110,13 @@ const ClubAttendanceMemberList: React.FC = () => {
                     ))}
                 </IonList>
                 <IonFab vertical="bottom" horizontal="end" slot="fixed">
-                    <IonFabButton onClick={setCurrentDate}>
+                    <IonFabButton onClick={resetPage}>
                         <IonIcon icon={refreshOutline} />
                     </IonFabButton>
                 </IonFab>
                 <IonButton expand="full" onClick={saveAttendance}>Save Attendance</IonButton>
                 <IonFab vertical="bottom" horizontal="start" slot="fixed" color='black'>
-                    <strong><i><IonLabel color='dark'>Date: {attendanceDate}</IonLabel></i></strong>
+                    <strong><i><IonLabel color='dark'>Date: {format(attendanceDate, 'EEEE, do MMMM, yyyy')}</IonLabel></i></strong>
                 </IonFab>
             </IonContent>
             <MainFooter />
