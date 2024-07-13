@@ -400,13 +400,13 @@ export async function getMembersByClubId(clubId: string): Promise<MemberData[]> 
 // Function to mark attendance for a member on a specific date
 export async function markAttendance(memberId: string, date: string, attended: boolean): Promise<boolean> {
   try {
-    const memberRef = doc(db, 'members', memberId);
-    // Update the member document to set attendance for the specified date
-    await updateDoc(memberRef, { [`attendance.${date}`]: attended });
-    return true;
+      const memberRef = doc(db, 'members', memberId);
+      // Update the member document to set attendance for the specified date
+      await updateDoc(memberRef, { [`attendance.${date}`]: attended });
+      return true;
   } catch (error) {
-    console.error('Error marking attendance: ', error);
-    return false;
+      console.error('Error marking attendance: ', error);
+      return false;
   }
 }
 
@@ -426,7 +426,25 @@ export async function getAttendanceByDate(clubId: string, date: string): Promise
       return members;
   } catch (error) {
       console.error('Error fetching attendance records: ', error);
-      toast('Failed to fetch attendance records');
+      return [];
+  }
+}
+
+// Function to fetch all dates for which there are attendance records
+export async function getAllAttendanceDates(clubId: string): Promise<string[]> {
+  try {
+      const membersQuery = query(collection(db, 'members'), where('clubId', '==', clubId));
+      const querySnapshot = await getDocs(membersQuery);
+      const dates: Set<string> = new Set();
+      querySnapshot.forEach(doc => {
+          const data = doc.data() as MemberData;
+          if (data.attendance) {
+              Object.keys(data.attendance).forEach(date => dates.add(date));
+          }
+      });
+      return Array.from(dates);
+  } catch (error) {
+      console.error('Error fetching attendance dates: ', error);
       return [];
   }
 }

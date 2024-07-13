@@ -6,6 +6,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { MemberData, markAttendance, getMembersByClubId, getClubById } from '../firebaseConfig';
 import MainHeader from '../components/Header';
 import MainFooter from '../components/MainFooter';
+import { toast } from '../toast';
 
 const ClubAttendanceMemberList: React.FC = () => {
     const { clubId } = useParams<{ clubId: string }>();
@@ -57,7 +58,7 @@ const ClubAttendanceMemberList: React.FC = () => {
             markAttendance(member.id, currentDate, attended)
                 .then(success => {
                     if (success) {
-                        console.log(`Attendance marked for member ${member.id}`);
+                        toast(`Attendance marked for ${clubName}`);
                     } else {
                         console.error(`Failed to mark attendance for member ${member.id}`);
                     }
@@ -66,7 +67,7 @@ const ClubAttendanceMemberList: React.FC = () => {
                     console.error('Error marking attendance:', error);
                 });
         });
-        history.push(`/attendance-record/`);
+        history.push(`/club-attendance-list/`);
     };
 
     return (
