@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonText
 } from '@ionic/react';
-import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline, checkboxOutline } from 'ionicons/icons';
+import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline, checkboxOutline, folderOpenOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { getCurrentUser, signOut } from '../firebaseConfig'; // Import getCurrentUser and signOut functions
@@ -71,35 +71,13 @@ const Dashboard: React.FC = () => {
               </IonCard>
             </IonCol>
             <IonCol size="12" size-md="6" size-lg="4">
-              <IonCard button routerLink="/club-page" className="dashboard-card">
+              <IonCard button routerLink="/club-management" className="dashboard-card">
                 <IonCardHeader>
-                  <IonIcon icon={addCircleOutline} className="dashboard-icon" />
-                  <IonCardTitle className="dashboard-title">Create/View Club</IonCardTitle>
+                  <IonIcon icon={folderOpenOutline} className="dashboard-icon" />
+                  <IonCardTitle className="dashboard-title">Manage Clubs</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
                   View and Manage all clubs
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            <IonCol size="12" size-md="6" size-lg="4">
-              <IonCard button routerLink="/club-attendance-list" className="dashboard-card">
-                <IonCardHeader>
-                  <IonIcon icon={checkboxOutline} className="dashboard-icon" />
-                  <IonCardTitle className="dashboard-title"> Club Attendance</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                View and Manage Members' Club Attendance
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            <IonCol size="12" size-md="6" size-lg="4">
-              <IonCard button routerLink="/attendance-record" className="dashboard-card">
-                <IonCardHeader>
-                  <IonIcon icon={checkboxOutline} className="dashboard-icon" />
-                  <IonCardTitle className="dashboard-title"> Club Attendance Record</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                View Club Members' Attendance Records
                 </IonCardContent>
               </IonCard>
             </IonCol>

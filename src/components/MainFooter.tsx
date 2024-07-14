@@ -10,7 +10,7 @@ const MainFooter: React.FC = () => {
         <IonTabBar slot="bottom">
           <IonTabButton tab="add-member" href="/add-member">
             <IonIcon icon={personAddOutline} />
-            <IonLabel>Add</IonLabel>
+            <IonLabel>Add Member</IonLabel>
           </IonTabButton>
           <IonTabButton tab="member-list" href="/member-list">
             <IonIcon icon={peopleOutline} />
@@ -24,13 +24,9 @@ const MainFooter: React.FC = () => {
             <IonIcon icon={schoolOutline} />
             <IonLabel>Tribes</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="club-page" href="/club-page">
+          <IonTabButton tab="club-management" href="/club-management">
             <IonIcon icon={addCircleOutline} />
             <IonLabel>Clubs</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="clubattendance-list" href="/club-attendance-list">
-            <IonIcon icon={checkboxOutline} />
-            <IonLabel>Attend</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonFooter>

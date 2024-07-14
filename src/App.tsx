@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import AttendanceRecord from './pages/AttendanceRecord';
 import AttendanceMemberRecord from './pages/AttendanceMemberRecord';
+import ClubManagement from './pages/ClubManagement';
 
 
 setupIonicReact();
@@ -86,6 +87,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/attendance-member-record/:clubId">
           <AttendanceMemberRecord />
+        </Route>
+        <Route exact path="/club-management">
+          <ClubManagement />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

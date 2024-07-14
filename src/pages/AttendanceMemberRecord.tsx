@@ -74,24 +74,37 @@ const AttendanceMemberRecord: React.FC = () => {
     const generatePDF = async () => {
         const pdfDoc = await PDFDocument.create();
         const page = pdfDoc.addPage(PageSizes.A4);
-
+    
         let y = page.getHeight() - 50;
-
+    
         const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-
-        Object.keys(attendanceRecords).forEach(date => {
-            const dateString = format(new Date(date), 'EEEE, do MMMM, yyyy');
-            page.drawText(`Attendance for ${dateString}`, {
+    
+        // Add header with club name
+        page.drawText(`Attendance records for ${clubName} Club`, {
+            x: 50,
+            y,
+            size: 18,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+        });
+    
+        y -= 30;
+    
+        Object.keys(attendanceRecords).forEach(dateString => {
+            const date = new Date(dateString); // Ensure date is interpreted correctly
+            const formattedDate = format(toZonedTime(date, timeZone), 'EEEE, do MMMM, yyyy');
+    
+            page.drawText(`Attendance for ${formattedDate}`, {
                 x: 50,
                 y,
-                size: 18,
+                size: 14,
                 font: timesRomanFont,
                 color: rgb(0, 0, 0),
             });
-
-            y -= 30;
-
-            attendanceRecords[date].forEach(member => {
+    
+            y -= 20;
+    
+            attendanceRecords[dateString].forEach(member => {
                 y -= 20;
                 const attendanceStatus = member.attended ? 'Present' : 'Absent';
                 const memberText = `${member.name}: ${attendanceStatus}`;
@@ -103,13 +116,15 @@ const AttendanceMemberRecord: React.FC = () => {
                     color: rgb(0, 0, 0),
                 });
             });
-
+    
             y -= 30;
         });
-
+    
         const pdfBytes = await pdfDoc.save();
         return pdfBytes;
     };
+    
+
 
     const downloadDOC = () => {
         const htmlContent = generateHTML();
@@ -121,20 +136,23 @@ const AttendanceMemberRecord: React.FC = () => {
 
     const generateHTML = () => {
         let html = `<html><head><title>Attendance Records</title></head><body><h1>Attendance Records for ${clubName} Club</h1>`;
-
-        Object.keys(attendanceRecords).forEach(date => {
-            const dateString = format(new Date(date), 'EEEE, do MMMM, yyyy');
-            html += `<h2>Attendance for ${dateString}</h2><ul>`;
-            attendanceRecords[date].forEach(member => {
+    
+        Object.keys(attendanceRecords).forEach(dateString => {
+            const date = new Date(dateString); // Ensure date is interpreted correctly
+            const formattedDate = format(toZonedTime(date, timeZone), 'EEEE, do MMMM, yyyy');
+    
+            html += `<h2>Attendance for ${formattedDate}</h2><ul>`;
+            attendanceRecords[dateString].forEach(member => {
                 const attendanceStatus = member.attended ? 'Present' : 'Absent';
                 html += `<li>${member.name}: ${attendanceStatus}</li>`;
             });
             html += `</ul>`;
         });
-
+    
         html += `</body></html>`;
         return html;
     };
+    
 
     const downloadFile = (blob: Blob, filename: string) => {
         const url = window.URL.createObjectURL(blob);
@@ -150,19 +168,21 @@ const AttendanceMemberRecord: React.FC = () => {
     const convertToCSV = (data: Record<string, MemberData[]>): string | null => {
         try {
             let csv = 'Date,Member Name,Attendance\n';
-
+    
             for (const date in data) {
+                const formattedDate = format(new Date(date), 'yyyy-MM-dd'); // Format date as yyyy-MM-dd for CSV
                 data[date].forEach(member => {
-                    csv += `${date},${member.name},${member.attended ? 'Present' : 'Absent'}\n`;
+                    csv += `${formattedDate},${member.name},${member.attended ? 'Present' : 'Absent'}\n`;
                 });
             }
-
+    
             return csv;
         } catch (error) {
             console.error('Error converting to CSV:', error);
             return null;
         }
     };
+    
 
     const handleClose = () => {
         history.replace('/attendance-record'); 
