@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Tribe, tribes } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
+import './TribeList.css';
 
 // Define the tribes grouped by their mothers
 const groupedTribes: { mother: string, children: Tribe[] }[] = [
@@ -36,11 +37,12 @@ const TribeList: React.FC = () => {
         <IonPage>
             <MainHeader />
             <IonContent className="ion-padding item-background-color" color="background">
+                <IonLabel ><IonText ><p className='description'>Select a Tribe to view and manage members in that tribe</p></IonText></IonLabel>
                 <IonList>
                     {groupedTribes.map(group => (
                         <React.Fragment key={group.mother}>
                             <IonItem lines="none" className="item-background-color">
-                                <IonLabel color="dark" style={{ fontWeight: 'bold', opacity: 0.4 }}>
+                                <IonLabel className='moms' color="dark" style={{ fontWeight: 'bold', opacity: 0.4 }}>
                                     {group.mother}
                                 </IonLabel>
                             </IonItem>
