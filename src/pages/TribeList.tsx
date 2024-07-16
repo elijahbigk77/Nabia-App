@@ -40,7 +40,7 @@ const TribeList: React.FC = () => {
                     {groupedTribes.map(group => (
                         <React.Fragment key={group.mother}>
                             <IonItem lines="none" className="item-background-color">
-                                <IonLabel color="dark" style={{ fontWeight: 'bold', opacity: 0.6 }}>
+                                <IonLabel color="dark" style={{ fontWeight: 'bold', opacity: 0.4 }}>
                                     {group.mother}
                                 </IonLabel>
                             </IonItem>
