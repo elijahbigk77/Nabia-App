@@ -1,6 +1,6 @@
 // ClubMemberList.tsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   IonPage,
   IonContent,
@@ -17,15 +17,26 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle
-} from '@ionic/react';
-import MainHeader from '../components/MainHeader';
-import MainFooter from '../components/MainFooter';
-import { getMembersByClubId, MemberData, updateMember, deleteMember, Tribe, tribes, ClubData, getTribes, getAllClubs } from '../firebaseConfig';
-import { useParams } from 'react-router-dom';
+  IonCardTitle,
+  IonButtons,
+} from "@ionic/react";
+import MainHeader from "../components/MainHeader";
+import MainFooter from "../components/MainFooter";
+import {
+  getMembersByClubId,
+  MemberData,
+  updateMember,
+  deleteMember,
+  Tribe,
+  tribes,
+  ClubData,
+  getTribes,
+  getAllClubs,
+} from "../firebaseConfig";
+import { useParams } from "react-router-dom";
 
-import { pencilOutline, trashOutline } from 'ionicons/icons';
-import { toast } from '../toast';
+import { pencilOutline, trashOutline } from "ionicons/icons";
+import { toast } from "../toast";
 
 interface RouteParams {
   clubId: string;
@@ -38,19 +49,19 @@ const ClubMemberList: React.FC = () => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editMemberData, setEditMemberData] = useState<MemberData>({
-    id: '',
-    name: '',
-    birthdate: '',
-    residentialAddress: '',
-    schoolAddress: '',
-    parentGuardianName: '',
-    parentGuardianRelationship: '',
-    parentGuardianContact: '',
-    teacherName: '',
-    teacherContact: '',
-    teacherClass: '',
-    tribeId: '',
-    clubId: ''
+    id: "",
+    name: "",
+    birthdate: "",
+    residentialAddress: "",
+    schoolAddress: "",
+    parentGuardianName: "",
+    parentGuardianRelationship: "",
+    parentGuardianContact: "",
+    teacherName: "",
+    teacherContact: "",
+    teacherClass: "",
+    tribeId: "",
+    clubId: "",
   });
 
   const { clubId } = useParams<RouteParams>();
@@ -136,40 +147,65 @@ const ClubMemberList: React.FC = () => {
     const year = date.getFullYear();
 
     // Suffix for day (e.g., 1st, 2nd, 3rd, 4th)
-    const suffixes = ['th', 'st', 'nd', 'rd'];
-    const suffix = suffixes[day % 10] || 'th';
+    const suffixes = ["th", "st", "nd", "rd"];
+    const suffix = suffixes[day % 10] || "th";
 
     // Array of month names
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     const month = months[monthIndex];
 
     return `${day}${suffix} ${month}, ${year}`;
   };
 
   // Find the selected club's name
-  const selectedClubName = clubs.find(club => club.id === clubId)?.name || '';
+  const selectedClubName = clubs.find((club) => club.id === clubId)?.name || "";
 
   return (
     <IonPage>
       <MainHeader />
-      <IonContent fullscreen className="ion-padding" color="background">
-        <h2>Members of {selectedClubName}</h2>
+      <IonContent
+        fullscreen
+        className="ion-padding item-background-color"
+        color="background"
+      >
+        <IonButtons>
+          <IonButton>
+            <h2>Members of {selectedClubName}</h2>
+          </IonButton>
+        </IonButtons>
         <IonList>
-                    {members.map((member, index) => (
-                        <IonCard key={index} onClick={() => openModal(member)}>
-                            <IonCardHeader>
-                                <IonCardTitle>{member.name}</IonCardTitle>
-                            </IonCardHeader>
-                            <IonCardContent>
-                                <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
-                                <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
-                            </IonCardContent>
-                        </IonCard>
-                    ))}
-                </IonList>
+          {members.map((member, index) => (
+            <IonCard key={index} onClick={() => openModal(member)}>
+              <IonCardHeader>
+                <IonCardTitle>{member.name}</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
+                <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
+              </IonCardContent>
+            </IonCard>
+          ))}
+        </IonList>
 
         {/* Member Details Modal */}
-        <IonModal isOpen={showModal} onDidDismiss={closeModal} className="full-screen-modal">
+        <IonModal
+          isOpen={showModal}
+          onDidDismiss={closeModal}
+          className="full-screen-modal"
+        >
           {editMode ? (
             <IonContent fullscreen>
               <MainHeader />
@@ -177,7 +213,12 @@ const ClubMemberList: React.FC = () => {
                 <IonLabel position="stacked">Name</IonLabel>
                 <IonInput
                   value={editMemberData.name}
-                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, name: e.target.value })}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      name: e.target.value,
+                    })
+                  }
                 />
               </IonItem>
               <IonItem>
@@ -185,21 +226,36 @@ const ClubMemberList: React.FC = () => {
                 <IonInput
                   type="date"
                   value={editMemberData.birthdate}
-                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, birthdate: e.target.value })}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      birthdate: e.target.value,
+                    })
+                  }
                 />
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Residential Address</IonLabel>
                 <IonInput
                   value={editMemberData.residentialAddress}
-                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, residentialAddress: e.target.value })}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      residentialAddress: e.target.value,
+                    })
+                  }
                 />
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">School Address</IonLabel>
                 <IonInput
                   value={editMemberData.schoolAddress}
-                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, schoolAddress: e.target.value })}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      schoolAddress: e.target.value,
+                    })
+                  }
                 />
               </IonItem>
               <IonItem>
@@ -207,16 +263,24 @@ const ClubMemberList: React.FC = () => {
                 <IonInput
                   value={editMemberData.parentGuardianName}
                   onIonInput={(e: any) =>
-                    setEditMemberData({ ...editMemberData, parentGuardianName: e.target.value })
+                    setEditMemberData({
+                      ...editMemberData,
+                      parentGuardianName: e.target.value,
+                    })
                   }
                 />
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Parent/Guardian Relationship</IonLabel>
+                <IonLabel position="stacked">
+                  Parent/Guardian Relationship
+                </IonLabel>
                 <IonInput
                   value={editMemberData.parentGuardianRelationship}
                   onIonInput={(e: any) =>
-                    setEditMemberData({ ...editMemberData, parentGuardianRelationship: e.target.value })
+                    setEditMemberData({
+                      ...editMemberData,
+                      parentGuardianRelationship: e.target.value,
+                    })
                   }
                 />
               </IonItem>
@@ -225,7 +289,10 @@ const ClubMemberList: React.FC = () => {
                 <IonInput
                   value={editMemberData.parentGuardianContact}
                   onIonInput={(e: any) =>
-                    setEditMemberData({ ...editMemberData, parentGuardianContact: e.target.value })
+                    setEditMemberData({
+                      ...editMemberData,
+                      parentGuardianContact: e.target.value,
+                    })
                   }
                 />
               </IonItem>
@@ -233,7 +300,12 @@ const ClubMemberList: React.FC = () => {
                 <IonLabel position="stacked">Teacher Name</IonLabel>
                 <IonInput
                   value={editMemberData.teacherName}
-                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherName: e.target.value })}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      teacherName: e.target.value,
+                    })
+                  }
                 />
               </IonItem>
               <IonItem>
@@ -241,7 +313,10 @@ const ClubMemberList: React.FC = () => {
                 <IonInput
                   value={editMemberData.teacherContact}
                   onIonInput={(e: any) =>
-                    setEditMemberData({ ...editMemberData, teacherContact: e.target.value })
+                    setEditMemberData({
+                      ...editMemberData,
+                      teacherContact: e.target.value,
+                    })
                   }
                 />
               </IonItem>
@@ -249,7 +324,12 @@ const ClubMemberList: React.FC = () => {
                 <IonLabel position="stacked">Teacher Class</IonLabel>
                 <IonInput
                   value={editMemberData.teacherClass}
-                  onIonInput={(e: any) => setEditMemberData({ ...editMemberData, teacherClass: e.target.value })}
+                  onIonInput={(e: any) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      teacherClass: e.target.value,
+                    })
+                  }
                 />
               </IonItem>
               <IonItem>
@@ -257,7 +337,10 @@ const ClubMemberList: React.FC = () => {
                 <IonSelect
                   value={editMemberData.tribeId}
                   onIonChange={(e: any) =>
-                    setEditMemberData({ ...editMemberData, tribeId: e.target.value })
+                    setEditMemberData({
+                      ...editMemberData,
+                      tribeId: e.target.value,
+                    })
                   }
                 >
                   {tribesList.map((tribe: Tribe) => (
@@ -272,7 +355,10 @@ const ClubMemberList: React.FC = () => {
                 <IonSelect
                   value={editMemberData.clubId}
                   onIonChange={(e: any) =>
-                    setEditMemberData({ ...editMemberData, clubId: e.target.value })
+                    setEditMemberData({
+                      ...editMemberData,
+                      clubId: e.target.value,
+                    })
                   }
                 >
                   {clubs.map((club: ClubData) => (
@@ -296,10 +382,12 @@ const ClubMemberList: React.FC = () => {
                 <p>{selectedMember?.name}</p>
               </IonItem>
               <IonItem>
-                <p>Birthdate: {formatBirthdate(selectedMember?.birthdate || '')}</p>
+                <p>
+                  Birthdate: {formatBirthdate(selectedMember?.birthdate || "")}
+                </p>
               </IonItem>
               <IonItem>
-                <p>Age: {calculateAge(selectedMember?.birthdate || '')}</p>
+                <p>Age: {calculateAge(selectedMember?.birthdate || "")}</p>
               </IonItem>
               <IonItem>
                 <p>Residential Address: {selectedMember?.residentialAddress}</p>
@@ -311,10 +399,15 @@ const ClubMemberList: React.FC = () => {
                 <p>Parent/Guardian: {selectedMember?.parentGuardianName}</p>
               </IonItem>
               <IonItem>
-                <p>Relationship: {selectedMember?.parentGuardianRelationship}</p>
+                <p>
+                  Relationship: {selectedMember?.parentGuardianRelationship}
+                </p>
               </IonItem>
               <IonItem>
-                <p>Parent/Guardian Contact: {selectedMember?.parentGuardianContact}</p>
+                <p>
+                  Parent/Guardian Contact:{" "}
+                  {selectedMember?.parentGuardianContact}
+                </p>
               </IonItem>
               <IonItem>
                 <p>Teacher: {selectedMember?.teacherName}</p>
@@ -325,9 +418,23 @@ const ClubMemberList: React.FC = () => {
               <IonItem>
                 <p>Teacher Class: {selectedMember?.teacherClass}</p>
               </IonItem>
-              <IonItem><p>{`Tribe: ${tribesList.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p></IonItem>
-              <IonItem><p>{`Club: ${clubs.find((club: ClubData) => club.id === selectedMember?.clubId)?.name}`}</p></IonItem>
-              <IonButton onClick={closeModal} color='danger'>Close</IonButton>
+              <IonItem>
+                <p>{`Tribe: ${
+                  tribesList.find(
+                    (tribe: Tribe) => tribe.id === selectedMember?.tribeId
+                  )?.name
+                }`}</p>
+              </IonItem>
+              <IonItem>
+                <p>{`Club: ${
+                  clubs.find(
+                    (club: ClubData) => club.id === selectedMember?.clubId
+                  )?.name
+                }`}</p>
+              </IonItem>
+              <IonButton onClick={closeModal} color="danger">
+                Close
+              </IonButton>
               <IonButton color="dark" onClick={() => setEditMode(true)}>
                 <IonIcon icon={pencilOutline} />
               </IonButton>
@@ -342,18 +449,18 @@ const ClubMemberList: React.FC = () => {
         <IonAlert
           isOpen={showDeleteAlert}
           onDidDismiss={() => setShowDeleteAlert(false)}
-          header={'Confirm Delete'}
+          header={"Confirm Delete"}
           message={`Are you sure you want to delete ${selectedMember?.name}?`}
           buttons={[
             {
-              text: 'Cancel',
-              role: 'cancel',
-              cssClass: 'secondary'
+              text: "Cancel",
+              role: "cancel",
+              cssClass: "secondary",
             },
             {
-              text: 'Delete',
-              handler: handleDeleteMember
-            }
+              text: "Delete",
+              handler: handleDeleteMember,
+            },
           ]}
         />
       </IonContent>

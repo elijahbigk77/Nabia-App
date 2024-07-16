@@ -24,7 +24,6 @@ import { addOutline, createOutline, trashOutline, closeOutline } from 'ionicons/
 import { addClub, getAllClubs, ClubData, updateClub, deleteClub } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
-import { toast } from '../toast';
 import { useHistory } from 'react-router-dom';
 
 const ClubPage: React.FC = () => {
@@ -90,7 +89,7 @@ const ClubPage: React.FC = () => {
   };
 
   const openEditModal = (club: ClubData) => {
-    setEditClubId(club.id || null); 
+    setEditClubId(club.id || null);
     setEditClubName(club.name);
     setEditClubLocation(club.location);
     setShowEditModal(true);
@@ -109,23 +108,22 @@ const ClubPage: React.FC = () => {
   return (
     <IonPage>
       <MainHeader />
-      <IonContent className="ion-padding" color="background">
+      <IonContent className="ion-padding item-background-color" color="background">
+        <IonButton size="small" fill="clear" color='dark' className="view-members-link" style={{ opacity: 0.4 }}>
+          Click on a Club to View Members in that club
+        </IonButton>
         <IonList>
           {clubs.map((club, index) => (
-            <IonCard key={index}>
+            <IonCard key={index} onClick={() => navigateToClubMemberList(club.id || '')}>
               <IonCardHeader>
                 <IonCardTitle>{club.name}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
                 <p>{`Location: ${club.location}`}</p>
-                {/* Link to ClubMemberList */}
-                <IonButton size="small" fill="clear" onClick={() => navigateToClubMemberList(club.id || '')} className="view-members-link">
-                  View Members in {club.name} Club
-                </IonButton>
-                <IonButton size="small" onClick={() => openEditModal(club)}>
+                <IonButton size="small" color='dark' onClick={() => openEditModal(club)}>
                   <IonIcon icon={createOutline} slot="icon-only" />
                 </IonButton>
-                <IonButton size="small" onClick={() => openDeleteAlert(club.id || '')}>
+                <IonButton size="small" color='danger' onClick={() => openDeleteAlert(club.id || '')}>
                   <IonIcon icon={trashOutline} slot="icon-only" />
                 </IonButton>
               </IonCardContent>

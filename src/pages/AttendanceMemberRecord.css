@@ -1,0 +1,12 @@
+.present {
+    background-color: #d4edda; 
+    color: #067e22; 
+    font-weight: bold;
+  }
+  
+  .absent {
+    background-color: #f8d7da;
+    color: #e32336; 
+    font-weight: bold;
+  }
+  

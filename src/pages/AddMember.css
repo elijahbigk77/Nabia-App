@@ -1,5 +1,5 @@
 .ion-item-custom {
-  --background: rgba(187, 134, 1, 0.743);;
+  --background: rgba(187, 134, 1, 0.743);
   --border-color: #000000;
   --padding-start: 10px;
   --padding-end: 10px;
@@ -7,7 +7,7 @@
   --padding-bottom: 5px;
   margin-bottom: 10px;
   border-radius: 8px;
-  
+
   box-shadow: 20px 4px 8px rgba(0.3, 0.4, 0.4, 0.5);
 }
 
@@ -48,4 +48,3 @@ h2 {
 .add-member-btn {
   margin-top: 20px;
 }
-

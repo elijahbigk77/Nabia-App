@@ -8,6 +8,7 @@ import MainFooter from '../components/MainFooter';
 import { toDate, toZonedTime } from 'date-fns-tz';
 import { closeOutline, downloadOutline } from 'ionicons/icons';
 import { PDFDocument, rgb, StandardFonts, PageSizes } from 'pdf-lib';
+import './AttendanceMemberRecord.css'; // Import CSS file
 
 const timeZone = 'UTC'; // Set the time zone you want to display (e.g., UTC)
 
@@ -221,7 +222,7 @@ const AttendanceMemberRecord: React.FC = () => {
                         </IonLabel>
                         <IonList>
                             {attendanceRecords[date].map(member => (
-                                <IonItem key={member.id}>
+                                <IonItem key={member.id} className={member.attended ? 'present' : 'absent'}>
                                     <IonLabel>{member.name}</IonLabel>
                                     <IonLabel slot="end">{member.attended ? 'Present' : 'Absent'}</IonLabel>
                                 </IonItem>
