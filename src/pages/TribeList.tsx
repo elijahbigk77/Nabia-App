@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonPage, IonContent, IonList, IonItem, IonLabel, IonText } from '@ionic/react';
+import { IonPage, IonContent, IonList, IonItem, IonLabel, IonText, IonCard, IonCardContent } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { Tribe, tribes } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
@@ -39,17 +39,17 @@ const TribeList: React.FC = () => {
                 <IonList>
                     {groupedTribes.map(group => (
                         <React.Fragment key={group.mother}>
-                            <IonItem lines="none" className="ion-text-center item-background-color">
-                                <IonLabel color="medium">
-                                    <IonText style={{ fontWeight: 'bold', opacity: 0.6 }}>
-                                        {group.mother}
-                                    </IonText>
+                            <IonItem lines="none" className="item-background-color">
+                                <IonLabel color="dark" style={{ fontWeight: 'bold', opacity: 0.6 }}>
+                                    {group.mother}
                                 </IonLabel>
                             </IonItem>
                             {group.children.map((tribe: Tribe) => (
-                                <IonItem key={tribe.id} onClick={() => handleTribeClick(tribe.id)} className='item-background-color'>
-                                    <IonLabel>{tribe.name}</IonLabel>
-                                </IonItem>
+                                <IonCard key={tribe.id} color='dark' onClick={() => handleTribeClick(tribe.id)} className="item-background-color">
+                                    <IonCardContent>
+                                        <IonLabel>{tribe.name}</IonLabel>
+                                    </IonCardContent>
+                                </IonCard>
                             ))}
                         </React.Fragment>
                     ))}
