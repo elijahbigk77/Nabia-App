@@ -28,11 +28,6 @@ const ClubAttendanceList: React.FC = () => {
   return (
     <IonPage>
         <MainHeader />
-      
-        
-        
-        
-      
       <IonContent>
       <IonLabel ><p className='ion-padding'><i>Select a Club to Take Club Meeting Attendance</i></p></IonLabel>
         <IonList>
