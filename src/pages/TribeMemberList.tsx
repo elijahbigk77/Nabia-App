@@ -130,7 +130,7 @@ const TribeMemberList: React.FC = () => {
     return (
         <IonPage>
             <MainHeader />
-            <IonContent fullscreen className="ion-padding" color="background">
+            <IonContent fullscreen className="ion-padding item-background-color" color="background">
                 <p>Members of {selectedTribeName} Tribe</p>
                 <IonList>
                     {members.map((member, index) => (
@@ -273,7 +273,7 @@ const TribeMemberList: React.FC = () => {
                                 <IonCardHeader>
                                     <IonCardTitle>{selectedMember?.name}</IonCardTitle>
                                 </IonCardHeader>
-                                <IonCardContent className='member-info'>
+                                <IonCardContent className='ion-padding member-info'>
                                     <IonLabel>
                                         <p>{`Birthdate: ${formatBirthdate(selectedMember?.birthdate || '')}`}</p>
                                         <p>{`Age: ${calculateAge(selectedMember?.birthdate || '')}`}</p>

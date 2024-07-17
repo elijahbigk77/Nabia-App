@@ -1,0 +1,23 @@
+.create-club .center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+  }
+
+
+  .form-group ion-input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid var(--ion-color-dark);
+  border-radius: 5px;
+}
+
+.description{
+    font-weight: bold;
+    color: rgb(244, 244, 244);
+}
+  

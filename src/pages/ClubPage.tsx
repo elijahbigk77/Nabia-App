@@ -18,13 +18,15 @@ import {
   IonCardTitle,
   IonCardContent,
   IonAlert,
-  IonToast
+  IonToast,
+  IonText
 } from '@ionic/react';
 import { addOutline, createOutline, trashOutline, closeOutline } from 'ionicons/icons';
 import { addClub, getAllClubs, ClubData, updateClub, deleteClub } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { useHistory } from 'react-router-dom';
+import './ClubPage.css'
 
 const ClubPage: React.FC = () => {
   const [clubs, setClubs] = useState<ClubData[]>([]);
@@ -101,7 +103,6 @@ const ClubPage: React.FC = () => {
   };
 
   const navigateToClubMemberList = (clubId: string) => {
-    // Navigate to ClubMemberList page passing the clubId as a parameter
     history.push(`/club-member-list/${clubId}`);
   };
 
@@ -138,22 +139,28 @@ const ClubPage: React.FC = () => {
         </IonFab>
 
         {/* Add Club Modal */}
-        <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-          <IonContent className="ion-padding">
-            <IonItem>
-              <IonLabel position="stacked">Club Name</IonLabel>
-              <IonInput value={newClubName} onIonChange={e => setNewClubName(e.detail.value!)} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Location</IonLabel>
-              <IonInput value={newClubLocation} onIonChange={e => setNewClubLocation(e.detail.value!)} />
-            </IonItem>
-            <IonButton expand="block" onClick={handleAddClub}>
-              Create Club
-            </IonButton>
-            <IonButton expand="block" color="light" onClick={() => setShowModal(false)}>
-              Cancel
-            </IonButton>
+        <IonModal className='create-club' isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+          
+          <IonContent className="ion-padding item-background-color" color='background'>
+          <IonLabel ><IonText ><p className='description'>Provide Information to create a club</p></IonText></IonLabel>
+            <div className="center-content">
+              <IonItem lines='none'>
+              <div className='form-group'>
+                <IonLabel position="stacked">Club Name</IonLabel>
+                <IonInput className='form-group' value={newClubName} onIonChange={e => setNewClubName(e.detail.value!)} /></div>
+              </IonItem>
+              <IonItem lines='none'>
+              <div className='form-group'>
+                <IonLabel position="stacked">Location</IonLabel>
+                <IonInput value={newClubLocation} onIonChange={e => setNewClubLocation(e.detail.value!)} /></div>
+              </IonItem>
+              <IonButton expand="block" onClick={handleAddClub} color='dark'>
+                Create Club
+              </IonButton>
+              <IonButton expand="block" color="danger" onClick={() => setShowModal(false)}>
+                Cancel
+              </IonButton>
+            </div>
           </IonContent>
         </IonModal>
 

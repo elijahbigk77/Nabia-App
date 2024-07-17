@@ -34,9 +34,9 @@ import {
   getAllClubs,
 } from "../firebaseConfig";
 import { useParams } from "react-router-dom";
-
 import { pencilOutline, trashOutline } from "ionicons/icons";
 import { toast } from "../toast";
+import './ClubMembeList.css'
 
 interface RouteParams {
   clubId: string;
@@ -199,12 +199,11 @@ const ClubMemberList: React.FC = () => {
             </IonCard>
           ))}
         </IonList>
-
+        
         {/* Member Details Modal */}
         <IonModal
           isOpen={showModal}
           onDidDismiss={closeModal}
-          className="full-screen-modal"
         >
           {editMode ? (
             <IonContent fullscreen>
@@ -378,54 +377,55 @@ const ClubMemberList: React.FC = () => {
           ) : (
             <IonContent className="profile-modal">
               <MainHeader />
-              <IonItem>
+              <div className="center-content">
+              <IonItem lines="none">
                 <p>{selectedMember?.name}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>
                   Birthdate: {formatBirthdate(selectedMember?.birthdate || "")}
                 </p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>Age: {calculateAge(selectedMember?.birthdate || "")}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>Residential Address: {selectedMember?.residentialAddress}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>School Address: {selectedMember?.schoolAddress}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>Parent/Guardian: {selectedMember?.parentGuardianName}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>
                   Relationship: {selectedMember?.parentGuardianRelationship}
                 </p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>
                   Parent/Guardian Contact:{" "}
                   {selectedMember?.parentGuardianContact}
                 </p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>Teacher: {selectedMember?.teacherName}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>Teacher Contact: {selectedMember?.teacherContact}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>Teacher Class: {selectedMember?.teacherClass}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>{`Tribe: ${
                   tribesList.find(
                     (tribe: Tribe) => tribe.id === selectedMember?.tribeId
                   )?.name
                 }`}</p>
               </IonItem>
-              <IonItem>
+              <IonItem lines="none">
                 <p>{`Club: ${
                   clubs.find(
                     (club: ClubData) => club.id === selectedMember?.clubId
@@ -436,11 +436,12 @@ const ClubMemberList: React.FC = () => {
                 Close
               </IonButton>
               <IonButton color="dark" onClick={() => setEditMode(true)}>
-                <IonIcon icon={pencilOutline} />
+                <IonIcon icon={pencilOutline} /> 
               </IonButton>
               <IonButton color="dark" onClick={() => setShowDeleteAlert(true)}>
                 <IonIcon icon={trashOutline} />
               </IonButton>
+              </div>
             </IonContent>
           )}
         </IonModal>

@@ -25,7 +25,6 @@ h2 {
   color: #333;
 }
 
-/* AddMember.css */
 
 .form-group {
   margin-bottom: 15px;
@@ -35,14 +34,16 @@ h2 {
   display: block;
   margin-bottom: 5px;
   color: var(--ion-color-dark);
+  font-weight: bold;
 }
 
 .form-group ion-input,
 .form-group ion-select {
   width: 100%;
   padding: 10px;
-  border: 1px solid var(--ion-color-medium);
+  border: 1px solid var(--ion-color-dark);
   border-radius: 5px;
+  opacity: 0.4;
 }
 
 .add-member-btn {
