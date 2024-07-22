@@ -342,7 +342,7 @@ const ClubMemberList: React.FC = () => {
                     })
                   }
                 >
-                  {tribesList.map((tribe: Tribe) => (
+                  {tribes.map((tribe: Tribe) => (
                     <IonSelectOption key={tribe.id} value={tribe.id}>
                       {tribe.name}
                     </IonSelectOption>
@@ -420,7 +420,7 @@ const ClubMemberList: React.FC = () => {
               </IonItem>
               <IonItem lines="none">
                 <p>{`Tribe: ${
-                  tribesList.find(
+                  tribes.find(
                     (tribe: Tribe) => tribe.id === selectedMember?.tribeId
                   )?.name
                 }`}</p>
