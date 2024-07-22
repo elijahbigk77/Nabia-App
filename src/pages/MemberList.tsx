@@ -17,8 +17,11 @@ import {
   IonDatetime,
   IonSelect,
   IonSelectOption,
+  IonFab,
+  IonFabButton,
 } from "@ionic/react";
-import { pencilOutline, trashOutline, closeOutline } from "ionicons/icons";
+import { useLocation } from "react-router-dom";
+import { pencilOutline, trashOutline, closeOutline, addOutline } from "ionicons/icons";
 import MainHeader from "../components/MainHeader";
 import MainFooter from "../components/MainFooter";
 import {
@@ -31,7 +34,9 @@ import {
 import "./MemberList.css";
 import { toast } from "../toast";
 import { tribes, Tribe, ClubData, getAllClubs } from "../firebaseConfig";
-import SearchBar from "../components/SearchBar"; // Import the SearchBar component
+import SearchBar from "../components/SearchBar";
+import AddMember from "./AddMember";
+import { useHistory } from 'react-router-dom';
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<MemberData[]>([]);
@@ -57,12 +62,25 @@ const MemberList: React.FC = () => {
   const [tribesList, setTribesList] = useState<Tribe[]>([]);
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [searchText, setSearchText] = useState("");
+  const location = useLocation();
+  const history = useHistory();
+
+
+  useEffect(() => {
+    if (location.state && (location.state as any).refresh) {
+      fetchMembers();
+    }
+  }, [location.state]);
 
   useEffect(() => {
     fetchMembers();
     fetchTribes();
     fetchClubs();
   }, []);
+
+  const navigateToAddMember = () => {
+    history.push(`/add-member/`);
+  };
 
   const fetchMembers = async () => {
     const fetchedMembers = await getAllMembers();
@@ -220,6 +238,11 @@ const MemberList: React.FC = () => {
             </IonCard>
           ))}
         </IonList>
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+          <IonFabButton onClick={navigateToAddMember}>
+            <IonIcon icon={addOutline} />
+          </IonFabButton>
+        </IonFab>
 
         {/* Modal to display member details */}
         <IonModal
@@ -292,7 +315,9 @@ const MemberList: React.FC = () => {
                 />
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Relationship</IonLabel>
+                <IonLabel position="stacked">
+                  Parent/Guardian Relationship
+                </IonLabel>
                 <IonInput
                   value={editMemberData.parentGuardianRelationship}
                   onIonInput={(e: any) =>
@@ -372,115 +397,215 @@ const MemberList: React.FC = () => {
               <IonItem>
                 <IonLabel position="stacked">Club</IonLabel>
                 <IonSelect
-                  value={editMemberData.clubId || ""}
-                  onIonChange={(e: any) =>
+                  value={editMemberData.clubId}
+                  onIonChange={(e) =>
                     setEditMemberData({
                       ...editMemberData,
-                      clubId: e.target.value,
+                      clubId: e.detail.value,
                     })
                   }
                 >
-                  {clubs.map((club: ClubData) => (
+                  {clubs.map((club) => (
                     <IonSelectOption key={club.id} value={club.id}>
                       {club.name}
                     </IonSelectOption>
                   ))}
                 </IonSelect>
               </IonItem>
-              <IonButton expand="block" onClick={handleEditMember}>
-                Save Changes
+              <IonButton
+                expand="full"
+                color="success"
+                onClick={handleEditMember}
+              >
+                Save
               </IonButton>
-              <IonButton expand="block" color="medium" onClick={closeModal}>
+              <IonButton
+                expand="full"
+                color="danger"
+                onClick={() => setShowDeleteAlert(true)}
+              >
+                Delete
+              </IonButton>
+              <IonButton expand="full" onClick={() => setEditMode(false)}>
                 Cancel
               </IonButton>
+              <IonButton
+                fill="clear"
+                color="dark"
+                className="close-button"
+                onClick={closeModal}
+              >
+                <IonIcon slot="icon-only" icon={closeOutline} />
+              </IonButton>
+              <IonAlert
+                isOpen={showDeleteAlert}
+                onDidDismiss={() => setShowDeleteAlert(false)}
+                header={"Delete Member"}
+                message={"Are you sure you want to delete this member?"}
+                buttons={[
+                  {
+                    text: "Cancel",
+                    role: "cancel",
+                  },
+                  {
+                    text: "Delete",
+                    handler: handleDeleteMember,
+                  },
+                ]}
+              />
             </IonContent>
           ) : (
-            <IonContent className="profile-modal" color="background">
-              <MainHeader> </MainHeader>
-              <IonCard className="profile-card">
-                <IonCardHeader>
-                  <IonCardTitle>{selectedMember?.name}</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent className="member-info">
-                  <IonList className="full-screen-profile-info">
-                    <p>{`Birthdate: ${formatBirthdate(
-                      selectedMember?.birthdate || ""
-                    )}`}</p>
-                    <p>{`Age: ${calculateAge(
-                      selectedMember?.birthdate || ""
-                    )}`}</p>
-                    <p>{`Residential Address: ${
-                      selectedMember?.residentialAddress || ""
-                    }`}</p>
-                    <p>{`School Address: ${
-                      selectedMember?.schoolAddress || ""
-                    }`}</p>
-                    <p>{`Parent/Guardian: ${
-                      selectedMember?.parentGuardianName || ""
-                    }`}</p>
-                    <p>{`Relationship: ${
-                      selectedMember?.parentGuardianRelationship || ""
-                    }`}</p>
-                    <p>{`Parent/Guardian Contact: ${
-                      selectedMember?.parentGuardianContact || ""
-                    }`}</p>
-                    <p>{`Teacher: ${selectedMember?.teacherName || ""}`}</p>
-                    <p>{`Teacher Contact: ${
-                      selectedMember?.teacherContact || ""
-                    }`}</p>
-                    <p>{`Teacher Class: ${
-                      selectedMember?.teacherClass || ""
-                    }`}</p>
-                    <p>{`Tribe: ${
-                      tribes.find(
+            <IonContent fullscreen>
+              <MainHeader />
+              {selectedMember && (
+                <div>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Name</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.name}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Birthdate</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{formatBirthdate(selectedMember.birthdate)}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Residential Address</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.residentialAddress}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>School Address</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.schoolAddress}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Parent/Guardian Name</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.parentGuardianName}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Parent/Guardian Relationship</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.parentGuardianRelationship}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Parent/Guardian Contact</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.parentGuardianContact}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Teacher Name</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.teacherName}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Teacher Contact</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.teacherContact}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Teacher Class</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>{selectedMember.teacherClass}</p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                  <IonLabel>
+                    <h2>Tribe</h2>
+                  </IonLabel>
+                  <IonLabel>
+                    <p>
+                      {tribes.find(
                         (tribe: Tribe) => tribe.id === selectedMember?.tribeId
-                      )?.name
-                    }`}</p>
-                    <p>{`Club: ${
-                      clubs.find(
-                        (club: ClubData) => club.id === selectedMember?.clubId
-                      )?.name || ""
-                    }`}</p>
-                  </IonList>
-                  <IonButton onClick={closeModal} color="danger">
-                    <IonIcon icon={closeOutline} />
-                    Close
-                  </IonButton>
-                  <IonButton color="dark" onClick={() => setEditMode(true)}>
-                    <IonIcon icon={pencilOutline} />
+                      )?.name}
+                    </p>
+                  </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>
+                      <h2>Club</h2>
+                    </IonLabel>
+                    <IonLabel>
+                      <p>
+                        {
+                          clubs.find(
+                            (club: ClubData) => club.id === selectedMember?.clubId
+                          )?.name
+                        }
+                      </p>
+                    </IonLabel>
+                  </IonItem>
+                  <IonButton
+                    expand="full"
+                    color="success"
+                    onClick={() => setEditMode(true)}
+                  >
                     Edit
+                    <IonIcon slot="start" icon={pencilOutline} />
                   </IonButton>
                   <IonButton
-                    color="dark"
+                    expand="full"
+                    color="danger"
                     onClick={() => setShowDeleteAlert(true)}
                   >
-                    <IonIcon icon={trashOutline} />
                     Delete
+                    <IonIcon slot="start" icon={trashOutline} />
                   </IonButton>
-                </IonCardContent>
-              </IonCard>
+                  <IonButton expand="full" onClick={closeModal}>
+                    Close
+                    <IonIcon slot="start" icon={closeOutline} />
+                  </IonButton>
+                  <IonAlert
+                    isOpen={showDeleteAlert}
+                    onDidDismiss={() => setShowDeleteAlert(false)}
+                    header={"Delete Member"}
+                    message={"Are you sure you want to delete this member?"}
+                    buttons={[
+                      {
+                        text: "Cancel",
+                        role: "cancel",
+                      },
+                      {
+                        text: "Delete",
+                        handler: handleDeleteMember,
+                      },
+                    ]}
+                  />
+                </div>
+              )}
             </IonContent>
           )}
-          <MainFooter />
         </IonModal>
-
-        {/* Alert to confirm delete action */}
-        <IonAlert
-          isOpen={showDeleteAlert}
-          onDidDismiss={() => setShowDeleteAlert(false)}
-          header="Confirm Delete"
-          message="Are you sure you want to delete this member?"
-          buttons={[
-            {
-              text: "Cancel",
-              role: "cancel",
-            },
-            {
-              text: "Delete",
-              handler: handleDeleteMember,
-            },
-          ]}
-        />
       </IonContent>
       <MainFooter />
     </IonPage>
