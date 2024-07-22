@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
                   <IonCardTitle className="dashboard-title">Create/View Club</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  View and Manage all clubs
+                  Create and Manage all clubs
                 </IonCardContent>
               </IonCard>
             </IonCol>
