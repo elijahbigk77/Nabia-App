@@ -12,7 +12,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchText, setSearchText, placeh
     <IonSearchbar
       value={searchText}
       onIonInput={(e: any) => setSearchText(e.target.value)}
-      debounce={0} // Optional: reduce debounce to make the response faster
+      debounce={0} 
       placeholder={placeholder}
     />
   );

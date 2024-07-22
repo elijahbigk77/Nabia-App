@@ -7,6 +7,7 @@ import { MemberData, Tribe, getMembersByTribeId, tribes, updateMember, getAllClu
 import './MemberList.css';
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import { toast } from '../toast';
+import SearchBar from "../components/SearchBar";
 
 const TribeMemberList: React.FC = () => {
     const { tribeId } = useParams<{ tribeId: string }>();
@@ -33,12 +34,17 @@ const TribeMemberList: React.FC = () => {
 
     const [clubs, setClubs] = useState<ClubData[]>([]);
     const [tribesList, setTribesList] = useState<Tribe[]>([]);
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
         fetchMembers();
         fetchTribes();
         fetchClubs();
     }, [tribeId]); // Fetch members when tribeId changes
+
+    const filteredMembers = members.filter((member) =>
+        member.name.toLowerCase().includes(searchText.toLowerCase())
+      );
 
     const fetchMembers = async () => {
         const fetchedMembers = await getMembersByTribeId(tribeId); // Fetch members by tribeId
@@ -131,9 +137,14 @@ const TribeMemberList: React.FC = () => {
         <IonPage>
             <MainHeader />
             <IonContent fullscreen className="ion-padding item-background-color" color="background">
+            <SearchBar
+          searchText={searchText}
+          setSearchText={setSearchText}
+          placeholder="Search members by name"
+        />
                 <p>Members of {selectedTribeName} Tribe</p>
                 <IonList>
-                    {members.map((member, index) => (
+                    {filteredMembers.map((member, index) => (
                         <IonCard key={index} onClick={() => openModal(member)}>
                             <IonCardHeader>
                                 <IonCardTitle>{member.name}</IonCardTitle>

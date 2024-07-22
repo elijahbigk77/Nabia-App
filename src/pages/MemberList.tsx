@@ -216,7 +216,7 @@ const MemberList: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>{member.name}</IonCardTitle>
               </IonCardHeader>
-              <IonCardContent>
+              <IonCardContent className="name-cards">
                 <IonLabel>
                   <p>
                     <b>Birthdate:</b>
