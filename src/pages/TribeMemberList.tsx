@@ -143,6 +143,7 @@ const TribeMemberList: React.FC = () => {
           placeholder="Search members by name"
         />
                 <p>Members of {selectedTribeName} Tribe</p>
+                <h4 className="total-members">Number of Members in {selectedTribeName} Tribe: {members.length}</h4>
                 <IonList>
                     {filteredMembers.map((member, index) => (
                         <IonCard key={index} onClick={() => openModal(member)}>

@@ -6,3 +6,7 @@
     height: 100%;
     text-align: center;
   }
+
+  .total-members{
+    text-align: right;
+  }

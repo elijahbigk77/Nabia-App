@@ -29,6 +29,12 @@
     text-align: center; 
   }
 
+  .total-members{
+    color: aliceblue;
+    text-align: right;
+    margin-right: 10px;
+  }
+
   .name-edit {
     background-color: #DEA000;
   }
