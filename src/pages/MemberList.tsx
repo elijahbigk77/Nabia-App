@@ -210,6 +210,7 @@ const MemberList: React.FC = () => {
           setSearchText={setSearchText}
           placeholder="Search members by name"
         />
+        <h4 className="total-members">Total Number of Members: {members.length}</h4>
         <IonList>
           {filteredMembers.map((member, index) => (
             <IonCard key={index} onClick={() => openModal(member)}>

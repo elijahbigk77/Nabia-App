@@ -186,6 +186,7 @@ const ClubMemberList: React.FC = () => {
             <h2>Members of {selectedClubName}</h2>
           </IonButton>
         </IonButtons>
+        <h4 className="total-members">Number of Members : {members.length}</h4>
         <IonList>
           {members.map((member, index) => (
             <IonCard key={index} onClick={() => openModal(member)}>
@@ -195,6 +196,7 @@ const ClubMemberList: React.FC = () => {
               <IonCardContent>
                 <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
                 <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
+                <p>{`tribe: ${tribes.find((tribe: Tribe) => tribe.id === member?.tribeId)?.name}`}</p>
               </IonCardContent>
             </IonCard>
           ))}
@@ -342,7 +344,7 @@ const ClubMemberList: React.FC = () => {
                     })
                   }
                 >
-                  {tribes.map((tribe: Tribe) => (
+                  {tribesList.map((tribe: Tribe) => (
                     <IonSelectOption key={tribe.id} value={tribe.id}>
                       {tribe.name}
                     </IonSelectOption>
@@ -419,11 +421,7 @@ const ClubMemberList: React.FC = () => {
                 <p>Teacher Class: {selectedMember?.teacherClass}</p>
               </IonItem>
               <IonItem lines="none">
-                <p>{`Tribe: ${
-                  tribes.find(
-                    (tribe: Tribe) => tribe.id === selectedMember?.tribeId
-                  )?.name
-                }`}</p>
+              <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
               </IonItem>
               <IonItem lines="none">
                 <p>{`Club: ${
