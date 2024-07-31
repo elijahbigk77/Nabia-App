@@ -116,7 +116,7 @@ const ClubPage: React.FC = () => {
         <h4 className="total-members">Total Number of clubs : {clubs.length}</h4>
         <IonList className="item-background-color">
           {clubs.map((club, index) => (
-            <IonCard color='background' key={index} onClick={() => navigateToClubMemberList(club.id || '')}>
+            <IonCard className='club-cards' key={index} onClick={() => navigateToClubMemberList(club.id || '')}>
               <IonCardHeader>
                 <IonCardTitle>{club.name}</IonCardTitle>
               </IonCardHeader>
