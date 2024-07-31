@@ -11,6 +11,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonDatetime,
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import MainHeader from "../components/MainHeader";
@@ -113,8 +114,8 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Birthdate</IonLabel>
-                <IonInput
-                  type="date"
+                <IonDatetime
+                  
                   value={formData.birthdate}
                   onIonChange={(e) =>
                     handleInputChange("birthdate", e.detail.value!)

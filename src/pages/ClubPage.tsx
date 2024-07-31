@@ -109,14 +109,14 @@ const ClubPage: React.FC = () => {
   return (
     <IonPage>
       <MainHeader />
-      <IonContent className="ion-padding item-background-color" color="background">
+      <IonContent color="background">
         <IonButton size="small" fill="clear" color='dark' className="view-members-link" style={{ opacity: 0.4 }}>
           Click on a Club to View Members in that club
         </IonButton>
         <h4 className="total-members">Total Number of clubs : {clubs.length}</h4>
-        <IonList>
+        <IonList className="item-background-color">
           {clubs.map((club, index) => (
-            <IonCard key={index} onClick={() => navigateToClubMemberList(club.id || '')}>
+            <IonCard color='background' key={index} onClick={() => navigateToClubMemberList(club.id || '')}>
               <IonCardHeader>
                 <IonCardTitle>{club.name}</IonCardTitle>
               </IonCardHeader>
