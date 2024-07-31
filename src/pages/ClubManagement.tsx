@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const user = getCurrentUser(); // Get current authenticated user
     if (user) {
-      setDisplayName(user.displayName || 'User'); // Set display name from user's profile
+      setDisplayName(user.displayName || 'User'); 
     }
   }, []);
 
