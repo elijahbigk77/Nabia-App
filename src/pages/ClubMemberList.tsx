@@ -334,23 +334,20 @@ const ClubMemberList: React.FC = () => {
                 />
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Tribe</IonLabel>
-                <IonSelect
-                  value={editMemberData.tribeId}
-                  onIonChange={(e: any) =>
-                    setEditMemberData({
-                      ...editMemberData,
-                      tribeId: e.target.value,
-                    })
-                  }
-                >
-                  {tribesList.map((tribe: Tribe) => (
-                    <IonSelectOption key={tribe.id} value={tribe.id}>
-                      {tribe.name}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
+                                <IonLabel position="stacked">Tribe</IonLabel>
+                                <IonSelect
+                                    value={editMemberData.tribeId}
+                                    onIonChange={(e: any) =>
+                                        setEditMemberData({ ...editMemberData, tribeId: e.target.value })
+                                    }
+                                >
+                                    {tribes.map((tribe: Tribe) => (
+                                        <IonSelectOption key={tribe.id} value={tribe.id}>
+                                            {tribe.name}
+                                        </IonSelectOption>
+                                    ))}
+                                </IonSelect>
+                            </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Club</IonLabel>
                 <IonSelect
