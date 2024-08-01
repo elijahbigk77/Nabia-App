@@ -474,7 +474,7 @@ export async function deleteDummyAccounts() {
       console.log("All dummy accounts deleted successfully");
   } catch (error) {
       console.error('Error deleting dummy accounts: ', error);
-      toast('Failed to delete dummy accounts');
+      
   }
 }
 
