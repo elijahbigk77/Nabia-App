@@ -1,4 +1,4 @@
-import { IonBackButton, IonButtons, IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage } from '@ionic/react';
+import { IonBackButton, IonButtons, IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, IonCol, IonRow } from '@ionic/react';
 import MainHeader from '../components/MainHeader';
 import './Home.css';
 import { useState } from 'react';
@@ -39,18 +39,25 @@ const Login: React.FC = () => {
         <IonPage>
             <Header />
             <IonContent fullscreen className='ion-padding' color='background'>
-                <IonItem className='username-field' color='background'>
-                    <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Email / Username: </IonLabel>
-                    <IonInput className='ion-padding username-input' placeholder=' Email / Username' onIonChange={(e: any) => setUsername(e.target.value)} />
-                </IonItem>
-                <IonItem className='password-field' color='background'>
-                    <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Password: </IonLabel>
-                    <IonInput className='ion-padding password-input' type='password' placeholder=' Password' onIonChange={(e: any) => setPassword(e.target.value)} />
-                </IonItem>
-                <IonButton className='login-button' color='dark' onClick={login}>Login</IonButton>
-                <p className='register-text'>
+                <IonRow>
+                    <IonCol size='12'>
+                        <div className='username-container'>
+                            <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Email / Username: </IonLabel>
+                            <IonInput className='ion-padding username-input' placeholder=' Email / Username' onIonChange={(e: any) => setUsername(e.target.value)} />
+                        </div>
+                        <div className='password-container'>
+                            <IonLabel style={{ fontSize: '25px', fontWeight: 'bold', color: 'black' }} position="stacked"> Password: </IonLabel>
+                            <IonInput className='ion-padding password-input' type='password' placeholder=' Password' onIonChange={(e: any) => setPassword(e.target.value)} />
+                        </div>
+                        <IonButton className='login-btn' color='dark' onClick={login}>Login</IonButton>
+                        <p className='new-user-text'>
                     First time user? <Link to='/register'>Create New Account</Link>
                 </p>
+                    </IonCol>
+                    
+                </IonRow>
+                
+                
             </IonContent>
             <Footer />
         </IonPage>
