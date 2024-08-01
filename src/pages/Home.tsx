@@ -1,6 +1,5 @@
-import { IonButton, IonContent, IonHeader, IonItem, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonPage, IonText } from '@ionic/react';
 import './Home.css';
-import MainFooter from '../components/MainFooter';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -8,7 +7,7 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <Header />
-      <IonContent fullscreen className='home-content' color='background' >
+      <IonContent fullscreen className='home-content' color='background'>
         <div className="home-container">
           <p className="ion-padding welcome-text">
             <i><IonText>Welcome to the Nabia Fellows App</IonText></i>
