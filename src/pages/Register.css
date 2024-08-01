@@ -1,16 +1,10 @@
 .create-account-button{
-    position: absolute;
-    left: 50%;
-    top: 78%;
-    transform: translate(-50%, -50%);
     width: 40%;
+    margin-left: 30%;
 }
 
 .login-text{
-    position: absolute;
-    left: 50%;
-    top: 83%;
-    transform: translate(-50%, -50%);
+   text-align: center;
 }
 
 .name-field {
@@ -85,4 +79,8 @@
 
 .confirm-password-label{
     font-size: 14px ;
+}
+
+.space-container{
+    margin-bottom: 5%;
 }
