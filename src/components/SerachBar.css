@@ -1,0 +1,17 @@
+.search-bar {
+    --background: #f3c44e; 
+    --color: #121212;         /* Text color */
+    --placeholder-color: #555151; 
+    --icon-color: #6d6a6ac5;
+    border: 1px solid #090808;
+    padding: 1px;   
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 5px;
+  }
+  
+
+.search-bar .searchbar-clear-icon {
+    color: #d01616;
+  }

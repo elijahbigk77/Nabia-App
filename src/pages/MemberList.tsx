@@ -205,12 +205,14 @@ const MemberList: React.FC = () => {
         className="ion-padding item-background-color"
         color="background"
       >
-        <SearchBar
+        
+        <SearchBar 
           searchText={searchText}
           setSearchText={setSearchText}
           placeholder="Search members by name"
+          className="search-bar"
         />
-        <h4 className="total-members">Total Number of Members: {members.length}</h4>
+        <h5 className="total-members">Total Number of Members: {members.length}</h5>
         <IonList>
           {filteredMembers.map((member, index) => (
             <IonCard className="name-cards" key={index} onClick={() => openModal(member)}>
