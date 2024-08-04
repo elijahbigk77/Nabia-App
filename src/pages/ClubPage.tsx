@@ -109,7 +109,7 @@ const ClubPage: React.FC = () => {
   return (
     <IonPage>
       <MainHeader />
-      <IonContent color="background">
+      <IonContent className="ion-padding item-background-color" color="background">
         <IonButton size="small" fill="clear" color='dark' className="view-members-link" style={{ opacity: 0.4 }}>
           Click on a Club to View Members in that club
         </IonButton>
