@@ -198,6 +198,10 @@ const MemberList: React.FC = () => {
     member.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const handleMemberClick = (memberId: string) => {
+    history.push(`/member-details/${memberId}`);
+  };
+
   return (
     <IonPage>
       <MainHeader />
@@ -215,7 +219,8 @@ const MemberList: React.FC = () => {
         <h5 className="total-members">Total Number of Members: {members.length}</h5>
         <IonList>
           {filteredMembers.map((member, index) => (
-            <IonCard className="name-cards" key={index} onClick={() => openModal(member)}>
+            /**<IonCard className="name-cards" key={index} onClick={() => openModal(member)}> **/
+            <IonCard className="name-cards" key={member.id} button onClick={() => handleMemberClick(member.id)}>
               <IonCardHeader>
                 <IonCardTitle>{member.name}</IonCardTitle>
               </IonCardHeader>

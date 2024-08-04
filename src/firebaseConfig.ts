@@ -103,9 +103,14 @@ export interface MemberData {
 }
 
 // Function to add a new member to Firestore
-export async function addMember(memberData: MemberData): Promise<boolean> {
+export async function addMember(memberData: Omit<MemberData, 'id'>): Promise<boolean> {
     try {
-        await addDoc(collection(db, 'members'), memberData);
+        // Add the document and get the document reference
+        const docRef = await addDoc(collection(db, 'members'), memberData);
+        
+        // Update the document with the generated ID
+        await updateDoc(docRef, { id: docRef.id });
+
         return true;
     } catch (error) {
         console.error('Error adding member: ', error);
@@ -117,6 +122,7 @@ export async function addMember(memberData: MemberData): Promise<boolean> {
         return false;
     }
 }
+
 
 // Function to fetch all members from Firestore and remove those without a name
 export async function getAllMembers(): Promise<MemberData[]> {
@@ -176,7 +182,12 @@ export const updateMember = async (memberId: string, updatedMemberData: Partial<
 // Function to delete a member from Firestore
 export const deleteMember = async (memberId: string): Promise<boolean> => {
     try {
+        if (!memberId) {
+            console.error('Member ID is invalid.');
+            return false;
+        }
         const memberRef = doc(db, 'members', memberId);
+        console.log('Deleting member with reference:', memberRef.path); // Log the path
         await deleteDoc(memberRef);
         return true;
     } catch (error) {
@@ -488,6 +499,22 @@ deleteDummyAccounts()
       console.error("Error cleaning up dummy accounts: ", error);
   });
   
+
+  // Function to get a member by ID
+export const getMemberById = async (id: string): Promise<MemberData | null> => {
+    try {
+      const memberRef = doc(db, "members", id);
+      const docSnap = await getDoc(memberRef);
+      if (docSnap.exists()) {
+        return docSnap.data() as MemberData;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching member:", error);
+      return null;
+    }
+  };
 
 
 export const signOut = async () => {

@@ -35,6 +35,7 @@ import './theme/variables.css';
 import AttendanceRecord from './pages/AttendanceRecord';
 import AttendanceMemberRecord from './pages/AttendanceMemberRecord';
 import ClubManagement from './pages/ClubManagement';
+import MemberDetails from './components/MemberDetails';
 
 
 setupIonicReact();
@@ -91,6 +92,7 @@ const App: React.FC = () => (
         <Route exact path="/club-management">
           <ClubManagement />
         </Route>
+        <Route path="/member-details/:memberId" component={MemberDetails} exact />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

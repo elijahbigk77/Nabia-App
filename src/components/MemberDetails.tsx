@@ -21,6 +21,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { pencilOutline, trashOutline } from "ionicons/icons";
 import MainHeader from "../components/MainHeader";
 import MainFooter from "../components/MainFooter";
+import {tribes} from '../components/TribeList'
 import {
   MemberData,
   //getMemberById,
@@ -28,6 +29,7 @@ import {
   deleteMember,
   getTribes,
   getAllClubs,
+  getMemberById,
 } from "../firebaseConfig";
 import { toast } from "../toast";
 import { Tribe, ClubData } from "../firebaseConfig";
@@ -58,12 +60,12 @@ const MemberDetails: React.FC = () => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   useEffect(() => {
-    //etchMember();
+    fetchMember();
     fetchTribes();
     fetchClubs();
   }, [memberId]);
 
-  /**const fetchMember = async () => {
+  const fetchMember = async () => {
     if (memberId) {
       const fetchedMember = await getMemberById(memberId);
       if (fetchedMember) {
@@ -71,7 +73,7 @@ const MemberDetails: React.FC = () => {
         setEditMemberData(fetchedMember);
       }
     }
-  };**/
+  };
 
   const fetchTribes = async () => {
     const fetchedTribes = await getTribes();
@@ -107,13 +109,22 @@ const MemberDetails: React.FC = () => {
   };
 
   const handleDeleteMember = async () => {
-    if (member) {
-      const deleted = await deleteMember(member.id);
-      if (deleted) {
-        history.goBack(); // Go back to the previous page
-      }
+    if (member && member.id) {
+        console.log("Attempting to delete member with ID:", member.id); // Log the member ID
+        const deleted = await deleteMember(member.id);
+        if (deleted) {
+            fetchMember(); // Refresh member list after delete
+            history.goBack(); // Go back to the previous page
+        } else {
+            toast("Failed to delete member.");
+        }
+    } else {
+        toast("Invalid member ID.");
     }
-  };
+};
+
+
+  
 
 
 
@@ -322,7 +333,7 @@ const MemberDetails: React.FC = () => {
             </IonButton>
           </IonContent>
         ) : (
-          <IonCard>
+          <IonCard className="ion-padding background-color">
             <IonCardHeader>
               <IonCardTitle>{member?.name}</IonCardTitle>
             </IonCardHeader>
@@ -451,19 +462,5 @@ const MemberDetails: React.FC = () => {
 
 
 
-export const tribes: Tribe[] = [
-    { id: "1", name: "Asher" },
-    { id: "2", name: "Dan" },
-    { id: "3", name: "Judah" },
-    { id: "4", name: "Reuben" },
-    { id: "5", name: "Joseph" },
-    { id: "6", name: "Naphtali" },
-    { id: "7", name: "Issachar" },
-    { id: "8", name: "Simeon" },
-    { id: "9", name: "Benjamin" },
-    { id: "10", name: "Gad" },
-    { id: "11", name: "Zebulun" },
-    { id: "12", name: "Levi" }
-];
 
 export default MemberDetails;
