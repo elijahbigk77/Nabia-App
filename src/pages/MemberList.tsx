@@ -213,11 +213,11 @@ const MemberList: React.FC = () => {
         <h4 className="total-members">Total Number of Members: {members.length}</h4>
         <IonList>
           {filteredMembers.map((member, index) => (
-            <IonCard key={index} onClick={() => openModal(member)}>
+            <IonCard className="name-cards" key={index} onClick={() => openModal(member)}>
               <IonCardHeader>
                 <IonCardTitle>{member.name}</IonCardTitle>
               </IonCardHeader>
-              <IonCardContent className="name-cards">
+              <IonCardContent>
                 <IonLabel>
                   <p>
                     <b>Birthdate:</b>

@@ -40,5 +40,7 @@
   }
 
   .name-cards{
-    color: aquaß;
+    background-color: #dea000;
+    border: 1px solid #3e3d3c;
+    border-radius: 10px;
   }
