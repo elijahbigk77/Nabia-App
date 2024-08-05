@@ -90,14 +90,15 @@ const MemberList: React.FC = () => {
     const invalidMembers = fetchedMembers.filter(
       (member) => !member.name || member.name.trim() === ""
     );
-
+  
     // Delete invalid members from Firestore
     for (const member of invalidMembers) {
       await deleteMember(member.id);
     }
-
+  
     setMembers(validMembers);
   };
+  
 
   const fetchTribes = async () => {
     const fetchedTribes = await getTribes();
@@ -118,7 +119,9 @@ const MemberList: React.FC = () => {
 
   const closeModal = () => {
     setShowModal(false);
+    setEditMode(false);
   };
+  
 
   const calculateAge = (birthdate: string): string => {
     const today = new Date();
@@ -137,14 +140,21 @@ const MemberList: React.FC = () => {
       toast("Please fill in all required fields.");
       return;
     }
-
+  
     const memberId = editMemberData.id;
     const updated = await updateMember(memberId, editMemberData);
     if (updated) {
-      fetchMembers(); // Refresh member list after update
+      // Update the members state directly
+      setMembers((prevMembers) =>
+        prevMembers.map((member) =>
+          member.id === memberId ? { ...member, ...editMemberData } : member
+        )
+      );
       closeModal();
     }
   };
+  
+
 
   const handleDeleteMember = async () => {
     if (selectedMember) {

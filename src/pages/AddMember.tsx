@@ -16,6 +16,7 @@ import {
 import { useHistory } from "react-router-dom";
 import MainHeader from "../components/MainHeader";
 import MainFooter from "../components/MainFooter";
+import { format } from "date-fns";
 import {
   addMember,
   MemberData,
@@ -89,6 +90,12 @@ const AddMember: React.FC = () => {
     }
   };
 
+  //const formatDate = (dateString: string): string => {
+    //if (!dateString) return "";
+    //const date = new Date(dateString);
+    //return format(date, "MMM dd, yyyy"); 
+  //};
+
   return (
     <IonPage>
       <MainHeader />
@@ -105,7 +112,7 @@ const AddMember: React.FC = () => {
             <IonCol size="12">
               <div className="form-group">
                 <IonLabel>Name</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.name}
                   onIonChange={(e) =>
                     handleInputChange("name", e.detail.value!)
@@ -115,7 +122,7 @@ const AddMember: React.FC = () => {
               <div className="form-group">
                 <IonLabel>Birthdate</IonLabel>
                 <IonDatetime
-                  
+                  presentation="date"
                   value={formData.birthdate}
                   onIonChange={(e) =>
                     handleInputChange("birthdate", e.detail.value!)
@@ -124,7 +131,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Residential Address</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.residentialAddress}
                   onIonChange={(e) =>
                     handleInputChange("residentialAddress", e.detail.value!)
@@ -133,7 +140,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>School Address</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.schoolAddress}
                   onIonChange={(e) =>
                     handleInputChange("schoolAddress", e.detail.value!)
@@ -142,7 +149,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Parent/Guardian Name</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.parentGuardianName}
                   onIonChange={(e) =>
                     handleInputChange("parentGuardianName", e.detail.value!)
@@ -151,7 +158,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Relationship of Parent/Guardian</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.parentGuardianRelationship}
                   onIonChange={(e) =>
                     handleInputChange(
@@ -163,7 +170,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Contact of Parent/Guardian</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.parentGuardianContact}
                   onIonChange={(e) =>
                     handleInputChange("parentGuardianContact", e.detail.value!)
@@ -172,7 +179,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Teacher Name</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.teacherName}
                   onIonChange={(e) =>
                     handleInputChange("teacherName", e.detail.value!)
@@ -181,7 +188,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Teacher Contact</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.teacherContact}
                   onIonChange={(e) =>
                     handleInputChange("teacherContact", e.detail.value!)
@@ -190,7 +197,7 @@ const AddMember: React.FC = () => {
               </div>
               <div className="form-group">
                 <IonLabel>Teacher Class</IonLabel>
-                <IonInput
+                <IonInput className="ion-padding"
                   value={formData.teacherClass}
                   onIonChange={(e) =>
                     handleInputChange("teacherClass", e.detail.value!)

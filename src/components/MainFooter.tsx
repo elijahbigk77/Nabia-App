@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonFooter, IonToolbar, IonTitle, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
-import { personAddOutline, peopleOutline, schoolOutline, addCircleOutline, logOutOutline, homeOutline, checkboxOutline } from 'ionicons/icons';
+import { personAddOutline, peopleOutline, schoolOutline, addCircleOutline, logOutOutline, homeOutline, checkboxOutline, footstepsOutline } from 'ionicons/icons';
 import './MainFooter.css';
 
 const MainFooter: React.FC = () => {
@@ -21,7 +21,7 @@ const MainFooter: React.FC = () => {
             <IonLabel>Home</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tribe-list" href="/tribe-list">
-            <IonIcon icon={schoolOutline} />
+            <IonIcon icon={footstepsOutline} />
             <IonLabel>Tribes</IonLabel>
           </IonTabButton>
           <IonTabButton tab="club-management" href="/club-management">

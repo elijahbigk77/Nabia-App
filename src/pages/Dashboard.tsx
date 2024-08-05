@@ -12,11 +12,12 @@ import {
   IonIcon,
   IonText
 } from '@ionic/react';
-import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline, checkboxOutline, folderOpenOutline } from 'ionicons/icons';
+import { peopleOutline, schoolOutline, logOutOutline, addCircleOutline, personAddOutline, checkboxOutline, folderOpenOutline, footstepsOutline } from 'ionicons/icons';
 import MainHeader from '../components/MainHeader';
 import MainFooter from '../components/MainFooter';
 import { getCurrentUser, signOut } from '../firebaseConfig'; // Import getCurrentUser and signOut functions
 import './Dashboard.css';
+import DashboardHeader from '../components/DashboardHeader';
 
 const Dashboard: React.FC = () => {
   const [displayName, setDisplayName] = useState<string>('Guest');
@@ -30,7 +31,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <IonPage>
-      <MainHeader />
+      <DashboardHeader />
       <IonContent fullscreen className="ion-padding custom-background" color='background'>
         <div className="welcome-text">
           <IonText>Hello {displayName}, Welcome to your dashboard</IonText>
@@ -62,7 +63,7 @@ const Dashboard: React.FC = () => {
             <IonCol size="12" size-md="6" size-lg="4">
               <IonCard button routerLink="/tribe-list" className="dashboard-card">
                 <IonCardHeader>
-                  <IonIcon icon={schoolOutline} className="dashboard-icon" />
+                  <IonIcon icon={footstepsOutline} className="dashboard-icon" />
                   <IonCardTitle className="dashboard-title">View Tribes</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>

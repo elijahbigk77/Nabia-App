@@ -22,6 +22,7 @@ import {
 } from "@ionic/react";
 import MainHeader from "../components/MainHeader";
 import MainFooter from "../components/MainFooter";
+import SearchBar from "../components/SearchBar";
 import {
   getMembersByClubId,
   MemberData,
@@ -50,6 +51,7 @@ const ClubMemberList: React.FC = () => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const history = useHistory();
+  const [searchText, setSearchText] = useState("");
   const [editMemberData, setEditMemberData] = useState<MemberData>({
     id: "",
     name: "",
@@ -70,11 +72,19 @@ const ClubMemberList: React.FC = () => {
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [tribesList, setTribesList] = useState<Tribe[]>([]);
 
+  const filteredMembers = members.filter((member) =>
+    member.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   useEffect(() => {
     fetchTribes();
     fetchClubs();
     fetchMembers(clubId);
   }, [clubId]);
+
+  useEffect(() => {
+    fetchMembers(clubId);
+  }, [searchText]);
 
   const fetchMembers = async (clubId: string) => {
     const fetchedMembers = await getMembersByClubId(clubId);
@@ -187,6 +197,12 @@ const ClubMemberList: React.FC = () => {
         className="ion-padding item-background-color"
         color="background"
       >
+        <SearchBar 
+          searchText={searchText}
+          setSearchText={setSearchText}
+          placeholder="Search members by name"
+          className="search-bar"
+        />
         <IonButtons>
           <IonButton>
             <h2>Members of {selectedClubName}</h2>
@@ -194,7 +210,7 @@ const ClubMemberList: React.FC = () => {
         </IonButtons>
         <h4 className="total-members">Number of Members : {members.length}</h4>
         <IonList>
-          {members.map((member, index) => (
+          {filteredMembers.map((member, index) => (
             <IonCard className="name-cards" key={member.id} button onClick={() => handleMemberClick(member.id)}>
               <IonCardHeader>
                 <IonCardTitle>{member.name}</IonCardTitle>
@@ -340,32 +356,35 @@ const ClubMemberList: React.FC = () => {
                 />
               </IonItem>
               <IonItem>
-                                <IonLabel position="stacked">Tribe</IonLabel>
-                                <IonSelect
-                                    value={editMemberData.tribeId}
-                                    onIonChange={(e: any) =>
-                                        setEditMemberData({ ...editMemberData, tribeId: e.target.value })
-                                    }
-                                >
-                                    {tribes.map((tribe: Tribe) => (
-                                        <IonSelectOption key={tribe.id} value={tribe.id}>
-                                            {tribe.name}
-                                        </IonSelectOption>
-                                    ))}
-                                </IonSelect>
-                            </IonItem>
+                <IonLabel position="stacked">Tribe</IonLabel>
+                <IonSelect
+                  value={editMemberData.tribeId}
+                  onIonChange={(e) =>
+                    setEditMemberData({
+                      ...editMemberData,
+                      tribeId: e.detail.value,
+                    })
+                  }
+                >
+                  {tribesList.map((tribe) => (
+                    <IonSelectOption key={tribe.id} value={tribe.id}>
+                      {tribe.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Club</IonLabel>
                 <IonSelect
                   value={editMemberData.clubId}
-                  onIonChange={(e: any) =>
+                  onIonChange={(e) =>
                     setEditMemberData({
                       ...editMemberData,
-                      clubId: e.target.value,
+                      clubId: e.detail.value,
                     })
                   }
                 >
-                  {clubs.map((club: ClubData) => (
+                  {clubs.map((club) => (
                     <IonSelectOption key={club.id} value={club.id}>
                       {club.name}
                     </IonSelectOption>
@@ -375,84 +394,68 @@ const ClubMemberList: React.FC = () => {
               <IonButton expand="block" onClick={handleEditMember}>
                 Save Changes
               </IonButton>
-              <IonButton expand="block" color="medium" onClick={closeModal}>
+              <IonButton expand="block" color="light" onClick={closeModal}>
                 Cancel
               </IonButton>
             </IonContent>
           ) : (
-            <IonContent className="profile-modal">
-              <MainHeader />
-              <div className="center-content">
-              <IonItem lines="none">
-                <p>{selectedMember?.name}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>
-                  Birthdate: {formatBirthdate(selectedMember?.birthdate || "")}
-                </p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>Age: {calculateAge(selectedMember?.birthdate || "")}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>Residential Address: {selectedMember?.residentialAddress}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>School Address: {selectedMember?.schoolAddress}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>Parent/Guardian: {selectedMember?.parentGuardianName}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>
-                  Relationship: {selectedMember?.parentGuardianRelationship}
-                </p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>
-                  Parent/Guardian Contact:{" "}
-                  {selectedMember?.parentGuardianContact}
-                </p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>Teacher: {selectedMember?.teacherName}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>Teacher Contact: {selectedMember?.teacherContact}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>Teacher Class: {selectedMember?.teacherClass}</p>
-              </IonItem>
-              <IonItem lines="none">
-              <p>{`Tribe: ${tribes.find((tribe: Tribe) => tribe.id === selectedMember?.tribeId)?.name}`}</p>
-              </IonItem>
-              <IonItem lines="none">
-                <p>{`Club: ${
-                  clubs.find(
-                    (club: ClubData) => club.id === selectedMember?.clubId
-                  )?.name
-                }`}</p>
-              </IonItem>
-              <IonButton onClick={closeModal} color="danger">
-                Close
-              </IonButton>
-              <IonButton color="dark" onClick={() => setEditMode(true)}>
-                <IonIcon icon={pencilOutline} /> 
-              </IonButton>
-              <IonButton color="dark" onClick={() => setShowDeleteAlert(true)}>
-                <IonIcon icon={trashOutline} />
-              </IonButton>
-              </div>
+            <IonContent>
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>{selectedMember?.name}</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <p>{`Birthdate: ${formatBirthdate(
+                    selectedMember?.birthdate || ""
+                  )}`}</p>
+                  <p>{`Age: ${calculateAge(
+                    selectedMember?.birthdate || ""
+                  )}`}</p>
+                  <p>{`Residential Address: ${selectedMember?.residentialAddress}`}</p>
+                  <p>{`School Address: ${selectedMember?.schoolAddress}`}</p>
+                  <p>{`Parent/Guardian Name: ${selectedMember?.parentGuardianName}`}</p>
+                  <p>{`Parent/Guardian Relationship: ${selectedMember?.parentGuardianRelationship}`}</p>
+                  <p>{`Parent/Guardian Contact: ${selectedMember?.parentGuardianContact}`}</p>
+                  <p>{`Teacher Name: ${selectedMember?.teacherName}`}</p>
+                  <p>{`Teacher Contact: ${selectedMember?.teacherContact}`}</p>
+                  <p>{`Teacher Class: ${selectedMember?.teacherClass}`}</p>
+                  <p>{`Tribe: ${
+                    tribes.find(
+                      (tribe: Tribe) => tribe.id === selectedMember?.tribeId
+                    )?.name || ""
+                  }`}</p>
+                  <p>{`Club: ${
+                    clubs.find(
+                      (club: ClubData) => club.id === selectedMember?.clubId
+                    )?.name || ""
+                  }`}</p>
+                </IonCardContent>
+                <IonButton
+                  expand="block"
+                  onClick={() => setEditMode(true)}
+                >
+                  Edit
+                </IonButton>
+                <IonButton
+                  expand="block"
+                  color="danger"
+                  onClick={() => setShowDeleteAlert(true)}
+                >
+                  Delete
+                </IonButton>
+                <IonButton expand="block" color="light" onClick={closeModal}>
+                  Close
+                </IonButton>
+              </IonCard>
             </IonContent>
           )}
         </IonModal>
 
-        {/* Alert for delete confirmation */}
         <IonAlert
           isOpen={showDeleteAlert}
           onDidDismiss={() => setShowDeleteAlert(false)}
           header={"Confirm Delete"}
-          message={`Are you sure you want to delete ${selectedMember?.name}?`}
+          message={"Are you sure you want to delete this member?"}
           buttons={[
             {
               text: "Cancel",
