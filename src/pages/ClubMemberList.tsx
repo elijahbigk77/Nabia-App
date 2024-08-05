@@ -37,6 +37,7 @@ import { useParams } from "react-router-dom";
 import { pencilOutline, trashOutline } from "ionicons/icons";
 import { toast } from "../toast";
 import './ClubMembeList.css'
+import { useHistory } from 'react-router-dom';
 
 interface RouteParams {
   clubId: string;
@@ -48,6 +49,7 @@ const ClubMemberList: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const history = useHistory();
   const [editMemberData, setEditMemberData] = useState<MemberData>({
     id: "",
     name: "",
@@ -173,6 +175,10 @@ const ClubMemberList: React.FC = () => {
   // Find the selected club's name
   const selectedClubName = clubs.find((club) => club.id === clubId)?.name || "";
 
+  const handleMemberClick = (memberId: string) => {
+    history.push(`/member-details/${memberId}`);
+  };
+
   return (
     <IonPage>
       <MainHeader />
@@ -189,7 +195,7 @@ const ClubMemberList: React.FC = () => {
         <h4 className="total-members">Number of Members : {members.length}</h4>
         <IonList>
           {members.map((member, index) => (
-            <IonCard key={index} onClick={() => openModal(member)}>
+            <IonCard className="name-cards" key={member.id} button onClick={() => handleMemberClick(member.id)}>
               <IonCardHeader>
                 <IonCardTitle>{member.name}</IonCardTitle>
               </IonCardHeader>

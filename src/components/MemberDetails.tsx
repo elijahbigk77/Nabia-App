@@ -16,12 +16,15 @@ import {
   IonCardContent,
   IonList,
   IonAlert,
+  IonText,
+  IonButtons,
 } from "@ionic/react";
 import { useParams, useHistory } from "react-router-dom";
-import { pencilOutline, trashOutline } from "ionicons/icons";
+import { pencilOutline, personCircle, personCircleOutline, trashOutline } from "ionicons/icons";
 import MainHeader from "../components/MainHeader";
 import MainFooter from "../components/MainFooter";
 import {tribes} from '../components/TribeList'
+import './MemberDetails.css'
 import {
   MemberData,
   //getMemberById,
@@ -33,6 +36,7 @@ import {
 } from "../firebaseConfig";
 import { toast } from "../toast";
 import { Tribe, ClubData } from "../firebaseConfig";
+import { TextAlignment } from "pdf-lib";
 
 
 const MemberDetails: React.FC = () => {
@@ -124,10 +128,6 @@ const MemberDetails: React.FC = () => {
 };
 
 
-  
-
-
-
   const formatBirthdate = (birthdate: string): string => {
     const date = new Date(birthdate);
     const day = date.getDate();
@@ -165,7 +165,7 @@ const MemberDetails: React.FC = () => {
   return (
     <IonPage>
       <MainHeader />
-      <IonContent fullscreen>
+      <IonContent fullscreen color='background'>
         {editMode ? (
           <IonContent fullscreen>
             <IonItem>
@@ -333,105 +333,126 @@ const MemberDetails: React.FC = () => {
             </IonButton>
           </IonContent>
         ) : (
-          <IonCard className="ion-padding background-color">
-            <IonCardHeader>
-              <IonCardTitle>{member?.name}</IonCardTitle>
+          <IonCard className="background-color" color='background'>
+            <IonCardHeader >
+              <IonCardTitle className="member-name">{member?.name}</IonCardTitle>
             </IonCardHeader>
-            <IonCardContent>
-              <IonList>
-                <IonItem>
+            
+            <div className="icon-container">
+              <IonIcon icon={personCircle} style={{ fontSize: '60px' }} />
+            </div>
+
+            <IonItem className='info' color='background'>
                   <IonLabel>
-                    <h2>Birthdate</h2>
-                    <p>{member?.birthdate ? formatBirthdate(member.birthdate) : "N/A"}</p>
+                  <p>Birthdate: {member?.birthdate ? formatBirthdate(member.birthdate) : "N/A"}</p>
+                  <p>{member?.birthdate ? calculateAge(member.birthdate) : "N/A"} years</p>
                   </IonLabel>
+                </IonItem >
+            <IonItem className='info-label'>
+                  <IonLabel>Club & Tribe</IonLabel>
                 </IonItem>
-                <IonItem>
+            <IonItem color='background'>
                   <IonLabel>
-                    <h2>Age</h2>
-                    <p>{member?.birthdate ? calculateAge(member.birthdate) : "N/A"}</p>
+                    <h2><b>Club</b></h2>
+                    <p>{clubs.find((club) => club.id === member?.clubId)?.name}</p>
                   </IonLabel>
-                </IonItem>
-                <IonItem>
+            </IonItem>
+            <IonItem color='background'>
                   <IonLabel>
-                    <h2>Residential Address</h2>
+                    <p>
+                      <h2><b>Tribe</b></h2>
+                      {tribes.find(
+                        (tribe: Tribe) => tribe.id === member?.tribeId
+                      )?.name} <IonText>tribe</IonText>
+                    </p>
+                  </IonLabel>
+            </IonItem>
+
+            
+
+            
+              
+                <IonItem className='info-label'>
+                  <IonLabel>Address</IonLabel>
+                </IonItem>
+                <IonItem color='background'>
+                  <IonLabel>
+                    <h2><b>Residential Address</b></h2>
                     <p>{member?.residentialAddress}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>School Address</h2>
+                    <h2><b>School Address</b></h2>
                     <p>{member?.schoolAddress}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem className='info-label'>
+                  <IonLabel>Parents/Guardian</IonLabel>
+                </IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>Parent/Guardian Name</h2>
+                    <h2><b>Parent/Guardian Name</b></h2>
                     <p>{member?.parentGuardianName}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>Relationship</h2>
+                    <h2><b>Relationship</b></h2>
                     <p>{member?.parentGuardianRelationship}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>Parent/Guardian Contact</h2>
+                    <h2><b>Parent/Guardian Contact</b></h2>
                     <p>{member?.parentGuardianContact}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem className='info-label'>
+                  <IonLabel>School/Teacher</IonLabel>
+                </IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>Teacher Name</h2>
+                    <h2><b>Teacher Name</b></h2>
                     <p>{member?.teacherName}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>Teacher Contact</h2>
+                    <h2><b>Teacher Contact</b></h2>
                     <p>{member?.teacherContact}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem color='background'>
                   <IonLabel>
-                    <h2>Teacher Class</h2>
+                    <h2><b>Class</b></h2>
                     <p>{member?.teacherClass}</p>
                   </IonLabel>
                 </IonItem>
-                <IonItem>
-                  <IonLabel>
-                    <h2>Tribe</h2>
-                    <p>
-                      {tribes.find(
-                        (tribe: Tribe) => tribe.id === member?.tribeId
-                      )?.name}
-                    </p>
-                  </IonLabel>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>
-                    <h2>Club</h2>
-                    <p>{clubs.find((club) => club.id === member?.clubId)?.name}</p>
-                  </IonLabel>
-                </IonItem>
-              </IonList>
+                <p>
+                  
+                </p>
+              <IonButtons className="edit-btn">
               <IonButton
-                fill="clear"
-                color="primary"
+                
+                fill='solid'
+                color='secondary'
                 onClick={() => setEditMode(true)}
               >
                 <IonIcon slot="start" icon={pencilOutline} />
-                Edit
+                Edit Member Info
               </IonButton>
+              
               <IonButton
-                fill="clear"
+                className="edit-btn"
+                fill="solid"
                 color="danger"
                 onClick={() => setShowDeleteAlert(true)}
               >
                 <IonIcon slot="start" icon={trashOutline} />
-                Delete
+                Delete Member
               </IonButton>
+              </IonButtons>
               <IonAlert
                 isOpen={showDeleteAlert}
                 onDidDismiss={() => setShowDeleteAlert(false)}
@@ -451,7 +472,9 @@ const MemberDetails: React.FC = () => {
                   },
                 ]}
               />
-            </IonCardContent>
+              <p>
+                  
+              </p>
           </IonCard>
         )}
       </IonContent>

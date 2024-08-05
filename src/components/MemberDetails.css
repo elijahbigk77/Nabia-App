@@ -1,0 +1,33 @@
+.member-name{
+    text-align: center;
+    font-size:24px;
+}
+
+.background{
+    color: #DEA000;
+    background-color: #DEA000;
+}
+
+.info-label {
+    height:45px;
+    width:100%;
+    margin: 0px;
+    text-align: left;
+    
+}
+
+.icon-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info{
+    text-align: center;
+}
+
+.edit-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

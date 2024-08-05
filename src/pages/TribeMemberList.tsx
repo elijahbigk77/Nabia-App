@@ -8,6 +8,7 @@ import './MemberList.css';
 import { pencilOutline, trashOutline } from 'ionicons/icons';
 import { toast } from '../toast';
 import SearchBar from "../components/SearchBar";
+import { useHistory } from 'react-router-dom';
 
 const TribeMemberList: React.FC = () => {
     const { tribeId } = useParams<{ tribeId: string }>();
@@ -35,6 +36,7 @@ const TribeMemberList: React.FC = () => {
     const [clubs, setClubs] = useState<ClubData[]>([]);
     const [tribesList, setTribesList] = useState<Tribe[]>([]);
     const [searchText, setSearchText] = useState("");
+    const history = useHistory();
 
     useEffect(() => {
         fetchMembers();
@@ -131,6 +133,11 @@ const TribeMemberList: React.FC = () => {
     
         return `${day}${suffix} ${month}, ${year}`;
       };
+
+      const handleMemberClick = (memberId: string) => {
+        history.push(`/member-details/${memberId}`);
+      };
+    
     
 
     return (
@@ -146,13 +153,14 @@ const TribeMemberList: React.FC = () => {
                 <h4 className="total-members">Number of Members in {selectedTribeName} Tribe: {members.length}</h4>
                 <IonList>
                     {filteredMembers.map((member, index) => (
-                        <IonCard key={index} onClick={() => openModal(member)}>
+                        <IonCard className="name-cards" key={member.id} button onClick={() => handleMemberClick(member.id)}>
                             <IonCardHeader>
                                 <IonCardTitle>{member.name}</IonCardTitle>
                             </IonCardHeader>
                             <IonCardContent>
-                                <p>{`Birthdate: ${formatBirthdate(member.birthdate)}`}</p>
-                                <p>{`Age: ${calculateAge(member.birthdate)}`}</p>
+                                <p><b>Birthdate: </b>{`${formatBirthdate(member.birthdate)}`}</p>
+                                <p><b>Age: </b>{`${calculateAge(member.birthdate)}`}</p>
+                                <p><b>Club:</b> {` ${clubs.find((club: ClubData) => club.id === member?.clubId)?.name || ""}`}</p>
                             </IonCardContent>
                         </IonCard>
                     ))}
