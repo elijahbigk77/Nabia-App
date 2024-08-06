@@ -12,6 +12,8 @@ import {
   IonRow,
   IonCol,
   IonDatetime,
+  IonImg,
+  IonIcon,
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import MainHeader from "../components/MainHeader";
@@ -27,6 +29,7 @@ import {
 } from "../firebaseConfig";
 import { toast } from "../toast";
 import "./AddMember.css";
+import { camera } from "ionicons/icons";
 
 const AddMember: React.FC = () => {
   const initialFormState = {
@@ -47,6 +50,7 @@ const AddMember: React.FC = () => {
   const [formData, setFormData] = useState(initialFormState);
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const history = useHistory();
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
 
   useEffect(() => {
     fetchClubs();
@@ -95,6 +99,20 @@ const AddMember: React.FC = () => {
     //const date = new Date(dateString);
     //return format(date, "MMM dd, yyyy"); 
   //};
+
+  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        handleInputChange("picture", file);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <IonPage>
@@ -235,6 +253,28 @@ const AddMember: React.FC = () => {
                     </IonSelectOption>
                   ))}
                 </IonSelect>
+              </div>
+              <div className="form-group">
+                <IonLabel>Profile Picture</IonLabel>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePictureChange}
+                  style={{ display: "none" }}
+                  id="picture-upload"
+                />
+                <label htmlFor="picture-upload">
+                  <IonButton fill="outline" color="dark">
+                    <IonIcon slot="start" icon={camera} />
+                    Upload Picture
+                  </IonButton>
+                </label>
+                {preview && (
+                  <IonImg
+                    src={preview as string}
+                    style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                  />
+                )}
               </div>
               <IonButton
                 className="add-member-btn"
