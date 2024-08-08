@@ -1,0 +1,18 @@
+.timestamp {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    font-size: 1.0em;
+    color: gray;
+}
+
+.edit {
+    background-color: rgb(89, 154, 228);
+    border-radius: 5px;
+}
+
+.delete {
+    background-color: rgb(234, 118, 118);
+    border-radius: 5px;
+}
+

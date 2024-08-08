@@ -1,6 +1,6 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, getDoc, Timestamp } from 'firebase/firestore';
 import { toast } from './toast';
 
 const firebaseConfig = {
@@ -102,60 +102,62 @@ export interface MemberData {
     attendance?: { [date: string]: boolean };
 }
 
-// Function to add a new post to Firestore
-export async function addPost(postData: { content: string, userId: string }): Promise<boolean> {
-  try {
-      await addDoc(collection(db, 'posts'), {
-          ...postData,
-          createdAt: new Date().toISOString() // Save the post creation timestamp
-      });
-      return true;
-  } catch (error) {
-      console.error('Error adding post: ', error);
-      toast('Failed to add post');
-      return false;
-  }
-}
-
 export interface PostData {
   id: string;
   content: string;
   userId: string;
-  createdAt: string;
+  createdAt: Timestamp;
+  displayName: string;
 }
 
-export async function getAllPosts(): Promise<PostData[]> {
+export const addPost = async (post: Omit<PostData, 'id'>) => {
   try {
-      const querySnapshot = await getDocs(collection(db, 'posts'));
-      const posts: PostData[] = querySnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-              id: doc.id,
-              content: data.content, // Ensure 'content' field is correctly mapped
-              userId: data.userId,   // Ensure 'userId' field is correctly mapped
-              createdAt: data.createdAt // Ensure 'createdAt' field is correctly mapped
-          };
+      const docRef = await addDoc(collection(db, 'posts'), {
+          ...post,
+          createdAt: Timestamp.now(),
       });
-      return posts;
+      return !!docRef.id;
   } catch (error) {
-      console.error('Error fetching posts: ', error);
-      return [];
-  }
-}
-
-// Function to delete a post from Firestore
-export async function deletePost(postId: string): Promise<boolean> {
-  try {
-      const postRef = doc(db, 'posts', postId);
-      await deleteDoc(postRef);
-      return true;
-  } catch (error) {
-      console.error('Error deleting post: ', error);
-      toast('Failed to delete post');
+      console.error('Error adding post:', error);
       return false;
   }
-}
+};
 
+export const getAllPosts = async (): Promise<PostData[]> => {
+  const posts: PostData[] = [];
+  try {
+      const querySnapshot = await getDocs(collection(db, 'posts'));
+      querySnapshot.forEach((doc) => {
+          posts.push({ id: doc.id, ...doc.data() } as PostData);
+      });
+  } catch (error) {
+      console.error('Error getting posts:', error);
+  }
+  return posts;
+};
+
+// Delete a post
+export const deletePost = async (postId: string) => {
+  try {
+      await deleteDoc(doc(db, 'posts', postId));
+      return true;
+  } catch (error) {
+      console.error('Error deleting post:', error);
+      return false;
+  }
+};
+
+// Update a post
+export const updatePost = async (postId: string, updatedData: Partial<PostData>) => {
+  try {
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, updatedData);
+      return true;
+  } catch (error) {
+      console.error('Error updating post:', error);
+      return false;
+  }
+};
 
 
 // Function to add a new member to Firestore

@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonButton, IonInput, IonLabel, IonItem } from '@ionic/react';
-import { addPost, getAllPosts, deletePost, PostData } from '../firebaseConfig';
-import { toast } from '../toast'; 
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonButton, IonInput, IonLabel, IonItem, IonText, IonButtons } from '@ionic/react';
+import { addPost, getAllPosts, deletePost, updatePost, PostData } from '../firebaseConfig';
+import { toast } from '../toast';
 import { getCurrentUser } from '../firebaseConfig';
+import MainHeader from '../components/MainHeader';
+import MainFooter from '../components/Footer';
+import './Posts.css';
+import { Timestamp } from 'firebase/firestore';
 
 const Posts: React.FC = () => {
     const [posts, setPosts] = useState<PostData[]>([]);
     const [content, setContent] = useState<string>('');
+    const [editContent, setEditContent] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const [displayName, setDisplayName] = useState<string>('Guest');
+    const [editingPostId, setEditingPostId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchPosts();
-        const user = getCurrentUser(); // Get current authenticated user
-          if (user) {
-            setDisplayName(user.displayName || 'User'); // Set display name from user's profile
-          }
     }, []);
 
     const fetchPosts = async () => {
@@ -30,7 +31,6 @@ const Posts: React.FC = () => {
             setLoading(false);
         }
     };
-        
 
     const handleAddPost = async () => {
         if (!content.trim()) {
@@ -38,19 +38,20 @@ const Posts: React.FC = () => {
             return;
         }
 
-        const currentUser = getCurrentUser(); // Adjust this as per your user fetching method
+        const currentUser = getCurrentUser();
         if (!currentUser) {
             toast('User not authenticated');
             return;
         }
 
         const userId = currentUser.uid;
+        const displayName = currentUser.displayName || 'User';
 
         try {
-            const success = await addPost({ content, userId });
+            const success = await addPost({ content, userId, displayName, createdAt: new Timestamp(Timestamp.now().seconds, Timestamp.now().nanoseconds) });
             if (success) {
                 setContent('');
-                fetchPosts(); // Refresh the posts list
+                fetchPosts();
                 toast('Post added successfully');
             }
         } catch (error) {
@@ -59,11 +60,31 @@ const Posts: React.FC = () => {
         }
     };
 
+    const handleEditPost = async (postId: string) => {
+        if (!editContent.trim()) {
+            toast('Post content cannot be empty');
+            return;
+        }
+
+        try {
+            const success = await updatePost(postId, { content: editContent });
+            if (success) {
+                setEditingPostId(null);
+                setEditContent('');
+                fetchPosts();
+                toast('Post updated successfully');
+            }
+        } catch (error) {
+            console.error('Error updating post:', error);
+            toast('Failed to update post');
+        }
+    };
+
     const handleDeletePost = async (postId: string) => {
         try {
             const success = await deletePost(postId);
             if (success) {
-                fetchPosts(); // Refresh the posts list
+                fetchPosts();
                 toast('Post deleted successfully');
             }
         } catch (error) {
@@ -74,6 +95,7 @@ const Posts: React.FC = () => {
 
     return (
         <IonPage>
+            <MainHeader />
             <IonHeader>
                 <IonToolbar>
                     <IonTitle>Posts</IonTitle>
@@ -88,21 +110,42 @@ const Posts: React.FC = () => {
                     {loading ? 'Adding...' : 'Add Post'}
                 </IonButton>
                 {posts.map(post => (
-                    <IonCard key={post.id}>
+                    <IonCard key={post.id} className="post-card">
                         <IonCardHeader>
-                            <IonTitle>Post by {displayName}</IonTitle>
+                            <IonTitle color='primary'>{post.displayName}</IonTitle>
                         </IonCardHeader>
                         <IonCardContent>
-                            {post.content}
-                            <br />
-                            <small>{new Date(post.createdAt).toLocaleString()}</small>
-                            <IonButton color="danger" onClick={() => handleDeletePost(post.id)} expand="full" className="ion-margin-top">
-                                Delete
-                            </IonButton>
+                            {editingPostId === post.id ? (
+                                <>
+                                    <IonInput value={editContent} onIonChange={(e) => setEditContent(e.detail.value!)} />
+                                    <IonButton color="primary" onClick={() => handleEditPost(post.id)} className="ion-margin-top">
+                                        Save
+                                    </IonButton>
+                                    <IonButton color="secondary" onClick={() => setEditingPostId(null)} className="ion-margin-top">
+                                        Cancel
+                                    </IonButton>
+                                </>
+                            ) : (
+                                <>
+                                    {post.content}
+                                    <IonText className="timestamp">
+                                        <small>{new Date(post.createdAt.seconds * 1000).toLocaleString()}</small>
+                                    </IonText>
+                                    <IonButtons>
+                                        <IonButton color="primary" fill='solid' onClick={() => { setEditingPostId(post.id); setEditContent(post.content); }} className="ion-margin-top edit">
+                                            Edit Post
+                                        </IonButton>
+                                        <IonButton color="danger" fill='solid' onClick={() => handleDeletePost(post.id)} className="ion-margin-top delete">
+                                            Delete Post
+                                        </IonButton>
+                                    </IonButtons>
+                                </>
+                            )}
                         </IonCardContent>
                     </IonCard>
                 ))}
             </IonContent>
+            <MainFooter />
         </IonPage>
     );
 };
