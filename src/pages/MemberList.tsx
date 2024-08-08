@@ -252,6 +252,7 @@ const MemberList: React.FC = () => {
                         ?.name || ""
                     }`}
                   </p>
+                  <p>{`tribe: ${tribes.find((tribe: Tribe) => tribe.id === member?.tribeId)?.name}`}</p>
                 </IonLabel>
               </IonCardContent>
             </IonCard>

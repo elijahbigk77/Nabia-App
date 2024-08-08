@@ -3,7 +3,7 @@
     right: 16px;
     bottom: 16px;
     font-size: 1.0em;
-    color: gray;
+    color: rgb(69, 68, 68);
 }
 
 .edit {
@@ -16,12 +16,36 @@
     border-radius: 5px;
 }
 
-.form-group ion-input,
-.form-group ion-select {
+.form-group ion-input {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--ion-color-dark);
   border-radius: 5px;
-  color: rgb(129, 77, 9);
+  color: rgb(65, 63, 61);
+  background-color: #eabc49;
+  height: 100px;
+}
+
+.post-card {
+    background-color: #DEA000;
+    color: black;
+    border: 1px solid black;
+    margin: 20px;
+}
+
+.content{
+    background-color: #DEA000;
+}
+
+.post-title{
+    color: black;
+    background-color: #DEA000;
+    margin: 0px;
+}
+
+.add-post-btn{
+    color: black;
+    border: 2px solid black;
+    border-radius: 5px;
 }
 

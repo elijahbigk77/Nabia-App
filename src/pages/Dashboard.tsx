@@ -39,24 +39,13 @@ const Dashboard: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol size="12" size-md="6" size-lg="4">
-              <IonCard button routerLink="/add-member" className="dashboard-card">
-                <IonCardHeader>
-                  <IonIcon icon={personAddOutline} className="dashboard-icon" />
-                  <IonCardTitle className="dashboard-title">Add Member</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  Add new members
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            <IonCol size="12" size-md="6" size-lg="4">
-              <IonCard button routerLink="/member-list" className="dashboard-card">
+              <IonCard button routerLink="/manage-members" className="dashboard-card">
                 <IonCardHeader>
                   <IonIcon icon={peopleOutline} className="dashboard-icon" />
-                  <IonCardTitle className="dashboard-title">Member List</IonCardTitle>
+                  <IonCardTitle className="dashboard-title">Manage Members</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  View and Manage all members
+                  Add New Members and view all Members
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -89,7 +78,7 @@ const Dashboard: React.FC = () => {
                   <IonCardTitle className="dashboard-title">Posts</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  Leave Post or picture updates
+                  Leave Post updates
                 </IonCardContent>
               </IonCard>
             </IonCol>

@@ -28,6 +28,8 @@ const Posts: React.FC = () => {
         setLoading(true);
         try {
             const fetchedPosts = await getAllPosts();
+            // Sort posts by createdAt timestamp (latest on top)
+            fetchedPosts.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
             setPosts(fetchedPosts);
         } catch (error) {
             console.error('Error fetching posts:', error);
@@ -101,23 +103,21 @@ const Posts: React.FC = () => {
     return (
         <IonPage>
             <MainHeader />
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Posts</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent>
-            <IonRow>
-            <IonCol size="12">
-              <div className="form-group">
-              <IonLabel position="stacked">Post Content</IonLabel>
-              <IonInput className='form-group' value={content} onIonChange={(e) => setContent(e.detail.value!)} placeholder=' Share a post...' />
-              </div>
-              </IonCol>
-              </IonRow>
-              
-               
-                <IonButton expand="full" onClick={handleAddPost} disabled={loading}>
+            
+            <IonButton fill='clear' className='post-title'>
+                <IonTitle><b>Posts</b></IonTitle>
+            </IonButton>
+            
+            <IonContent color='background'>
+                <IonRow>
+                    <IonCol size="12">
+                        <div className="form-group">
+                            <IonLabel position="stacked">Post Content</IonLabel>
+                            <IonInput className='ion-padding form-group' value={content} onIonChange={(e) => setContent(e.detail.value!)} placeholder='Share a post...' />
+                        </div>
+                    </IonCol>
+                </IonRow>
+                <IonButton expand="full" onClick={handleAddPost} disabled={loading} className='add-post-btn' color='dark'>
                     {loading ? 'Adding...' : 'Add Post'}
                 </IonButton>
                 {posts.map(post => (

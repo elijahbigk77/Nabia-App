@@ -38,6 +38,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+import ManageMembers from './pages/ManageMembers';
 
 
 
@@ -97,6 +98,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/posts">
           <Posts />
+        </Route>
+        <Route exact path="/manage-members">
+          <ManageMembers />
         </Route>
         <Route path="/member-details/:memberId" component={MemberDetails} exact />
         <Route path="/member-details-cnt/:memberId" component={MemberDetailsCnT} exact />
