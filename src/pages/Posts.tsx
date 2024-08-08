@@ -14,9 +14,14 @@ const Posts: React.FC = () => {
     const [editContent, setEditContent] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchPosts();
+        const user = getCurrentUser();
+        if (user) {
+            setCurrentUserId(user.uid);
+        }
     }, []);
 
     const fetchPosts = async () => {
@@ -131,14 +136,16 @@ const Posts: React.FC = () => {
                                     <IonText className="timestamp">
                                         <small>{new Date(post.createdAt.seconds * 1000).toLocaleString()}</small>
                                     </IonText>
-                                    <IonButtons>
-                                        <IonButton color="primary" fill='solid' onClick={() => { setEditingPostId(post.id); setEditContent(post.content); }} className="ion-margin-top edit">
-                                            Edit Post
-                                        </IonButton>
-                                        <IonButton color="danger" fill='solid' onClick={() => handleDeletePost(post.id)} className="ion-margin-top delete">
-                                            Delete Post
-                                        </IonButton>
-                                    </IonButtons>
+                                    {currentUserId === post.userId && (
+                                        <IonButtons>
+                                            <IonButton color="primary" fill='solid' onClick={() => { setEditingPostId(post.id); setEditContent(post.content); }} className="ion-margin-top edit">
+                                                Edit Post
+                                            </IonButton>
+                                            <IonButton color="danger" fill='solid' onClick={() => handleDeletePost(post.id)} className="ion-margin-top delete">
+                                                Delete Post
+                                            </IonButton>
+                                        </IonButtons>
+                                    )}
                                 </>
                             )}
                         </IonCardContent>
