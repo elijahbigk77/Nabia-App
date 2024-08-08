@@ -135,7 +135,7 @@ const TribeMemberList: React.FC = () => {
       };
 
       const handleMemberClick = (memberId: string) => {
-        history.push(`/member-details/${memberId}`);
+        history.push(`/member-details-cnt/${memberId}`);
       };
     
     
