@@ -16,3 +16,12 @@
     border-radius: 5px;
 }
 
+.form-group ion-input,
+.form-group ion-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--ion-color-dark);
+  border-radius: 5px;
+  color: rgb(129, 77, 9);
+}
+

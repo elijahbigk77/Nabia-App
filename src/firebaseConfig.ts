@@ -3,6 +3,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, up
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, getDoc, Timestamp } from 'firebase/firestore';
 import { toast } from './toast';
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyDtBx6-QJY7n8YwO62mQLqd9oNj0IFOym0",
     authDomain: "nabia-app.firebaseapp.com",

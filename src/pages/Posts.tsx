@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonButton, IonInput, IonLabel, IonItem, IonText, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonButton, IonInput, IonLabel, IonItem, IonText, IonButtons, IonCol, IonRow } from '@ionic/react';
 import { addPost, getAllPosts, deletePost, updatePost, PostData } from '../firebaseConfig';
 import { toast } from '../toast';
 import { getCurrentUser } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
-import MainFooter from '../components/Footer';
+import MainFooter from '../components/MainFooter';
 import './Posts.css';
 import { Timestamp } from 'firebase/firestore';
 
@@ -107,10 +107,16 @@ const Posts: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <IonItem>
-                    <IonLabel position="stacked">Post Content</IonLabel>
-                    <IonInput value={content} onIonChange={(e) => setContent(e.detail.value!)} />
-                </IonItem>
+            <IonRow>
+            <IonCol size="12">
+              <div className="form-group">
+              <IonLabel position="stacked">Post Content</IonLabel>
+              <IonInput className='form-group' value={content} onIonChange={(e) => setContent(e.detail.value!)} placeholder=' Share a post...' />
+              </div>
+              </IonCol>
+              </IonRow>
+              
+               
                 <IonButton expand="full" onClick={handleAddPost} disabled={loading}>
                     {loading ? 'Adding...' : 'Add Post'}
                 </IonButton>

@@ -14,6 +14,15 @@ import ClubMemberList from './pages/ClubMemberList';
 import ClubAttendanceMemberList from './pages/ClubAttendanceMemberList';
 import ClubAttendanceList from './pages/ClubAttendanceList';
 
+import './theme/variables.css';
+import AttendanceRecord from './pages/AttendanceRecord';
+import AttendanceMemberRecord from './pages/AttendanceMemberRecord';
+import ClubManagement from './pages/ClubManagement';
+import MemberDetails from './components/MemberDetails';
+import MemberDetailsCnT from './components/MemberDetailsClubnTribe';
+import Posts from './pages/Posts';
+
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -30,14 +39,6 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-/* Theme variables */
-import './theme/variables.css';
-import AttendanceRecord from './pages/AttendanceRecord';
-import AttendanceMemberRecord from './pages/AttendanceMemberRecord';
-import ClubManagement from './pages/ClubManagement';
-import MemberDetails from './components/MemberDetails';
-import MemberDetailsCnT from './components/MemberDetailsClubnTribe';
-import Posts from './pages/Posts';
 
 
 setupIonicReact();

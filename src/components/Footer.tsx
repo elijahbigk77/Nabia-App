@@ -3,7 +3,7 @@ import { IonFooter, IonToolbar, IonTitle, IonTabBar, IonTabButton, IonIcon, IonL
 import { personAddOutline, peopleOutline, schoolOutline, addCircleOutline, logOutOutline, homeOutline, checkboxOutline } from 'ionicons/icons';
 import './MainFooter.css';
 
-const MainFooter: React.FC = () => {
+const Footer: React.FC = () => {
   return (
     <>
       
@@ -17,4 +17,4 @@ const MainFooter: React.FC = () => {
   );
 };
 
-export default MainFooter;
+export default Footer;
