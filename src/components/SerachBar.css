@@ -1,6 +1,6 @@
 .search-bar {
-    --background: #f3c44e; 
-    --color: #121212;         /* Text color */
+    --background:#eabc49;
+    --color: rgb(65, 63, 61);
     --placeholder-color: #555151; 
     --icon-color: #6d6a6ac5;
     border: 1px solid #090808;

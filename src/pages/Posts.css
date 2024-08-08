@@ -16,7 +16,7 @@
     border-radius: 5px;
 }
 
-.form-group ion-input {
+.post-group ion-input {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--ion-color-dark);

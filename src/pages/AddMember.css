@@ -43,7 +43,8 @@ h2 {
   padding: 10px;
   border: 1px solid var(--ion-color-dark);
   border-radius: 5px;
-  color: antiquewhite;
+  color: rgb(65, 63, 61);
+  background-color: #eabc49;
 }
 
 .add-member-btn {
