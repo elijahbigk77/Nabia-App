@@ -46,4 +46,16 @@
     border: 1px solid #3e3d3c;
     border-radius: 10px;
   }
+
+  .fab{
+    --background: #f3c44e;
+    border: 3px solid rgb(2, 2, 2);
+    border-radius: 360px;
+    margin-right: 10px;
+  }
+
+  .refresh {
+    text-align: center;
+    margin-right: 10px;
+  }
   

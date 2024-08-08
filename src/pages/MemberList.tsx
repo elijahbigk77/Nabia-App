@@ -19,9 +19,10 @@ import {
   IonSelectOption,
   IonFab,
   IonFabButton,
+  IonText,
 } from "@ionic/react";
 import { useLocation } from "react-router-dom";
-import { pencilOutline, trashOutline, closeOutline, addOutline } from "ionicons/icons";
+import { pencilOutline, trashOutline, closeOutline, addOutline, refreshOutline } from "ionicons/icons";
 import MainHeader from "../components/MainHeader";
 import MainFooter from "../components/MainFooter";
 import {
@@ -256,9 +257,18 @@ const MemberList: React.FC = () => {
             </IonCard>
           ))}
         </IonList>
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+
+        { /*
+        <IonFab vertical="bottom" horizontal="start" slot="fixed">
           <IonFabButton onClick={navigateToAddMember}>
             <IonIcon icon={addOutline} />
+          </IonFabButton>
+        </IonFab> 
+        */}
+
+        <IonFab vertical="bottom" horizontal="end" slot="fixed"  >
+          <IonFabButton onClick={fetchMembers} className="fab">
+            <IonIcon icon={refreshOutline} color="primary"/>
           </IonFabButton>
         </IonFab>
 
