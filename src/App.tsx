@@ -37,6 +37,7 @@ import AttendanceMemberRecord from './pages/AttendanceMemberRecord';
 import ClubManagement from './pages/ClubManagement';
 import MemberDetails from './components/MemberDetails';
 import MemberDetailsCnT from './components/MemberDetailsClubnTribe';
+import Posts from './pages/Posts';
 
 
 setupIonicReact();
@@ -92,6 +93,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/club-management">
           <ClubManagement />
+        </Route>
+        <Route exact path="/posts">
+          <Posts />
         </Route>
         <Route path="/member-details/:memberId" component={MemberDetails} exact />
         <Route path="/member-details-cnt/:memberId" component={MemberDetailsCnT} exact />

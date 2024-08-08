@@ -102,6 +102,62 @@ export interface MemberData {
     attendance?: { [date: string]: boolean };
 }
 
+// Function to add a new post to Firestore
+export async function addPost(postData: { content: string, userId: string }): Promise<boolean> {
+  try {
+      await addDoc(collection(db, 'posts'), {
+          ...postData,
+          createdAt: new Date().toISOString() // Save the post creation timestamp
+      });
+      return true;
+  } catch (error) {
+      console.error('Error adding post: ', error);
+      toast('Failed to add post');
+      return false;
+  }
+}
+
+export interface PostData {
+  id: string;
+  content: string;
+  userId: string;
+  createdAt: string;
+}
+
+export async function getAllPosts(): Promise<PostData[]> {
+  try {
+      const querySnapshot = await getDocs(collection(db, 'posts'));
+      const posts: PostData[] = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+              id: doc.id,
+              content: data.content, // Ensure 'content' field is correctly mapped
+              userId: data.userId,   // Ensure 'userId' field is correctly mapped
+              createdAt: data.createdAt // Ensure 'createdAt' field is correctly mapped
+          };
+      });
+      return posts;
+  } catch (error) {
+      console.error('Error fetching posts: ', error);
+      return [];
+  }
+}
+
+// Function to delete a post from Firestore
+export async function deletePost(postId: string): Promise<boolean> {
+  try {
+      const postRef = doc(db, 'posts', postId);
+      await deleteDoc(postRef);
+      return true;
+  } catch (error) {
+      console.error('Error deleting post: ', error);
+      toast('Failed to delete post');
+      return false;
+  }
+}
+
+
+
 // Function to add a new member to Firestore
 export async function addMember(memberData: Omit<MemberData, 'id'>): Promise<boolean> {
     try {
