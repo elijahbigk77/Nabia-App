@@ -112,7 +112,7 @@ const Posts: React.FC = () => {
                 <IonRow>
                     <IonCol size="12">
                         <div className="post-group">
-                            <IonLabel position="stacked">Post Content</IonLabel>
+                            <IonLabel position="stacked">Post an Update:</IonLabel>
                             <IonInput className='ion-padding post-group' value={content} onIonChange={(e) => setContent(e.detail.value!)} placeholder='Share a post...' />
                         </div>
                     </IonCol>
