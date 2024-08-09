@@ -22,6 +22,12 @@ const Posts: React.FC = () => {
         if (user) {
             setCurrentUserId(user.uid);
         }
+
+        const interval = setInterval(() => {
+            fetchPosts();
+        }, 15000); // Fetch posts every 15 seconds
+
+        return () => clearInterval(interval); // Clear interval on component unmount
     }, []);
 
     const fetchPosts = async () => {
