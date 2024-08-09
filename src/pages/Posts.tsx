@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonButton, IonInput, IonLabel, IonItem, IonText, IonButtons, IonCol, IonRow } from '@ionic/react';
-import { addPost, getNewPosts, deletePost, updatePost, PostData, getAllPosts } from '../firebaseConfig';
+import { addPost, getAllPosts, deletePost, updatePost, PostData } from '../firebaseConfig';
 import { toast } from '../toast';
 import { getCurrentUser } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
@@ -15,53 +15,27 @@ const Posts: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-    const [isTyping, setIsTyping] = useState<boolean>(false);
-    const [lastPostTimestamp, setLastPostTimestamp] = useState<Timestamp | null>(null);
 
     useEffect(() => {
-        fetchInitialPosts();
+        fetchPosts();
         const user = getCurrentUser();
         if (user) {
             setCurrentUserId(user.uid);
         }
+    }, []);
 
-        const interval = setInterval(() => {
-            if (!isTyping && !editingPostId) {
-                fetchNewPosts();
-            }
-        }, 10000); // Fetch new posts every 10 seconds if not typing/editing
-
-        return () => clearInterval(interval); // Clear interval on component unmount
-    }, [isTyping, editingPostId]);
-
-    const fetchInitialPosts = async () => {
+    const fetchPosts = async () => {
         setLoading(true);
         try {
             const fetchedPosts = await getAllPosts();
+            // Sort posts by createdAt timestamp (latest on top)
             fetchedPosts.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
             setPosts(fetchedPosts);
-            if (fetchedPosts.length > 0) {
-                setLastPostTimestamp(fetchedPosts[0].createdAt);
-            }
         } catch (error) {
             console.error('Error fetching posts:', error);
             toast('Failed to load posts');
         } finally {
             setLoading(false);
-        }
-    };
-
-    const fetchNewPosts = async () => {
-        if (!lastPostTimestamp) return;
-        try {
-            const newPosts = await getNewPosts(lastPostTimestamp);
-            if (newPosts.length > 0) {
-                setPosts((prevPosts) => [...newPosts, ...prevPosts]);
-                setLastPostTimestamp(newPosts[0].createdAt);
-            }
-        } catch (error) {
-            console.error('Error fetching new posts:', error);
-            toast('Failed to load new posts');
         }
     };
 
@@ -84,7 +58,7 @@ const Posts: React.FC = () => {
             const success = await addPost({ content, userId, displayName, createdAt: new Timestamp(Timestamp.now().seconds, Timestamp.now().nanoseconds) });
             if (success) {
                 setContent('');
-                fetchInitialPosts();
+                fetchPosts();
                 toast('Post added successfully');
             }
         } catch (error) {
@@ -104,7 +78,7 @@ const Posts: React.FC = () => {
             if (success) {
                 setEditingPostId(null);
                 setEditContent('');
-                fetchInitialPosts();
+                fetchPosts();
                 toast('Post updated successfully');
             }
         } catch (error) {
@@ -117,18 +91,13 @@ const Posts: React.FC = () => {
         try {
             const success = await deletePost(postId);
             if (success) {
-                setPosts((prevPosts) => prevPosts.filter(post => post.id !== postId));
+                fetchPosts();
                 toast('Post deleted successfully');
             }
         } catch (error) {
             console.error('Error deleting post:', error);
             toast('Failed to delete post');
         }
-    };
-
-    const handleTyping = (e: CustomEvent) => {
-        setContent(e.detail.value!);
-        setIsTyping(true);
     };
 
     return (
@@ -144,13 +113,7 @@ const Posts: React.FC = () => {
                     <IonCol size="12">
                         <div className="post-group">
                             <IonLabel position="stacked">Post an Update:</IonLabel>
-                            <IonInput
-                                className='ion-padding post-group'
-                                value={content}
-                                onIonInput={handleTyping}
-                                onIonBlur={() => setIsTyping(false)}
-                                placeholder='Share a post...'
-                            />
+                            <IonInput className='ion-padding post-group' value={content} onIonChange={(e) => setContent(e.detail.value!)} placeholder='Share a post...' />
                         </div>
                     </IonCol>
                 </IonRow>
@@ -165,12 +128,7 @@ const Posts: React.FC = () => {
                         <IonCardContent>
                             {editingPostId === post.id ? (
                                 <>
-                                    <IonInput
-                                        value={editContent}
-                                        onIonChange={(e) => setEditContent(e.detail.value!)}
-                                        onIonFocus={() => setIsTyping(true)}
-                                        onIonBlur={() => setIsTyping(false)}
-                                    />
+                                    <IonInput value={editContent} onIonChange={(e) => setEditContent(e.detail.value!)} />
                                     <IonButton color="primary" onClick={() => handleEditPost(post.id)} className="ion-margin-top">
                                         Save
                                     </IonButton>
