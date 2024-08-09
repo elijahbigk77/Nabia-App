@@ -109,7 +109,43 @@ export interface PostData {
   userId: string;
   createdAt: Timestamp;
   displayName: string;
+  reactions?: {
+      [userId: string]: 'thumbs-up' | 'heart' | 'laugh' | 'thumbs-down' | null; // Reaction type or null
+  };
 }
+
+
+// Function to add or update reaction for a post
+export const reactToPost = async (postId: string, userId: string, reaction: 'thumbs-up' | 'heart' | 'laugh' | 'thumbs-down') => {
+  try {
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, {
+          [`reactions.${userId}`]: reaction
+      });
+      return true;
+  } catch (error) {
+      console.error('Error reacting to post:', error);
+      return false;
+  }
+};
+
+// Function to get reactions for a post
+export const getPostReactions = async (postId: string): Promise<{ [userId: string]: 'thumbs-up' | 'heart' | 'laugh' | 'thumbs-down' | null }> => {
+  try {
+      const postRef = doc(db, 'posts', postId);
+      const postDoc = await getDoc(postRef);
+      if (postDoc.exists()) {
+          const data = postDoc.data() as PostData;
+          return data.reactions || {};
+      }
+      return {};
+  } catch (error) {
+      console.error('Error fetching post reactions:', error);
+      return {};
+  }
+};
+
+
 
 export const getNewPosts = async (lastTimestamp: Timestamp): Promise<PostData[]> => {
   try {
