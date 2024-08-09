@@ -1,6 +1,6 @@
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, getDoc, Timestamp } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, getDoc, Timestamp, orderBy } from 'firebase/firestore';
 import { toast } from './toast';
 
 
@@ -110,6 +110,28 @@ export interface PostData {
   createdAt: Timestamp;
   displayName: string;
 }
+
+export const getNewPosts = async (lastTimestamp: Timestamp): Promise<PostData[]> => {
+  try {
+      const postsRef = collection(db, 'posts');
+      const q = query(
+          postsRef,
+          where('createdAt', '>', lastTimestamp),
+          orderBy('createdAt', 'asc')
+      );
+
+      const querySnapshot = await getDocs(q);
+      const newPosts: PostData[] = [];
+      querySnapshot.forEach((doc) => {
+          newPosts.push({ id: doc.id, ...doc.data() } as PostData);
+      });
+
+      return newPosts;
+  } catch (error) {
+      console.error('Error fetching new posts:', error);
+      return [];
+  }
+};
 
 export const addPost = async (post: Omit<PostData, 'id'>) => {
   try {

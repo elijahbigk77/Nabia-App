@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonButton, IonInput, IonLabel, IonItem, IonText, IonButtons, IonCol, IonRow } from '@ionic/react';
-import { addPost, getAllPosts, deletePost, updatePost, PostData } from '../firebaseConfig';
+import { addPost, getNewPosts, deletePost, updatePost, PostData, getAllPosts } from '../firebaseConfig';
 import { toast } from '../toast';
 import { getCurrentUser } from '../firebaseConfig';
 import MainHeader from '../components/MainHeader';
@@ -16,9 +16,10 @@ const Posts: React.FC = () => {
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [isTyping, setIsTyping] = useState<boolean>(false);
+    const [lastPostTimestamp, setLastPostTimestamp] = useState<Timestamp | null>(null);
 
     useEffect(() => {
-        fetchPosts();
+        fetchInitialPosts();
         const user = getCurrentUser();
         if (user) {
             setCurrentUserId(user.uid);
@@ -26,25 +27,41 @@ const Posts: React.FC = () => {
 
         const interval = setInterval(() => {
             if (!isTyping && !editingPostId) {
-                fetchPosts();
+                fetchNewPosts();
             }
-        }, 10000); // Fetch posts every 10 seconds if not typing/editing
+        }, 10000); // Fetch new posts every 10 seconds if not typing/editing
 
         return () => clearInterval(interval); // Clear interval on component unmount
     }, [isTyping, editingPostId]);
 
-    const fetchPosts = async () => {
+    const fetchInitialPosts = async () => {
         setLoading(true);
         try {
             const fetchedPosts = await getAllPosts();
-            // Sort posts by createdAt timestamp (latest on top)
             fetchedPosts.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
             setPosts(fetchedPosts);
+            if (fetchedPosts.length > 0) {
+                setLastPostTimestamp(fetchedPosts[0].createdAt);
+            }
         } catch (error) {
             console.error('Error fetching posts:', error);
             toast('Failed to load posts');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchNewPosts = async () => {
+        if (!lastPostTimestamp) return;
+        try {
+            const newPosts = await getNewPosts(lastPostTimestamp);
+            if (newPosts.length > 0) {
+                setPosts((prevPosts) => [...newPosts, ...prevPosts]);
+                setLastPostTimestamp(newPosts[0].createdAt);
+            }
+        } catch (error) {
+            console.error('Error fetching new posts:', error);
+            toast('Failed to load new posts');
         }
     };
 
@@ -67,7 +84,7 @@ const Posts: React.FC = () => {
             const success = await addPost({ content, userId, displayName, createdAt: new Timestamp(Timestamp.now().seconds, Timestamp.now().nanoseconds) });
             if (success) {
                 setContent('');
-                fetchPosts();
+                fetchInitialPosts();
                 toast('Post added successfully');
             }
         } catch (error) {
@@ -87,7 +104,7 @@ const Posts: React.FC = () => {
             if (success) {
                 setEditingPostId(null);
                 setEditContent('');
-                fetchPosts();
+                fetchInitialPosts();
                 toast('Post updated successfully');
             }
         } catch (error) {
@@ -100,7 +117,7 @@ const Posts: React.FC = () => {
         try {
             const success = await deletePost(postId);
             if (success) {
-                fetchPosts();
+                setPosts((prevPosts) => prevPosts.filter(post => post.id !== postId));
                 toast('Post deleted successfully');
             }
         } catch (error) {
