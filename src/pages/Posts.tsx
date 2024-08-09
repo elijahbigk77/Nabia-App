@@ -15,6 +15,7 @@ const Posts: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+    const [isTyping, setIsTyping] = useState<boolean>(false);
 
     useEffect(() => {
         fetchPosts();
@@ -24,11 +25,13 @@ const Posts: React.FC = () => {
         }
 
         const interval = setInterval(() => {
-            fetchPosts();
-        }, 15000); // Fetch posts every 15 seconds
+            if (!isTyping && !editingPostId) {
+                fetchPosts();
+            }
+        }, 10000); // Fetch posts every 10 seconds if not typing/editing
 
         return () => clearInterval(interval); // Clear interval on component unmount
-    }, []);
+    }, [isTyping, editingPostId]);
 
     const fetchPosts = async () => {
         setLoading(true);
@@ -106,6 +109,11 @@ const Posts: React.FC = () => {
         }
     };
 
+    const handleTyping = (e: CustomEvent) => {
+        setContent(e.detail.value!);
+        setIsTyping(true);
+    };
+
     return (
         <IonPage>
             <MainHeader />
@@ -119,7 +127,13 @@ const Posts: React.FC = () => {
                     <IonCol size="12">
                         <div className="post-group">
                             <IonLabel position="stacked">Post an Update:</IonLabel>
-                            <IonInput className='ion-padding post-group' value={content} onIonChange={(e) => setContent(e.detail.value!)} placeholder='Share a post...' />
+                            <IonInput
+                                className='ion-padding post-group'
+                                value={content}
+                                onIonInput={handleTyping}
+                                onIonBlur={() => setIsTyping(false)}
+                                placeholder='Share a post...'
+                            />
                         </div>
                     </IonCol>
                 </IonRow>
@@ -134,7 +148,12 @@ const Posts: React.FC = () => {
                         <IonCardContent>
                             {editingPostId === post.id ? (
                                 <>
-                                    <IonInput value={editContent} onIonChange={(e) => setEditContent(e.detail.value!)} />
+                                    <IonInput
+                                        value={editContent}
+                                        onIonChange={(e) => setEditContent(e.detail.value!)}
+                                        onIonFocus={() => setIsTyping(true)}
+                                        onIonBlur={() => setIsTyping(false)}
+                                    />
                                     <IonButton color="primary" onClick={() => handleEditPost(post.id)} className="ion-margin-top">
                                         Save
                                     </IonButton>
